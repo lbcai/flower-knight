@@ -1,5 +1,5 @@
 # flower-knight
-2D sidescroller written in Java with libGDX. Currently, the goal is to produce a functioning demo level in order to internalize OOP concepts learned in courses. This readme will be polished with images (and hopefully a working web demo) when the game is in a more complete state.
+2D sidescroller written in Java with libGDX. Currently, the goal is to produce a functioning demo level in order to internalize OOP concepts learned in courses. This readme will be polished with images (and hopefully a link to a working web demo) when the game is in a more complete state.
 
 ## TODO
 - [ ] Create basic player idle and walk animations
