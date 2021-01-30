@@ -5,15 +5,24 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class mainGame extends ApplicationAdapter {
 	// Object that "contains" drawn sprites; draw stuff to it to see the stuff. Dispose or else memory will leak.
 	SpriteBatch batch;
+	// Object that tells us where the specific sprite we want is on the spritesheet.
+	TextureAtlas textureAtlas;
 	
-	// Underlying OpenGL texture (image). Dispose or else memory will leak.
-	Texture playerTexture;
+	// Underlying OpenGL texture (image). Dispose or else memory will leak. Not using now because player is handled by spritesheet/atlas.
+	//Texture playerTexture;
+	Animation<TextureRegion> playerAnim;
+	// For tracking time without relying on FPS.
+	float elapsedTime = 0;
 	
 	// Sprite object that has the coordinates and is hooked up to the texture.
 	Sprite playerSprite;
@@ -26,10 +35,10 @@ public class mainGame extends ApplicationAdapter {
 		int winWidth = Gdx.graphics.getWidth();
 		
 		batch = new SpriteBatch();
-		playerTexture = new Texture("badlogic.jpg");
-		playerSprite = new Sprite(playerTexture);
-		
-		playerSprite.setPosition(winWidth/2 - playerSprite.getWidth()/2, 0);
+		textureAtlas = new TextureAtlas(Gdx.files.internal("playerSpritesheet.atlas"));
+		playerAnim = new Animation<TextureRegion>(1/2f, textureAtlas.getRegions());
+		//playerSprite = new Sprite(region);
+		//playerSprite.setPosition(winWidth/2 - playerSprite.getWidth()/2, 0);
 	}
 
 	@Override
@@ -51,10 +60,11 @@ public class mainGame extends ApplicationAdapter {
 			playerSprite.translateX(-10.0f);
 		}
 		
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//Gdx.gl.glClearColor(1, 0, 0, 1);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		playerSprite.draw(batch);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		batch.draw(playerAnim.getKeyFrame(elapsedTime, true), 0, 0);
 		batch.end();
 		
 		
@@ -63,6 +73,6 @@ public class mainGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		playerTexture.dispose();
+		textureAtlas.dispose();
 	}
 }
