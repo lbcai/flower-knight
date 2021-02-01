@@ -2,6 +2,7 @@ package lbcai.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,8 +20,11 @@ public class Player {
 	//see enum below
 	Facing facing;
 	JumpState jumpState;
+	RunState runState;
 	//a long is like a 64-bit int. a BIG int.
 	long jumpStartTime;
+	long runStartTime;
+	long idleStartTime;
 	Vector2 velocity;
 	
 	/**
@@ -32,6 +36,8 @@ public class Player {
 		facing = Facing.RIGHT;
 		jumpState = JumpState.FALLING;
 		velocity = new Vector2();
+		runState = RunState.IDLE;
+		idleStartTime = TimeUtils.nanoTime();
 	}
 	
 	/**
@@ -57,32 +63,56 @@ public class Player {
 	 * @param batch SpriteBatch from GameplayScreen
 	 */
 	public void render(SpriteBatch batch) {
-		
+
 		//Initialize the region to display.
-		TextureRegion[] region = Assets.instance.playerAssets.idleRight;
+		TextureRegion region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
 		
 		//Change the display depending on the direction the character faces.
 		if (facing == Facing.RIGHT) {
-			region = Assets.instance.playerAssets.idleRight;
+			if (jumpState == JumpState.GROUNDED) {
+				if (runState == RunState.IDLE) {
+					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(idleTime);
+				} else if (runState == RunState.RUN) {
+					//Calculate how long we have been running in seconds (nanoToSec just converts to seconds, 
+					//nanoTime gets current time).
+					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
+					region = Assets.instance.playerAssets.runRightAnim.getKeyFrame(runTime);
+				}
+				
+			}
+			
 		} else if (facing == Facing.LEFT) {
-			region = Assets.instance.playerAssets.idleLeft;
+			if (jumpState == JumpState.GROUNDED) {
+				if (runState == RunState.IDLE) {
+					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(idleTime);
+				} else if (runState == RunState.RUN) {
+					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
+					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
+				}
+			} else if (jumpState != JumpState.GROUNDED) {
+				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
+				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
+			}
+			
 		}
-		
+
 		//Actually draw the sprites.
-		batch.draw(region[0].getTexture(), 
+		batch.draw(region.getTexture(), 
 				(position.x - Constants.playerHead.x), 
 				(position.y - Constants.playerHead.y), 
 				0, 
 				0, 
-				region[0].getRegionWidth(), 
-				region[0].getRegionHeight(), 
+				region.getRegionWidth(), 
+				region.getRegionHeight(), 
 				1, 
 				1, 
 				0, 
-				region[0].getRegionX(), 
-				region[0].getRegionY(), 
-				region[0].getRegionWidth(), 
-				region[0].getRegionHeight(), 
+				region.getRegionX(), 
+				region.getRegionY(), 
+				region.getRegionWidth(), 
+				region.getRegionHeight(), 
 				false, 
 				false);
 	}
@@ -110,12 +140,16 @@ public class Player {
 			velocity.y = 0;
 		}
 		
-		//walk
+		//run
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			moveLeft(delta);
-		}
-		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			moveRight(delta);
+		} else {
+			if (runState != RunState.IDLE && jumpState == JumpState.GROUNDED) {
+				idleStartTime = TimeUtils.nanoTime();
+			}
+			runState = RunState.IDLE;
 		}
 		
 		//jump (apparently you can do this case thing with enums!)
@@ -127,13 +161,12 @@ public class Player {
 			case JUMPING:
 				continueJump();
 				break;
-			case FALLING:
-				break;
+			//note: do nothing when falling.
 			}
 		} else {
 			endJump();
 		}
-		
+
 	}
 	
 	/**
@@ -147,11 +180,20 @@ public class Player {
 	 * @param delta time in seconds, avoids framerate issues
 	 */
 	private void moveLeft(float delta) {
+		//At the beginning of movement, if we are running, save the time as the run start time.
+		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
+			runStartTime = TimeUtils.nanoTime();
+		}
+		runState = RunState.RUN;
 		facing = Facing.LEFT;
 		position.x -= delta * Constants.moveSpeed;
 	}
 	
 	private void moveRight(float delta) {
+		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
+			runStartTime = TimeUtils.nanoTime();
+		}
+		runState = RunState.RUN;
 		facing = Facing.RIGHT;
 		position.x += delta * Constants.moveSpeed;
 	}
@@ -166,13 +208,12 @@ public class Player {
 	//This is added to allow player to continue to press the jump key while in air in order to jump for longer and go higher.
 	private void continueJump() {
 		if (jumpState == JumpState.JUMPING) {
-			System.out.println("enter continue" + jumpState);
 			//Multiply by nanoToSec to convert from nanoseconds to seconds. The value we are converting is the length of time it
 			//has been since we started jumping. nanoTime() is current time in nanoseconds.
 			float jumpDuration = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
-			//If we are still allowed to be jumping because max jump time hasn't been reached, and keep in mind we only enter 
-			//this continueJump method if we press jump again while already in jumping state, we continue to go up by giving a
-			//boost to the player's velocity. If we aren't allowed, we just go to falling by ending the jump.
+			//If we are still allowed to be jumping up because max jump time hasn't been reached, we continue to go up by giving a
+			//boost to the player's velocity. If we aren't allowed, we just go to falling by ending the jump. The velocity will
+			//be affected by gravity in the update method and cause player to fall.
 			if (jumpDuration < Constants.maxJumpTime) {
 				velocity.y = Constants.jumpSpeed;
 			} else {
@@ -185,7 +226,6 @@ public class Player {
 	private void endJump() {
 		if (jumpState == JumpState.JUMPING) {
 			jumpState = JumpState.FALLING;
-			System.out.println("end" + jumpState);
 		}
 	}
 	
@@ -199,6 +239,11 @@ public class Player {
 		GROUNDED,
 		JUMPING,
 		FALLING
+	}
+	
+	enum RunState {
+		IDLE,
+		RUN
 	}
 	
 }

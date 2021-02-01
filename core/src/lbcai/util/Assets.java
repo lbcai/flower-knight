@@ -4,8 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.TextureArray;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -67,16 +72,80 @@ public class Assets implements Disposable, AssetErrorListener {
 	 */
 	public class PlayerAssets {
 		
-		public TextureRegion[] idleRight = new TextureRegion[5];
-		public TextureRegion[] idleLeft = new TextureRegion[5];
+		public final Array<AtlasRegion> idleRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> idleLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> jumpLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> jumpRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> runLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> runRight = new Array<AtlasRegion>();
+		
+		public final Animation<TextureRegion> idleRightAnim;
+		public final Animation<TextureRegion> idleLeftAnim;
+		public final Animation<TextureRegion> runRightAnim;
+		public final Animation<TextureRegion> runLeftAnim;
+		public final Animation<TextureRegion> jumpLeftAnim;
 		
 		/**
-		 * Finds the correct atlas region for starting the animation.
+		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
+		 * then packs that into an animation we can play.
 		 * @param atlas the TextureAtlas that has the sprites for this entity on it
 		 */
 		public PlayerAssets(TextureAtlas atlas) {
-			idleRight[0] = (atlas.findRegion(Constants.idleRight, 1));
-			idleLeft[0] = (atlas.findRegion(Constants.idleLeft, 1));
+			idleRight.add(atlas.findRegion(Constants.idleRight, 1));
+			idleRight.add(atlas.findRegion(Constants.idleRight, 2));
+			idleRight.add(atlas.findRegion(Constants.idleRight, 3));
+			idleRight.add(atlas.findRegion(Constants.idleRight, 4));
+			idleRight.add(atlas.findRegion(Constants.idleRight, 5));
+			idleRightAnim = new Animation(Constants.idleCycleTime, idleRight, PlayMode.LOOP);
+			
+			idleLeft.add(atlas.findRegion(Constants.idleLeft, 1));
+			idleLeft.add(atlas.findRegion(Constants.idleLeft, 2));
+			idleLeft.add(atlas.findRegion(Constants.idleLeft, 3));
+			idleLeft.add(atlas.findRegion(Constants.idleLeft, 4));
+			idleLeft.add(atlas.findRegion(Constants.idleLeft, 5));
+			idleLeftAnim = new Animation(Constants.idleCycleTime, idleLeft, PlayMode.LOOP);
+			
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 1));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 8));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 9));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeftAnim = new Animation(Constants.jumpCycleTime, jumpLeft, PlayMode.LOOP);
+			
+			runLeft.add(atlas.findRegion(Constants.runLeft, 1));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 2));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 3));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 4));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 5));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 6));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 7));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 8));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 9));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 10));
+			runLeft.add(atlas.findRegion(Constants.runLeft, 11));
+			runLeftAnim = new Animation(Constants.runCycleTime, runLeft, PlayMode.LOOP);
+			
+			runRight.add(atlas.findRegion(Constants.runRight, 1));
+			runRight.add(atlas.findRegion(Constants.runRight, 2));
+			runRight.add(atlas.findRegion(Constants.runRight, 3));
+			runRight.add(atlas.findRegion(Constants.runRight, 4));
+			runRight.add(atlas.findRegion(Constants.runRight, 5));
+			runRight.add(atlas.findRegion(Constants.runRight, 6));
+			runRight.add(atlas.findRegion(Constants.runRight, 7));
+			runRight.add(atlas.findRegion(Constants.runRight, 8));
+			runRight.add(atlas.findRegion(Constants.runRight, 9));
+			runRight.add(atlas.findRegion(Constants.runRight, 10));
+			runRight.add(atlas.findRegion(Constants.runRight, 11));
+			runRightAnim = new Animation(Constants.runCycleTime, runRight, PlayMode.LOOP);
 		}
 	}
 	
