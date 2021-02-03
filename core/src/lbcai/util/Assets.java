@@ -119,6 +119,8 @@ public class Assets implements Disposable, AssetErrorListener {
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 12));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 16));
 			jumpLeftAnim = new Animation(Constants.jumpCycleTime, jumpLeft, PlayMode.LOOP);
 			
 			runLeft.add(atlas.findRegion(Constants.runLeft, 1));
