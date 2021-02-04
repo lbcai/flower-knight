@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Assets;
@@ -26,10 +27,13 @@ public class Player {
 	long runStartTime;
 	long idleStartTime;
 	Vector2 velocity;
+	//use to compare against current position and check if player should land or fall off platforms.
+	Vector2 lastFramePosition;
 	
 	/**
 	 * Constructor: make (width, height) vector position. Tells us position is center of head. 
-	 * Starts player facing right & falling down (drop them into the level).
+	 * Starts player facing right & falling down (drop them into the level). Initializes things like idle start time,
+	 * last frame position, etc.
 	 */
 	public Player() {
 		position = new Vector2(128, Constants.playerEyeHeight);
@@ -38,6 +42,7 @@ public class Player {
 		velocity = new Vector2();
 		runState = RunState.IDLE;
 		idleStartTime = TimeUtils.nanoTime();
+		lastFramePosition = new Vector2(position);
 	}
 	
 	/**
@@ -122,7 +127,10 @@ public class Player {
 	 * @param delta the time in seconds so we avoid framerate problems and changing the passing of time on different devices.
 	 * 				Usually in some fraction of a second. This actually represents the time since last frame.
 	 */
-	public void update(float delta) {
+	public void update(float delta, Array<Platform> platforms) {
+		//Use position vector to set last frame position.
+		lastFramePosition.set(position);
+
 		//Subtract time * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
 		velocity.y -= delta * Constants.worldGravity;
@@ -133,6 +141,17 @@ public class Player {
 		if (jumpState != JumpState.FALLING) {
 			jumpState = JumpState.FALLING;
 		}
+
+		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
+		//weird behavior with jumping happens. Note that order in Java DOES matter!
+		for (Platform platform : platforms) {
+			if (landOnPlatform(platform)) {
+				jumpState = JumpState.GROUNDED;
+				position.y = platform.top + Constants.playerEyeHeight;
+				velocity.y = 0;
+			}
+		}
+		
 		//Prevent player from falling through ground. Player will start falling and hit ground and stay there.
 		if (position.y - Constants.playerEyeHeight < 0) {
 			jumpState = JumpState.GROUNDED;
@@ -175,7 +194,8 @@ public class Player {
 	 * Moving left/right is simple enough: change the position in the appropriate direction and change the facing to the right
 	 * direction. The facing will be used to figure out which sprite direction set to use for animations.
 	 * 
-	 * Jumping involves a jumpState: GROUNDED, JUMPING, and FALLING. See comments below.
+	 * Jumping involves a jumpState: GROUNDED, JUMPING, and FALLING. See comments below. Platform detection & interaction 
+	 * is also here.
 	 * 
 	 * @param delta time in seconds, avoids framerate issues
 	 */
@@ -228,6 +248,29 @@ public class Player {
 			jumpState = JumpState.FALLING;
 		}
 	}
+	
+	boolean landOnPlatform(Platform platform) {
+		boolean leftSideFootOnPlatform = false;
+		boolean rightSideFootOnPlatform = false;
+		boolean bothFootOnPlatform = false;
+		
+		if ((lastFramePosition.y - Constants.playerEyeHeight) >= platform.top && 
+				(position.y - Constants.playerEyeHeight) < platform.top) {
+			//since the player position is marked by the center of the head and this is basically in the center of the texture,
+			//the "origin" is 0,0 in the center of the texture. we need to subtract half the stance width to get the edge of each
+			//foot, then add on one side and subtract on the other.
+			float leftSideFoot = position.x - (Constants.playerStance / 2);
+			float rightSideFoot = position.x + (Constants.playerStance / 2);
+			leftSideFootOnPlatform = (platform.left < leftSideFoot && platform.right > leftSideFoot);
+			rightSideFootOnPlatform = (platform.left < rightSideFoot && platform.right > rightSideFoot);
+			//technically the platform is so tiny it is smaller than the stance width.
+			bothFootOnPlatform = (platform.left > leftSideFoot && platform.right < rightSideFoot);
+			
+		}
+		//return true if one is true, else return false
+		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
+	}
+	
 	
 	//enums are like discrete final variables, like steps you can set something to.
 	enum Facing {

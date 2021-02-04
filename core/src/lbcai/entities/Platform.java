@@ -1,7 +1,10 @@
 package lbcai.entities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import lbcai.util.Assets;
 
 public class Platform {
 	
@@ -29,16 +32,18 @@ public class Platform {
 	}
 	
 	/**
-	 * Render method for platforms. Handled by libGDX.
+	 * Render method for platforms.
 	 * 
-	 * @param renderer  is a ShapeRenderer, an object that renders points, lines, shape outlines, and filled shapes. Is disposable.
+	 * @param batch is a disposable object that renders textures on quads, need for nine patch.
 	 */
-	public void render(ShapeRenderer renderer) {
+	public void render(SpriteBatch batch) {
 		float width = right - left;
 		float height = top - bottom;
-		//ShapeRenderer method to draw a rectangle and color it green.
-		renderer.setColor(Color.GREEN);
-		renderer.rect(left, bottom, width, height);
+		//position x, position y, width, height
+		//no documentation. seems to slide platform 1 pixel to left and 1 down, add 2 to width and height
+		//this is on top of what was defined for the platform when it was created, seems like these values affect
+		//how far away from the actual texture entities will stand on the platform/count as touching platform, adjust as needed
+		Assets.instance.platformAssets.platformNinepatch.draw(batch, left - 1, bottom - 1, width + 2, height + 5);
 	}
 	
 }

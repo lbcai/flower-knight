@@ -25,11 +25,12 @@ public class Level {
 		player = new Player();
 		//Initialize the array of platforms and add a test platform.
 		platforms = new Array<Platform>();
-		platforms.add(new Platform(100, 100, 100, 100));
+		//left, top, width, height
+		platforms.add(new Platform(50, 50, 512, 50));
 	}
 	
 	public void update(float delta) {
-		player.update(delta);
+		player.update(delta, platforms);
 	}
 	
 	/**
@@ -38,17 +39,12 @@ public class Level {
 	 * @param batch      Object that draws textures on a bunch of rectangles/squares in OpenGL. Disposable.
 	 * @param renderer   Renders points, outlines, filled shapes, lines. Disposable.
 	 */
-	public void render(SpriteBatch batch, ShapeRenderer renderer) {
-		
-		//Shape type to render: here it renders a filled shape. The platform class itself says it should render a rectangle.
-		//The result is a filled rectangle.
-		renderer.begin(ShapeType.Filled);
-		for (Platform platform : platforms) {
-			platform.render(renderer);
-		}
-		renderer.end();
-		
+	public void render(SpriteBatch batch) {
+
 		batch.begin();
+		for (Platform platform : platforms) {
+			platform.render(batch);
+		}
 		player.render(batch);
 		batch.end();
 	}

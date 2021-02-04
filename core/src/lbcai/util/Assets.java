@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,6 +37,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	 * This class will find the right atlas regions for animations.
 	 */
 	public PlayerAssets playerAssets;
+	public PlatformAssets platformAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -63,6 +65,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		TextureAtlas atlas = assetManager.get(Constants.textureAtlas);
 		//Match the appropriate spritesheet with the appropriate atlas regions to make animations down the line.
 		playerAssets = new PlayerAssets(atlas);
+		platformAssets = new PlatformAssets(atlas);
 	}
 	
 	/**
@@ -149,6 +152,21 @@ public class Assets implements Disposable, AssetErrorListener {
 			runRight.add(atlas.findRegion(Constants.runRight, 11));
 			runRightAnim = new Animation(Constants.runCycleTime, runRight, PlayMode.LOOP);
 		}
+	}
+	
+	public class PlatformAssets {
+		
+		//A nine patch is an object that will make our platforms from 9 different sprites so we can modularly display them.
+		public final NinePatch platformNinepatch;
+		
+		public PlatformAssets(TextureAtlas atlas) {
+			AtlasRegion region = atlas.findRegion(Constants.platformSprite);
+			int edge = Constants.platformStretchEdge;
+			//Order of edge arguments: left, right, top, bottom. Each of these means "pixels from left/right/top/bottom" and places
+			//a line on the image that will "cut" the image into the tileable pieces.
+			platformNinepatch = new NinePatch(region, edge, edge, edge, edge);
+		}
+		
 	}
 	
 	/**

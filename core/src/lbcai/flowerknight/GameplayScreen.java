@@ -36,11 +36,6 @@ public class GameplayScreen extends ScreenAdapter {
 	SpriteBatch batch;
 	
 	/**
-	 * Object that draws points, lines, outlines, or filled shapes.
-	 */
-	ShapeRenderer renderer;
-	
-	/**
 	 * show() is called when this screen becomes the current screen for a game. Basically the initialize method.
 	 */
 	@Override
@@ -52,10 +47,6 @@ public class GameplayScreen extends ScreenAdapter {
 		level = new Level();
 		batch = new SpriteBatch();
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
-		renderer = new ShapeRenderer();
-		//If there is a problem drawing the shape type specified, the batch will be "flushed" and the shape type will change
-		//to suit the shape that was wrong. Take care to draw the same shape types together or else you will have many flushes.
-		renderer.setAutoShapeType(true);
 		
 		
 	}
@@ -84,9 +75,9 @@ public class GameplayScreen extends ScreenAdapter {
 		//We are now telling our SpriteBatch to use this combined matrix to render things. Call this whenever you do something to
 		//the camera! Putting it in render() is also safe.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
-		renderer.setProjectionMatrix(viewport.getCamera().combined);
+
 		//Render the level! Renders everything in the level.
-		level.render(batch, renderer);
+		level.render(batch);
 
 	}
 	
