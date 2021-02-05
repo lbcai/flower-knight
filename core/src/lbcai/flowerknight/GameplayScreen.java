@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lbcai.util.Assets;
+import lbcai.util.ChaseCam;
 import lbcai.util.Constants;
 
 /**
@@ -36,6 +37,11 @@ public class GameplayScreen extends ScreenAdapter {
 	SpriteBatch batch;
 	
 	/**
+	 * Add a camera that follows the player around.
+	 */
+	private ChaseCam chaseCam;
+	
+	/**
 	 * show() is called when this screen becomes the current screen for a game. Basically the initialize method.
 	 */
 	@Override
@@ -47,6 +53,7 @@ public class GameplayScreen extends ScreenAdapter {
 		level = new Level();
 		batch = new SpriteBatch();
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
+		chaseCam = new ChaseCam(viewport.getCamera(), level.player);
 		
 		
 	}
@@ -57,6 +64,8 @@ public class GameplayScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void render(float delta) {
+		//Update the camera.
+		chaseCam.update();
 		//Check what happened; update the level so we can re-render it below and provide illusion of movement.
 		level.update(delta);
 		//Actually applies the view to our camera.

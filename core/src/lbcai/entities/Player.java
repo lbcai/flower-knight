@@ -17,7 +17,7 @@ public class Player {
 
 	public final static String className = Player.class.getName();
 	
-	Vector2 position;
+	public Vector2 position;
 	//see enum below
 	Facing facing;
 	JumpState jumpState;
@@ -83,8 +83,10 @@ public class Player {
 					//nanoTime gets current time).
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runRightAnim.getKeyFrame(runTime);
-				}
-				
+				} 
+			} else if (jumpState != JumpState.GROUNDED) {
+				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
+				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
 			}
 			
 		} else if (facing == Facing.LEFT) {

@@ -87,6 +87,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> runRightAnim;
 		public final Animation<TextureRegion> runLeftAnim;
 		public final Animation<TextureRegion> jumpLeftAnim;
+		public final Animation<TextureRegion> jumpRightAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -109,22 +110,40 @@ public class Assets implements Disposable, AssetErrorListener {
 			idleLeftAnim = new Animation(Constants.idleCycleTime, idleLeft, PlayMode.LOOP);
 			
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 1));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 2));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 3));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 3));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 8));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 9));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 10));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 12));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 16));
 			jumpLeftAnim = new Animation(Constants.jumpCycleTime, jumpLeft, PlayMode.LOOP);
+			
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 1));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 2));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 3));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 3));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 4));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 4));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 5));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 6));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 8));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 9));
+			jumpRightAnim = new Animation(Constants.jumpCycleTime, jumpRight, PlayMode.LOOP);
 			
 			runLeft.add(atlas.findRegion(Constants.runLeft, 1));
 			runLeft.add(atlas.findRegion(Constants.runLeft, 2));

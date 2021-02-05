@@ -11,6 +11,7 @@ public class Constants {
 	public static final String idleRight = "Idleright";
 	public static final String idleLeft = "Idleleft";
 	public static final String jumpLeft = "Jumpleft";
+	public static final String jumpRight = "Jumpright";
 	public static final String runLeft = "Runleft";
 	public static final String runRight = "Runright";
 	

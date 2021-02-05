@@ -8,9 +8,9 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [x] Implement player standing, running, and jumping
 - [x] Draw player sprites according to player action
 - [x] Animate player run
-- [ ] Implement nine-patch platforms with collisions
+- [x] Implement nine-patch platforms with collisions
 - [ ] Allow maps to continue beyond the screen
-- [ ] Make camera follow player
+- [x] Make camera follow player
 - [ ] Remove floor and add kill plane
 - [ ] Add debug camera controls
 - [ ] Implement enemies with behavior, sprites, death
