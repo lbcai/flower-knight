@@ -174,7 +174,7 @@ public class Player {
 		}
 		
 		//jump (apparently you can do this case thing with enums!)
-		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
+		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
 			case GROUNDED:
 				startJump();
@@ -184,9 +184,13 @@ public class Player {
 				break;
 			//note: do nothing when falling.
 			}
-		} else {
 			endJump();
+		} else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
+			//downjump
+				jumpState = JumpState.FALLING;
+				position.y -= 10; 
 		}
+
 
 	}
 	

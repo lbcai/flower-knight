@@ -26,7 +26,12 @@ public class Level {
 		//Initialize the array of platforms and add a test platform.
 		platforms = new Array<Platform>();
 		//left, top, width, height
-		platforms.add(new Platform(50, 50, 512, 50));
+		platforms.add(new Platform(500, 75, 200, 50));
+		platforms.add(new Platform(0, 0, 512, 50));
+		//platform height bug (jump distance)
+		platforms.add(new Platform(100, 85, 300, 50));
+		
+		platforms.add(new Platform(100, 160, 500, 50));
 	}
 	
 	public void update(float delta) {
