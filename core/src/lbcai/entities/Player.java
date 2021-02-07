@@ -17,6 +17,10 @@ public class Player {
 
 	public final static String className = Player.class.getName();
 	
+	//use to compare against current position and check if player should land or fall off platforms.
+	Vector2 lastFramePosition;
+	Vector2 spawnLocation;
+	Vector2 velocity;
 	public Vector2 position;
 	//see enum below
 	Facing facing;
@@ -26,25 +30,33 @@ public class Player {
 	long jumpStartTime;
 	long runStartTime;
 	long idleStartTime;
-	Vector2 velocity;
-	//use to compare against current position and check if player should land or fall off platforms.
-	Vector2 lastFramePosition;
-	int jumpCounter = 0;
+	
+	private int jumpCounter = 0;
 	
 	/**
-	 * Constructor: make (width, height) vector position. Tells us position is center of head. 
-	 * Starts player facing right & falling down (drop them into the level). Initializes things like idle start time,
-	 * last frame position, etc.
+	 * Constructor: make a player.
 	 */
-	public Player(Vector2 position) {
-		//set player's position to position given in Level (makes sure player spawns on viable platform)
-		this.position = position;
+	public Player(Vector2 spawnLocation) {
+		
+		this.spawnLocation = spawnLocation;
+		position = new Vector2();
+		lastFramePosition = new Vector2();
+		velocity = new Vector2();
+		init();
+
+	}
+	
+	/**
+	 * Initialize the player, i.e. on respawn.
+	 */
+	public void init() {
+		position.set(spawnLocation);
+		lastFramePosition.set(spawnLocation);
+		velocity.setZero();
 		facing = Facing.RIGHT;
 		jumpState = JumpState.FALLING;
-		velocity = new Vector2();
 		runState = RunState.IDLE;
 		idleStartTime = TimeUtils.nanoTime();
-		lastFramePosition = new Vector2(position);
 	}
 	
 	/**
@@ -140,17 +152,22 @@ public class Player {
 		//Use position vector to set last frame position.
 		lastFramePosition.set(position);
 
-		//Subtract time * gravity from player velocity to make player accelerate downwards the longer they are in air.
+		//Subtract delta * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
 		velocity.y -= delta * Constants.worldGravity;
 		//Scale vector velocity by delta (time) and add to position vector. Changes position of player based on time and
 		//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
 		position.mulAdd(velocity, delta);
+		
 		//Start player falling.
 		if (jumpState != JumpState.FALLING && velocity.y < 0) {
 			endJump();
 		}
-
+		
+		if (position.y < Constants.killPlane) {
+			init();
+		}
+		
 		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
 		for (Platform platform : platforms) {
@@ -183,8 +200,8 @@ public class Player {
 			runState = RunState.IDLE;
 		}
 		
-		//jump (apparently you can do this case thing with enums!)
-		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
+		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
+		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
 			case GROUNDED:
 				if (jumpCounter < 2) {
@@ -202,10 +219,10 @@ public class Player {
 					break;
 				}
 			}
-		} else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
+		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
-			//prevent player from being able to doublejump straight onto the platform they downjumped off on accident
-			jumpCounter = 2;
+			//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
+			//downjumped off on accident
 			jumpState = JumpState.FALLING;
 			position.y -= 10; 
 		}

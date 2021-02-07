@@ -65,7 +65,7 @@ public class GameplayScreen extends ScreenAdapter {
 	@Override
 	public void render(float delta) {
 		//Update the camera.
-		chaseCam.update();
+		chaseCam.update(delta);
 		//Check what happened; update the level so we can re-render it below and provide illusion of movement.
 		level.update(delta);
 		//Actually applies the view to our camera.

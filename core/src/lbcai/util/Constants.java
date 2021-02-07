@@ -34,4 +34,6 @@ public class Constants {
 	//Player's base jump speed and base time allowed in the air for jump.
 	public static final float jumpSpeed = 900;
 	public static final float worldGravity = 2000;
+	public static final float killPlane = -500;
+	public static final float cameraMoveSpeed = 512;
 }

@@ -54,8 +54,11 @@ public class Level {
 		platforms.add(new Platform(500, 75, 200, 50));
 		platforms.add(new Platform(0, 0, 512, 50));
 		//platform height bug (jump distance)
-		//platforms.add(new Platform(100, 85, 300, 50));
+		platforms.add(new Platform(100, 85, 300, 50));
 		platforms.add(new Platform(100, 160, 500, 50));
+		platforms.add(new Platform(700, 160, 500, 50));
+		platforms.add(new Platform(0, 1000, 200, 800));
+		platforms.add(new Platform(512, 1000, 200, 800));
 		//Add player to the level. Add a start position for the level as input.
 		player = new Player(new Vector2(100, 200));
 	}
