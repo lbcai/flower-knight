@@ -29,14 +29,16 @@ public class Player {
 	Vector2 velocity;
 	//use to compare against current position and check if player should land or fall off platforms.
 	Vector2 lastFramePosition;
+	int jumpCounter = 0;
 	
 	/**
 	 * Constructor: make (width, height) vector position. Tells us position is center of head. 
 	 * Starts player facing right & falling down (drop them into the level). Initializes things like idle start time,
 	 * last frame position, etc.
 	 */
-	public Player() {
-		position = new Vector2(128, Constants.playerEyeHeight);
+	public Player(Vector2 position) {
+		//set player's position to position given in Level (makes sure player spawns on viable platform)
+		this.position = position;
 		facing = Facing.RIGHT;
 		jumpState = JumpState.FALLING;
 		velocity = new Vector2();
@@ -84,9 +86,11 @@ public class Player {
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runRightAnim.getKeyFrame(runTime);
 				} 
-			} else if (jumpState != JumpState.GROUNDED) {
+			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
+			} else if (jumpState == JumpState.FALLING) {
+				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
 			}
 			
 		} else if (facing == Facing.LEFT) {
@@ -98,9 +102,11 @@ public class Player {
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
 				}
-			} else if (jumpState != JumpState.GROUNDED) {
+			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
+			} else if (jumpState == JumpState.FALLING) {
+				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
 			}
 			
 		}
@@ -126,6 +132,7 @@ public class Player {
 	
 	/**
 	 * Update player based on input from controller.
+	 * 
 	 * @param delta the time in seconds so we avoid framerate problems and changing the passing of time on different devices.
 	 * 				Usually in some fraction of a second. This actually represents the time since last frame.
 	 */
@@ -140,8 +147,8 @@ public class Player {
 		//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
 		position.mulAdd(velocity, delta);
 		//Start player falling.
-		if (jumpState != JumpState.FALLING) {
-			jumpState = JumpState.FALLING;
+		if (jumpState != JumpState.FALLING && velocity.y < 0) {
+			endJump();
 		}
 
 		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
@@ -151,15 +158,18 @@ public class Player {
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + Constants.playerEyeHeight;
 				velocity.y = 0;
+				if (jumpCounter >= 2) {
+					jumpCounter = 0;
+				}
 			}
 		}
 		
 		//Prevent player from falling through ground. Player will start falling and hit ground and stay there.
-		if (position.y - Constants.playerEyeHeight < 0) {
-			jumpState = JumpState.GROUNDED;
-			position.y = Constants.playerEyeHeight;
-			velocity.y = 0;
-		}
+		//if (position.y - Constants.playerEyeHeight < 0) {
+		//	jumpState = JumpState.GROUNDED;
+		//	position.y = Constants.playerEyeHeight;
+		//	velocity.y = 0;
+		//}
 		
 		//run
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -177,18 +187,27 @@ public class Player {
 		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
 			case GROUNDED:
-				startJump();
-				break;
-			case JUMPING:
-				continueJump();
-				break;
-			//note: do nothing when falling.
+				if (jumpCounter < 2) {
+					startJump();
+					break;
+				}
+
+				//do nothing if continuejump
+				
+			case FALLING:
+				if (jumpCounter < 2) {
+					startJump();
+					break;
+				} else {
+					break;
+				}
 			}
-			endJump();
 		} else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
-				jumpState = JumpState.FALLING;
-				position.y -= 10; 
+			//prevent player from being able to doublejump straight onto the platform they downjumped off on accident
+			jumpCounter = 2;
+			jumpState = JumpState.FALLING;
+			position.y -= 10; 
 		}
 
 
@@ -228,25 +247,20 @@ public class Player {
 		jumpState = JumpState.JUMPING;
 		//Get current time (of starting jump).
 		jumpStartTime = TimeUtils.nanoTime();
+		jumpCounter += 1;
 		continueJump();
+		
 	}
 	
-	//This is added to allow player to continue to press the jump key while in air in order to jump for longer and go higher.
+	//This is added to allow player to doublejump under certain conditions (falling, and not exceeding 2 jumps before touching
+	//ground again).
 	private void continueJump() {
 		if (jumpState == JumpState.JUMPING) {
-			//Multiply by nanoToSec to convert from nanoseconds to seconds. The value we are converting is the length of time it
-			//has been since we started jumping. nanoTime() is current time in nanoseconds.
-			float jumpDuration = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
-			//If we are still allowed to be jumping up because max jump time hasn't been reached, we continue to go up by giving a
+			//If we are still allowed to be jumping up because max jump hasn't been reached, we continue to go up by giving a
 			//boost to the player's velocity. If we aren't allowed, we just go to falling by ending the jump. The velocity will
 			//be affected by gravity in the update method and cause player to fall.
-			if (jumpDuration < Constants.maxJumpTime) {
-				velocity.y = Constants.jumpSpeed;
-			} else {
-				endJump();
-			}
+			velocity.y = Constants.jumpSpeed;	
 		}
-		endJump();
 	}
 	
 	private void endJump() {
@@ -267,11 +281,11 @@ public class Player {
 			//foot, then add on one side and subtract on the other.
 			float leftSideFoot = position.x - (Constants.playerStance / 2);
 			float rightSideFoot = position.x + (Constants.playerStance / 2);
+			
 			leftSideFootOnPlatform = (platform.left < leftSideFoot && platform.right > leftSideFoot);
 			rightSideFootOnPlatform = (platform.left < rightSideFoot && platform.right > rightSideFoot);
 			//technically the platform is so tiny it is smaller than the stance width.
 			bothFootOnPlatform = (platform.left > leftSideFoot && platform.right < rightSideFoot);
-			
 		}
 		//return true if one is true, else return false
 		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;

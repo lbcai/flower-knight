@@ -116,16 +116,11 @@ public class Assets implements Disposable, AssetErrorListener {
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 7));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 8));
-			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 9));
-			jumpLeftAnim = new Animation(Constants.jumpCycleTime, jumpLeft, PlayMode.LOOP);
+			jumpLeftAnim = new Animation(Constants.jumpCycleTime, jumpLeft, PlayMode.NORMAL);
 			
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 1));
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 2));
@@ -134,16 +129,12 @@ public class Assets implements Disposable, AssetErrorListener {
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 4));
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 4));
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 5));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 5));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 5));
+			jumpRight.add(atlas.findRegion(Constants.jumpRight, 6));
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 6));
 			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 7));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 8));
-			jumpRight.add(atlas.findRegion(Constants.jumpRight, 9));
-			jumpRightAnim = new Animation(Constants.jumpCycleTime, jumpRight, PlayMode.LOOP);
+			jumpRightAnim = new Animation(Constants.jumpCycleTime, jumpRight, PlayMode.NORMAL);
 			
 			runLeft.add(atlas.findRegion(Constants.runLeft, 1));
 			runLeft.add(atlas.findRegion(Constants.runLeft, 2));
