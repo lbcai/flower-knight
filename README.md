@@ -13,7 +13,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [x] Make camera follow player
 - [x] Remove floor and add kill plane
 - [x] Add debug camera controls
-- [ ] Implement enemies with behavior, sprites, death
+- [x] Implement enemies with behavior, sprites, death
 - [ ] Add knockback
 - [ ] Add projectiles
 - [ ] Add hit detection 
@@ -29,7 +29,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
-- [ ] Add enemy aggression
+- [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets
 - [ ] Implement UI functionality

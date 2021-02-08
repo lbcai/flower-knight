@@ -15,6 +15,8 @@ public class Platform {
 	float right;
 	float top;
 	float bottom;
+	//used to link enemies to platforms
+	String id;
 	
 	/**
 	 * Constructor for a platform. Defines the platform qualities based on input.
@@ -44,6 +46,14 @@ public class Platform {
 		//this is on top of what was defined for the platform when it was created, seems like these values affect
 		//how far away from the actual texture entities will stand on the platform/count as touching platform, adjust as needed
 		Assets.instance.platformAssets.platformNinepatch.draw(batch, left - 1, bottom - 1, width + 2, height + 5);
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.RunState;
 
 public class Player {
 
@@ -204,20 +207,22 @@ public class Player {
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
 			case GROUNDED:
-				if (jumpCounter < 2) {
-					startJump();
-					break;
-				}
+				startJump();
+				break;
 
-				//do nothing if continuejump
-				
-			case FALLING:
+			case JUMPING:
 				if (jumpCounter < 2) {
 					startJump();
 					break;
 				} else {
 					break;
 				}
+				
+			case FALLING:
+				if (jumpCounter < 2) {
+					startJump();
+					break;
+				} 
 			}
 		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
@@ -308,22 +313,5 @@ public class Player {
 		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
 	}
 	
-	
-	//enums are like discrete final variables, like steps you can set something to.
-	enum Facing {
-		LEFT,
-		RIGHT
-	}
-	
-	enum JumpState {
-		GROUNDED,
-		JUMPING,
-		FALLING
-	}
-	
-	enum RunState {
-		IDLE,
-		RUN
-	}
 	
 }

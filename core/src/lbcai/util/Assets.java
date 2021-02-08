@@ -38,6 +38,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	 */
 	public PlayerAssets playerAssets;
 	public PlatformAssets platformAssets;
+	public PBeetleAssets pBeetleAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -66,6 +67,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		//Match the appropriate spritesheet with the appropriate atlas regions to make animations down the line.
 		playerAssets = new PlayerAssets(atlas);
 		platformAssets = new PlatformAssets(atlas);
+		pBeetleAssets = new PBeetleAssets(atlas);
 	}
 	
 	/**
@@ -175,6 +177,20 @@ public class Assets implements Disposable, AssetErrorListener {
 			//Order of edge arguments: left, right, top, bottom. Each of these means "pixels from left/right/top/bottom" and places
 			//a line on the image that will "cut" the image into the tileable pieces.
 			platformNinepatch = new NinePatch(region, edge, edge, edge, edge);
+		}
+		
+	}
+	
+	public class PBeetleAssets {
+		
+		public final Array<AtlasRegion> idleLeft = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> idleLeftAnim;
+
+		
+		public PBeetleAssets(TextureAtlas atlas) {
+			idleLeft.add(atlas.findRegion(Constants.pBeetle));
+			idleLeftAnim = new Animation(Constants.runCycleTime, idleLeft, PlayMode.LOOP);
+
 		}
 		
 	}
