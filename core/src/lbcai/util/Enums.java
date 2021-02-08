@@ -10,11 +10,14 @@ public class Enums {
 		public enum JumpState {
 			GROUNDED,
 			JUMPING,
-			FALLING
+			FALLING,
+			IFRAME
 		}
 		
 		public enum RunState {
 			IDLE,
 			RUN
 		}
+		
+		
 }

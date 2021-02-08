@@ -50,7 +50,7 @@ public class GameplayScreen extends ScreenAdapter {
 		AssetManager manager = new AssetManager();
 		//Initialize our own Assets class that handles rendering for entities.
 		Assets.instance.init(manager);
-		level = new Level();
+		level = new Level(viewport);
 		batch = new SpriteBatch();
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
 		chaseCam = new ChaseCam(viewport.getCamera(), level.player);

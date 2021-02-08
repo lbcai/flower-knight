@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
@@ -33,15 +35,19 @@ public class Player {
 	long jumpStartTime;
 	long runStartTime;
 	long idleStartTime;
-	
+	Level level;
 	private int jumpCounter = 0;
+	private boolean iFrame = false;
+	long timeSinceHit;
 	
 	/**
 	 * Constructor: make a player.
 	 */
-	public Player(Vector2 spawnLocation) {
+	public Player(Vector2 spawnLocation, Level level) {
 		
 		this.spawnLocation = spawnLocation;
+		//the current level we are in
+		this.level = level;
 		position = new Vector2();
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();
@@ -177,12 +183,40 @@ public class Player {
 			if (landOnPlatform(platform)) {
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + Constants.playerEyeHeight;
+				velocity.x = 0;
 				velocity.y = 0;
 				if (jumpCounter >= 2) {
 					jumpCounter = 0;
 				}
 			}
 		}
+		
+		//Collision detection with enemies, includes the direction the hit is coming from.
+		Rectangle playerBound = new Rectangle(
+				position.x - Constants.playerStance / 2,
+				position.y - Constants.playerEyeHeight, 
+				Constants.playerStance,
+				Constants.playerHeight);
+		
+		if (timeSinceHit > Constants.iFrameLength) {
+			iFrame = false;
+		}
+		
+		for (Enemy enemy : level.getEnemies()) {
+			Rectangle enemyBound = new Rectangle(
+					enemy.position.x - Constants.pBeetleCollisionRadius,
+					enemy.position.y - Constants.pBeetleCollisionRadius,
+					2 * Constants.pBeetleCollisionRadius,
+					2 * Constants.pBeetleCollisionRadius);
+			if (playerBound.overlaps(enemyBound)) {
+				if (position.x < enemy.position.x && iFrame == false) {
+					flinch(Facing.LEFT);
+				} else if (position.x > enemy.position.x && iFrame == false) {
+					flinch(Facing.RIGHT);
+				}
+			}
+		}
+		
 		
 		//Prevent player from falling through ground. Player will start falling and hit ground and stay there.
 		//if (position.y - Constants.playerEyeHeight < 0) {
@@ -191,16 +225,18 @@ public class Player {
 		//	velocity.y = 0;
 		//}
 		
-		//run
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			moveLeft(delta);
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			moveRight(delta);
-		} else {
-			if (runState != RunState.IDLE && jumpState == JumpState.GROUNDED) {
-				idleStartTime = TimeUtils.nanoTime();
+		//run (unavailable while flinching or otherwise iframe animation-locked)
+		if (jumpState != JumpState.IFRAME) {
+			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+				moveLeft(delta);
+			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+				moveRight(delta);
+			} else {
+				if (runState != RunState.IDLE && jumpState == JumpState.GROUNDED) {
+					idleStartTime = TimeUtils.nanoTime();
+				}
+				runState = RunState.IDLE;
 			}
-			runState = RunState.IDLE;
 		}
 		
 		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
@@ -214,10 +250,8 @@ public class Player {
 				if (jumpCounter < 2) {
 					startJump();
 					break;
-				} else {
-					break;
-				}
-				
+				} 
+
 			case FALLING:
 				if (jumpCounter < 2) {
 					startJump();
@@ -313,5 +347,16 @@ public class Player {
 		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
 	}
 	
+	private void flinch(Facing facing) {
+		velocity.y = Constants.knockbackSpeed.y;
+		if (facing == Facing.LEFT) {
+			velocity.x = -Constants.knockbackSpeed.x;
+		} else {
+			velocity.x = Constants.knockbackSpeed.x;
+		}
+		jumpState = JumpState.IFRAME;
+		timeSinceHit = TimeUtils.nanoTime();
+		iFrame = true;
+	}
 	
 }

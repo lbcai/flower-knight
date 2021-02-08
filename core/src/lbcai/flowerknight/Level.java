@@ -6,12 +6,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lbcai.entities.Enemy;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 
 public class Level {
+	//get each level
+	public static final String className = Level.class.getName();
+	private Viewport viewport;
+	
 	
 	/**
 	 * Make the player.
@@ -28,8 +33,9 @@ public class Level {
 	 */
 	private DelayedRemovalArray<Enemy> enemies;
 	
-	public Level() {
-
+	public Level(Viewport viewport) {
+		this.viewport = viewport;
+		
 		//Initialize the array of platforms and enemies.
 		platforms = new Array<Platform>();
 		enemies = new DelayedRemovalArray<Enemy>();
@@ -80,13 +86,18 @@ public class Level {
 		platforms.add(enemyPlatform);
 		
 		//Add player to the level. Add a start position for the level as input.
-		player = new Player(new Vector2(100, 200));
+		player = new Player(new Vector2(100, 200), this);
 	}
 	
 	public Array<Platform> getPlatforms() {
 		return platforms;
 	}
 	
+	public DelayedRemovalArray<Enemy> getEnemies() {
+		return enemies;
+	}
 	
-	
+	public Viewport getViewport() {
+		return viewport;
+	}
 }

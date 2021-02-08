@@ -30,12 +30,16 @@ public class Constants {
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
 	public static final float playerEyeHeight = 128.0f;
+	public static final float playerHeight = 164.0f;
 	//Distance between player's feet, used to detect when player lands on platforms and when player should fall.
 	public static final float playerStance = 60.0f;
 	//Player's base move speed.
 	public static final float moveSpeed = 512;
 	//Player's base jump speed and base time allowed in the air for jump.
 	public static final float jumpSpeed = 850;
+	//Basic on-touch knockback velocity.
+	public static final Vector2 knockbackSpeed = new Vector2(600, 200);
+	public static final float iFrameLength = 1f;
 	
 	
 	//tileset
@@ -50,4 +54,5 @@ public class Constants {
 	public static final float enemyMoveSpeed = 250;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
+	public static final float pBeetleCollisionRadius = 50;
 }
