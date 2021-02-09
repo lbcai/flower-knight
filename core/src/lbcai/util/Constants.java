@@ -23,6 +23,7 @@ public class Constants {
 	public static final String jumpRight = "Jumpright";
 	public static final String runLeft = "Runleft";
 	public static final String runRight = "Runright";
+	
 	public static final float runCycleTime = 0.04f;
 	public static final float idleCycleTime = 0.4f;
 	public static final float jumpCycleTime = 0.04f;
@@ -41,6 +42,10 @@ public class Constants {
 	public static final Vector2 knockbackSpeed = new Vector2(600, 200);
 	public static final float iFrameLength = 1f;
 	
+	public static final String runDust = "dust";
+	public static final Vector2 dustCenter = new Vector2(50, 50);
+	public static final float dustDuration = 0.5f;
+	
 	
 	//tileset
 	public static final String platformSprite = "Platform";
@@ -55,4 +60,10 @@ public class Constants {
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final float pBeetleCollisionRadius = 50;
+	public static final String bullet = "bulletseed";
+	public static final Vector2 bulletCenter = new Vector2(25, 25);
+	
+	//item
+	public static final String life = "heal";
+	public static final Vector2 lifeCenter = new Vector2(50, 50);
 }

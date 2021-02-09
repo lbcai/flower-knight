@@ -198,7 +198,7 @@ public class Player {
 				Constants.playerStance,
 				Constants.playerHeight);
 		
-		if (timeSinceHit > Constants.iFrameLength) {
+		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
 			iFrame = false;
 		}
 		

@@ -39,6 +39,9 @@ public class Assets implements Disposable, AssetErrorListener {
 	public PlayerAssets playerAssets;
 	public PlatformAssets platformAssets;
 	public PBeetleAssets pBeetleAssets;
+	public DustAssets dustAssets;
+	public LifeAssets lifeAssets;
+	public BulletAssets bulletAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -68,6 +71,9 @@ public class Assets implements Disposable, AssetErrorListener {
 		playerAssets = new PlayerAssets(atlas);
 		platformAssets = new PlatformAssets(atlas);
 		pBeetleAssets = new PBeetleAssets(atlas);
+		dustAssets = new DustAssets(atlas);
+		lifeAssets = new LifeAssets(atlas);
+		bulletAssets = new BulletAssets(atlas);
 	}
 	
 	/**
@@ -191,6 +197,36 @@ public class Assets implements Disposable, AssetErrorListener {
 			idleLeft.add(atlas.findRegion(Constants.pBeetle));
 			idleLeftAnim = new Animation(Constants.runCycleTime, idleLeft, PlayMode.LOOP);
 
+		}
+		
+	}
+	
+	public class DustAssets {
+		
+		public final AtlasRegion dust;
+		
+		public DustAssets(TextureAtlas atlas) {
+			dust = atlas.findRegion(Constants.runDust);
+		}
+		
+	}
+	
+	public class LifeAssets {
+		
+		public final AtlasRegion life;
+		
+		public LifeAssets(TextureAtlas atlas) {
+			life = atlas.findRegion(Constants.life);
+		}
+		
+	}
+	
+	public class BulletAssets {
+		
+		public final AtlasRegion bullet;
+		
+		public BulletAssets(TextureAtlas atlas) {
+			bullet = atlas.findRegion(Constants.bullet);
 		}
 		
 	}
