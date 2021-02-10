@@ -11,7 +11,8 @@ public class Enums {
 			GROUNDED,
 			JUMPING,
 			FALLING,
-			IFRAME
+			IFRAME,
+			WALL
 		}
 		
 		public enum RunState {

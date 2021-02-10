@@ -14,16 +14,16 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [x] Remove floor and add kill plane
 - [x] Add debug camera controls
 - [x] Implement enemies with behavior, sprites, death
-- [ ] Add knockback
+- [x] Add knockback
 - [ ] Add projectiles
-- [ ] Add hit detection 
+- [x] Add hit detection 
 - [ ] Add powerups 
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
 ### Custom Features
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
-- [ ] Inbetween animations: i.e. sliding to a stop after running
+- [ ] Inbetween animation: sliding to a stop after running
 - [ ] Add extra movement options: downjump, doublejump, wall climbing
 - [ ] Create platform tileset & background image
 - [ ] Create basic player attack animations

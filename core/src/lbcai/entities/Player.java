@@ -35,6 +35,7 @@ public class Player {
 	long jumpStartTime;
 	long runStartTime;
 	long idleStartTime;
+	long wallStartTime;
 	Level level;
 	private int jumpCounter = 0;
 	private boolean iFrame = false;
@@ -110,8 +111,10 @@ public class Player {
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
-			} else if (jumpState == JumpState.FALLING) {
+			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
+			} else if (jumpState == JumpState.WALL) {
+				region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
 			}
 			
 		} else if (facing == Facing.LEFT) {
@@ -126,8 +129,10 @@ public class Player {
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
-			} else if (jumpState == JumpState.FALLING) {
+			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
+			} else if (jumpState == JumpState.WALL) {
+				region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(0);
 			}
 			
 		}
@@ -168,17 +173,27 @@ public class Player {
 		//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
 		position.mulAdd(velocity, delta);
 		
-		//Start player falling.
+		//Start player falling. Why do we not just use endjump()? Because dropping off a platform will not cause you to enter
+		//falling state.
 		if (jumpState != JumpState.FALLING && velocity.y < 0) {
-			endJump();
+			jumpState = JumpState.FALLING;
 		}
 		
+		//Return player to spawn if they fall off the map. Currently doesn't deduct lives or anything.
 		if (position.y < Constants.killPlane) {
 			init();
 		}
 		
+		//Use for collision detection of player.
+		Rectangle playerBound = new Rectangle(
+				position.x - Constants.playerStance / 2,
+				position.y - Constants.playerEyeHeight, 
+				Constants.playerStance,
+				Constants.playerHeight);
+		
 		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
+		//Also collision detection with sides of platform.
 		for (Platform platform : platforms) {
 			if (landOnPlatform(platform)) {
 				jumpState = JumpState.GROUNDED;
@@ -189,15 +204,34 @@ public class Player {
 					jumpCounter = 0;
 				}
 			}
+			
+			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING) {
+				
+				if (position.x == platform.left) {
+					System.out.println("test");
+				}
+				
+				if (((position.x - Constants.playerStance / 2) == platform.right) && (platform.bottom <= position.y) && 
+						(position.y <= platform.top)) {
+					System.out.println("test");
+					wallStartTime = TimeUtils.nanoTime();
+					jumpState = JumpState.WALL;
+					jumpCounter = 0;
+					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
+						position.x = platform.right;
+					}
+				} else if ((position.x + Constants.playerStance / 2) == platform.left) {
+					wallStartTime = TimeUtils.nanoTime();
+					jumpState = JumpState.WALL;
+					jumpCounter = 0;
+					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
+						position.x = platform.left;
+					}
+				}
+			}
 		}
 		
-		//Collision detection with enemies, includes the direction the hit is coming from.
-		Rectangle playerBound = new Rectangle(
-				position.x - Constants.playerStance / 2,
-				position.y - Constants.playerEyeHeight, 
-				Constants.playerStance,
-				Constants.playerHeight);
-		
+		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
 			iFrame = false;
 		}
