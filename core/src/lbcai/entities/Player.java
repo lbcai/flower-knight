@@ -207,28 +207,22 @@ public class Player {
 			
 			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING) {
 				
-				if (position.x == platform.left) {
-					System.out.println("test");
+				if (stickToPlatformLeft(platform) || stickToPlatformRight(platform)) {
+					System.out.println("stick");
+					wallStartTime = TimeUtils.nanoTime();
+					jumpState = JumpState.WALL;
+					jumpCounter = 0;
+					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
+						if (stickToPlatformLeft(platform)) {
+							position.x = platform.left;
+						} else {
+							position.x = platform.right;
+						}
+					} 
+					
 				}
 				
-				if (((position.x - Constants.playerStance / 2) == platform.right) && (platform.bottom <= position.y) && 
-						(position.y <= platform.top)) {
-					System.out.println("test");
-					wallStartTime = TimeUtils.nanoTime();
-					jumpState = JumpState.WALL;
-					jumpCounter = 0;
-					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
-						position.x = platform.right;
-					}
-				} else if ((position.x + Constants.playerStance / 2) == platform.left) {
-					wallStartTime = TimeUtils.nanoTime();
-					jumpState = JumpState.WALL;
-					jumpCounter = 0;
-					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
-						position.x = platform.left;
-					}
-				}
-			}
+			}	
 		}
 		
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
@@ -237,6 +231,7 @@ public class Player {
 		}
 		
 		for (Enemy enemy : level.getEnemies()) {
+			//have to make new rectangle because enemies move
 			Rectangle enemyBound = new Rectangle(
 					enemy.position.x - Constants.pBeetleCollisionRadius,
 					enemy.position.y - Constants.pBeetleCollisionRadius,
@@ -391,6 +386,24 @@ public class Player {
 		jumpState = JumpState.IFRAME;
 		timeSinceHit = TimeUtils.nanoTime();
 		iFrame = true;
+	}
+	
+	boolean stickToPlatformLeft(Platform platform) {
+		boolean leftStick = (position.x + Constants.playerStance / 2) < platform.left + 1 &&
+				(position.x + Constants.playerStance / 2) > platform.left - 1;
+		boolean between = position.y < platform.top && position.y > platform.bottom;
+		boolean left = leftStick && between;
+		
+		return left;
+	}
+	
+	boolean stickToPlatformRight(Platform platform) {
+		boolean rightStick = (position.x - Constants.playerStance / 2) < platform.right + 1 &&
+				(position.x + Constants.playerStance / 2) > platform.right - 1;		
+		boolean between = position.y < platform.top && position.y > platform.bottom;
+		boolean right = rightStick && between;
+		
+		return right;
 	}
 	
 }
