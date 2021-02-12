@@ -169,7 +169,7 @@ public class Player {
 		//Subtract delta * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
 		velocity.y -= delta * Constants.worldGravity;
-		//Scale vector velocity by delta (time) and add to position vector. Changes position of player based on time and
+		//Multiply vector velocity by scalar delta (time) and add to position vector. Changes position of player based on time and
 		//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
 		position.mulAdd(velocity, delta);
 		
@@ -205,18 +205,21 @@ public class Player {
 				}
 			}
 			
-			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING) {
-				
+			if ((jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING) && (Gdx.input.isKeyPressed(Keys.LEFT) || 
+					Gdx.input.isKeyPressed(Keys.RIGHT))) {
 				if (stickToPlatformLeft(platform) || stickToPlatformRight(platform)) {
 					System.out.println("stick");
 					wallStartTime = TimeUtils.nanoTime();
 					jumpState = JumpState.WALL;
 					jumpCounter = 0;
 					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
+						
 						if (stickToPlatformLeft(platform)) {
-							position.x = platform.left;
+							position.x = platform.left - Constants.playerStance / 2;
+							position.y = position.y;
 						} else {
-							position.x = platform.right;
+							position.x = platform.right + Constants.playerStance / 2;
+							position.y = position.y;
 						}
 					} 
 					
@@ -389,21 +392,26 @@ public class Player {
 	}
 	
 	boolean stickToPlatformLeft(Platform platform) {
-		boolean leftStick = (position.x + Constants.playerStance / 2) < platform.left + 1 &&
-				(position.x + Constants.playerStance / 2) > platform.left - 1;
-		boolean between = position.y < platform.top && position.y > platform.bottom;
-		boolean left = leftStick && between;
-		
-		return left;
+		System.out.println("left1: " + lastFramePosition.x + " " + position.x + " " + platform.left + " " + lastFramePosition.y + " " + position.y);
+		if ((lastFramePosition.x + Constants.playerStance / 2) <= platform.left && 
+				(position.x + Constants.playerStance / 2) >= platform.left) {
+			System.out.println("left2");
+			if (position.y < platform.top && position.y > platform.bottom) {
+				return true;
+			}
+			
+		}
+		return false;
 	}
 	
 	boolean stickToPlatformRight(Platform platform) {
-		boolean rightStick = (position.x - Constants.playerStance / 2) < platform.right + 1 &&
-				(position.x + Constants.playerStance / 2) > platform.right - 1;		
-		boolean between = position.y < platform.top && position.y > platform.bottom;
-		boolean right = rightStick && between;
-		
-		return right;
+		if ((lastFramePosition.x - Constants.playerStance / 2) > platform.right && 
+				(position.x - Constants.playerStance / 2) < platform.right) {
+			if (position.y < platform.top && position.y > platform.bottom) {
+				return true;
+			}	
+		}
+		return false;
 	}
 	
 }

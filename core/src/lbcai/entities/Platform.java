@@ -18,7 +18,6 @@ public class Platform {
 	float bottom;
 	//used to link enemies to platforms
 	String id;
-	Rectangle collision;
 	
 	/**
 	 * Constructor for a platform. Defines the platform qualities based on input.
@@ -33,8 +32,7 @@ public class Platform {
 		this.bottom = top - height;
 		this.left = left;
 		this.right = left + width;
-		//(bottom left corner x coordinate, bottom left corner y coordinate, width, height)
-		collision = new Rectangle(top, bottom, width, height);
+
 	}
 	
 	/**
