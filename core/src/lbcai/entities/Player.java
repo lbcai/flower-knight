@@ -168,15 +168,17 @@ public class Player {
 
 		//Subtract delta * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
-		velocity.y -= delta * Constants.worldGravity;
-		//Multiply vector velocity by scalar delta (time) and add to position vector. Changes position of player based on time and
-		//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
-		position.mulAdd(velocity, delta);
+		if (jumpState != JumpState.WALL) {
+			velocity.y -= delta * Constants.worldGravity;
+			//Multiply vector velocity by scalar delta (time) and add to position vector. Changes position of player based on time and
+			//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
+			position.mulAdd(velocity, delta);
+		}
+
 		
-		//Start player falling. Why do we not just use endjump()? Because dropping off a platform will not cause you to enter
-		//falling state.
-		if (jumpState != JumpState.FALLING && velocity.y < 0) {
-			jumpState = JumpState.FALLING;
+		//Enter falling state if dropping
+		if (velocity.y < 0) {
+			endJump();
 		}
 		
 		//Return player to spawn if they fall off the map. Currently doesn't deduct lives or anything.
@@ -205,29 +207,56 @@ public class Player {
 				}
 			}
 			
-			if ((jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING) && (Gdx.input.isKeyPressed(Keys.LEFT) || 
-					Gdx.input.isKeyPressed(Keys.RIGHT))) {
-				if (stickToPlatformLeft(platform) || stickToPlatformRight(platform)) {
-					System.out.println("stick");
-					wallStartTime = TimeUtils.nanoTime();
-					jumpState = JumpState.WALL;
-					jumpCounter = 0;
-					if ((MathUtils.nanoToSec * TimeUtils.nanoTime() - wallStartTime) < Constants.wallTime) {
-						
-						if (stickToPlatformLeft(platform)) {
-							position.x = platform.left - Constants.playerStance / 2;
-							position.y = position.y;
-						} else {
-							position.x = platform.right + Constants.playerStance / 2;
-							position.y = position.y;
-						}
-					} 
-					
-				}
+			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING || jumpState == JumpState.WALL) {
 				
-			}	
+				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+					
+					if (stickToPlatformRight(platform)) {
+						
+						wallStartTime = TimeUtils.nanoTime();
+						jumpState = JumpState.WALL;
+						jumpCounter = 0;
+						
+						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+							position.x = platform.right + Constants.playerStance / 2;
+							velocity.x = 0;
+							velocity.y = 0;
+						} 
+						
+						if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+							position.x = (platform.right + Constants.playerStance / 2) - 10;
+							startJump();
+						}
+						
+					}
+				} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+					
+					if (stickToPlatformLeft(platform)) {
+
+						wallStartTime = TimeUtils.nanoTime();
+						jumpState = JumpState.WALL;
+						jumpCounter = 0;
+
+						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+							position.x = platform.left - Constants.playerStance / 2;
+							velocity.x = 0;
+							velocity.y = 0;
+						} 
+						
+						if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+							position.x = (platform.left - Constants.playerStance / 2) + 10;
+							startJump();
+						}
+
+					}
+				} else {
+					jumpState = JumpState.FALLING;
+
+				}
+			}
 		}
-		
+		System.out.println((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) + " " + Constants.wallTime);
+		System.out.println(jumpState);
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
 			iFrame = false;
@@ -242,8 +271,10 @@ public class Player {
 					2 * Constants.pBeetleCollisionRadius);
 			if (playerBound.overlaps(enemyBound)) {
 				if (position.x < enemy.position.x && iFrame == false) {
+					velocity.x = 0;
 					flinch(Facing.LEFT);
 				} else if (position.x > enemy.position.x && iFrame == false) {
+					velocity.x = 0;
 					flinch(Facing.RIGHT);
 				}
 			}
@@ -257,8 +288,9 @@ public class Player {
 		//	velocity.y = 0;
 		//}
 		
-		//run (unavailable while flinching or otherwise iframe animation-locked)
-		if (jumpState != JumpState.IFRAME) {
+		//run (unavailable while flinching or otherwise iframe animation-locked, which is a shorter period of time than
+		//the actual invincible time)
+		if (jumpState != JumpState.IFRAME && jumpState != JumpState.WALL) {
 			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 				moveLeft(delta);
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
@@ -289,6 +321,9 @@ public class Player {
 					startJump();
 					break;
 				} 
+			case WALL:
+				startJump();
+				break;
 			}
 		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
@@ -319,7 +354,7 @@ public class Player {
 		}
 		runState = RunState.RUN;
 		facing = Facing.LEFT;
-		position.x -= delta * Constants.moveSpeed;
+		velocity.x = -delta * Constants.moveSpeed;
 	}
 	
 	private void moveRight(float delta) {
@@ -328,7 +363,7 @@ public class Player {
 		}
 		runState = RunState.RUN;
 		facing = Facing.RIGHT;
-		position.x += delta * Constants.moveSpeed;
+		velocity.x = delta * Constants.moveSpeed;
 	}
 	
 	private void startJump() {
@@ -392,21 +427,18 @@ public class Player {
 	}
 	
 	boolean stickToPlatformLeft(Platform platform) {
-		System.out.println("left1: " + lastFramePosition.x + " " + position.x + " " + platform.left + " " + lastFramePosition.y + " " + position.y);
 		if ((lastFramePosition.x + Constants.playerStance / 2) <= platform.left && 
 				(position.x + Constants.playerStance / 2) >= platform.left) {
-			System.out.println("left2");
 			if (position.y < platform.top && position.y > platform.bottom) {
 				return true;
 			}
-			
 		}
 		return false;
 	}
 	
 	boolean stickToPlatformRight(Platform platform) {
-		if ((lastFramePosition.x - Constants.playerStance / 2) > platform.right && 
-				(position.x - Constants.playerStance / 2) < platform.right) {
+		if ((lastFramePosition.x - Constants.playerStance / 2) >= platform.right && 
+				(position.x - Constants.playerStance / 2) <= platform.right) {
 			if (position.y < platform.top && position.y > platform.bottom) {
 				return true;
 			}	
