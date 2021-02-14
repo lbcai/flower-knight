@@ -61,6 +61,10 @@ public class Constants {
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final float pBeetleCollisionRadius = 50;
+	public static final String dandelion = "dandelion";
+	public static final Vector2 dandelionEyeHeight = new Vector2(93, 52);
+	public static final float dandelionMoveSpeed = 0;
+	public static final float dandelionCollisionRadius = 64;
 	public static final String bullet = "bulletseed";
 	public static final Vector2 bulletCenter = new Vector2(25, 25);
 	

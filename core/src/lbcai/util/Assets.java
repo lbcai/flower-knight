@@ -39,6 +39,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public PlayerAssets playerAssets;
 	public PlatformAssets platformAssets;
 	public PBeetleAssets pBeetleAssets;
+	public DandelionAssets dandelionAssets;
 	public DustAssets dustAssets;
 	public LifeAssets lifeAssets;
 	public BulletAssets bulletAssets;
@@ -71,6 +72,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		playerAssets = new PlayerAssets(atlas);
 		platformAssets = new PlatformAssets(atlas);
 		pBeetleAssets = new PBeetleAssets(atlas);
+		dandelionAssets = new DandelionAssets(atlas);
 		dustAssets = new DustAssets(atlas);
 		lifeAssets = new LifeAssets(atlas);
 		bulletAssets = new BulletAssets(atlas);
@@ -200,6 +202,20 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 	}
+	
+	public class DandelionAssets {
+			
+			public final Array<AtlasRegion> idleLeft = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> idleLeftAnim;
+	
+			
+			public DandelionAssets(TextureAtlas atlas) {
+				idleLeft.add(atlas.findRegion(Constants.dandelion));
+				idleLeftAnim = new Animation(Constants.runCycleTime, idleLeft, PlayMode.LOOP);
+	
+			}
+			
+		}
 	
 	public class DustAssets {
 		

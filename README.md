@@ -23,9 +23,12 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 ### Custom Features
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
-- [ ] Inbetween animation: sliding to a stop after running
+- [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform
 - [x] Add extra movement options: downjump, doublejump, wall climbing
+- [ ] Create wall climbing animations
 - [ ] Create platform tileset & background image
+- [ ] Create custom platform class for nicer looking platforms
+- [ ] Add slanted ground/platforms
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations

@@ -202,7 +202,7 @@ Jumpright
   index: 9
 Platform
   rotate: false
-  xy: 2066, 1392
+  xy: 2324, 1650
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
@@ -389,6 +389,34 @@ Slideright
   orig: 256, 256
   offset: 0, 0
   index: 2
+bulletseed
+  rotate: false
+  xy: 1550, 668
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+dandelion
+  rotate: false
+  xy: 2066, 1364
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+dust
+  rotate: false
+  xy: 2582, 1908
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+heal
+  rotate: false
+  xy: 1292, 360
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 pbeetle
   rotate: false
   xy: 2, 2

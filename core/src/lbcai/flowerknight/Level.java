@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lbcai.entities.Enemy;
+import lbcai.entities.EnemyDandelion;
+import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 
@@ -82,7 +84,7 @@ public class Level {
 		platforms.add(new Platform(512, 1000, 200, 800));
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		enemies.add(new Enemy(enemyPlatform));
+		enemies.add(new EnemyDandelion(enemyPlatform));
 		platforms.add(enemyPlatform);
 		
 		//Add player to the level. Add a start position for the level as input.
