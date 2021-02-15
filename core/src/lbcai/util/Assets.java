@@ -239,10 +239,13 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class BulletAssets {
 		
-		public final AtlasRegion bullet;
+		public final Array<AtlasRegion> bullet = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> bulletAnim;
 		
 		public BulletAssets(TextureAtlas atlas) {
-			bullet = atlas.findRegion(Constants.bullet);
+			bullet.add(atlas.findRegion(Constants.bullet, 1));
+			bullet.add(atlas.findRegion(Constants.bullet, 2));
+			bulletAnim = new Animation(Constants.bulletCycleTime, bullet, PlayMode.LOOP);
 		}
 		
 	}

@@ -395,12 +395,19 @@ bulletseed
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
-  index: -1
+  index: 1
+bulletseed
+  rotate: false
+  xy: 1808, 926
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 2
 dandelion
   rotate: false
-  xy: 2066, 1364
-  size: 128, 128
-  orig: 128, 128
+  xy: 2, 2
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
 dust
@@ -419,7 +426,7 @@ heal
   index: -1
 pbeetle
   rotate: false
-  xy: 2, 2
+  xy: 2066, 1292
   size: 200, 200
   orig: 200, 200
   offset: 0, 0

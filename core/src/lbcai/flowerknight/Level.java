@@ -8,11 +8,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import lbcai.entities.Bullet;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
+import lbcai.util.Enums.Facing;
 
 public class Level {
 	//get each level
@@ -32,16 +34,14 @@ public class Level {
 	
 	/**
 	 * DelayedRemovalArray of enemies. This type of array allows for removal of items from the array even while iterating.
+	 * Did the same with bullet objects.
 	 */
 	private DelayedRemovalArray<Enemy> enemies;
+	private DelayedRemovalArray<Bullet> bullets;
 	
 	public Level(Viewport viewport) {
 		this.viewport = viewport;
-		
-		//Initialize the array of platforms and enemies.
-		platforms = new Array<Platform>();
-		enemies = new DelayedRemovalArray<Enemy>();
-		
+
 		//Start up the Debug level.
 		initDebugLevel();
 	}
@@ -51,6 +51,10 @@ public class Level {
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
 			enemy.update(delta);
+		}
+		
+		for (Bullet bullet : bullets) {
+			bullet.update(delta);
 		}
 	}
 	
@@ -70,10 +74,21 @@ public class Level {
 			enemy.render(batch);
 		}
 		player.render(batch);
+		
+		for (Bullet bullet : bullets) {
+			bullet.render(batch);
+		}
+		
 		batch.end();
 	}
 	
 	private void initDebugLevel() {
+		
+		//Initialize the array of platforms and enemies.
+		platforms = new Array<Platform>();
+		enemies = new DelayedRemovalArray<Enemy>();
+		bullets = new DelayedRemovalArray<Bullet>();
+		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
 		platforms.add(new Platform(0, 0, 512, 50));
@@ -83,12 +98,15 @@ public class Level {
 		platforms.add(new Platform(0, 1000, 200, 800));
 		platforms.add(new Platform(512, 1000, 200, 800));
 		
-		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		enemies.add(new EnemyDandelion(enemyPlatform));
-		platforms.add(enemyPlatform);
-		
 		//Add player to the level. Add a start position for the level as input.
 		player = new Player(new Vector2(100, 200), this);
+		
+		Platform enemyPlatform = new Platform(700, 160, 500, 50);
+		enemies.add(new EnemyDandelion(enemyPlatform, player));
+		enemies.add(new EnemyPBeetle(enemyPlatform));
+		platforms.add(enemyPlatform);
+		
+
 	}
 	
 	public Array<Platform> getPlatforms() {
@@ -99,7 +117,16 @@ public class Level {
 		return enemies;
 	}
 	
+	public DelayedRemovalArray<Bullet> getBullets() {
+		return bullets;
+	}
+	
 	public Viewport getViewport() {
 		return viewport;
 	}
+	
+	public void spawnBullet(Vector2 position, Facing facing) {
+		bullets.add(new Bullet(position, facing));
+	}
+	
 }

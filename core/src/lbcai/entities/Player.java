@@ -178,7 +178,7 @@ public class Player {
 		
 		//Enter falling state if dropping
 		if (velocity.y < 0) {
-			endJump();
+			jumpState = JumpState.FALLING;
 		}
 		
 		//Return player to spawn if they fall off the map. Currently doesn't deduct lives or anything.
@@ -189,9 +189,9 @@ public class Player {
 		//Use for collision detection of player.
 		Rectangle playerBound = new Rectangle(
 				position.x - Constants.playerStance / 2,
-				position.y - Constants.playerEyeHeight, 
+				position.y - Constants.playerEyeHeight + 40, 
 				Constants.playerStance,
-				Constants.playerHeight);
+				Constants.playerHeight - 20);
 		
 		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
@@ -255,25 +255,42 @@ public class Player {
 				}
 			}
 		}
-		System.out.println((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) + " " + Constants.wallTime);
-		System.out.println(jumpState);
+		
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
 			iFrame = false;
 		}
 		
 		for (Enemy enemy : level.getEnemies()) {
-			//have to make new rectangle because enemies move
+			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
 			Rectangle enemyBound = new Rectangle(
-					enemy.position.x - Constants.pBeetleCollisionRadius,
-					enemy.position.y - Constants.pBeetleCollisionRadius,
-					2 * Constants.pBeetleCollisionRadius,
-					2 * Constants.pBeetleCollisionRadius);
+					enemy.position.x - enemy.collisionRadius,
+					enemy.position.y - enemy.collisionRadius,
+					2 * enemy.collisionRadius,
+					2 * enemy.collisionRadius);
 			if (playerBound.overlaps(enemyBound)) {
 				if (position.x < enemy.position.x && iFrame == false) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
 				} else if (position.x > enemy.position.x && iFrame == false) {
+					velocity.x = 0;
+					flinch(Facing.RIGHT);
+				}
+			}
+		}
+		
+		for (Bullet bullet : level.getBullets()) {
+			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
+			Rectangle bulletBound = new Rectangle(
+					bullet.position.x - Constants.bulletCenter.x,
+					bullet.position.y - Constants.bulletCenter.y,
+					2 * Constants.bulletCenter.x,
+					2 * Constants.bulletCenter.y);
+			if (playerBound.overlaps(bulletBound)) {
+				if (position.x < bullet.position.x && iFrame == false) {
+					velocity.x = 0;
+					flinch(Facing.LEFT);
+				} else if (position.x > bullet.position.x && iFrame == false) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
 				}
@@ -322,9 +339,11 @@ public class Player {
 					break;
 				} 
 			case WALL:
-				startJump();
-				break;
-			}
+				if (jumpCounter < 2)
+					startJump();
+					break;
+				}
+			
 		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
 			//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
