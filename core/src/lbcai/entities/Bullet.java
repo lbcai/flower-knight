@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
@@ -16,12 +17,17 @@ public class Bullet {
 	Vector2 position;
 	private long startTime;
 	Boolean flipx;
+	Level level;
+	//For deciding when the clean up the bullet object.
+	public Boolean active;
 	
 	
-	public Bullet(Vector2 position, Facing facing) {
+	public Bullet(Level level, Vector2 position, Facing facing) {
 		this.position = position;
 		this.facing = facing;
 		this.startTime = TimeUtils.nanoTime();
+		this.level = level;
+		active = true;
 	}
 	
 	
@@ -34,6 +40,17 @@ public class Bullet {
 			position.x += delta * Constants.bulletMoveSpeed;
 			break;
 		}
+		
+		//get width of screen from level viewport
+		final float worldWidth = level.getViewport().getWorldWidth();
+		//get camera's horizontal position
+		final float cameraX = level.getViewport().getCamera().position.x;
+		//check if bullet goes off the screen, change to not active if so, in Level we destroy inactive bullets.
+		//this also has the benefit of dandelions not shooting at player until you share a screen with them.
+		if (position.x < cameraX - worldWidth / 2 || position.x > cameraX + worldWidth / 2) {
+			active = false;
+		}
+		
 	}
 	
 	public void render(SpriteBatch batch) {

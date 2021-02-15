@@ -53,9 +53,19 @@ public class Level {
 			enemy.update(delta);
 		}
 		
+		//removals from the delayed removal array are queued after begin and actually performed after end.
+		bullets.begin();
 		for (Bullet bullet : bullets) {
+			//update any bullets in the bullet array
 			bullet.update(delta);
+			if (!bullet.active) {
+				//if the bullet is not active (aka it is outside of the viewport), delete from bullet array
+				//removeValue only removes the first instance of the thing, false means use .equals() for comparison and not ==
+				bullets.removeValue(bullet, false);
+			}
 		}
+		bullets.end();
+		
 	}
 	
 	/**
@@ -66,7 +76,7 @@ public class Level {
 	 */
 	public void render(SpriteBatch batch) {
 
-		batch.begin();
+		
 		for (Platform platform : platforms) {
 			platform.render(batch);
 		}
@@ -79,7 +89,7 @@ public class Level {
 			bullet.render(batch);
 		}
 		
-		batch.end();
+		
 	}
 	
 	private void initDebugLevel() {
@@ -125,8 +135,12 @@ public class Level {
 		return viewport;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 	public void spawnBullet(Vector2 position, Facing facing) {
-		bullets.add(new Bullet(position, facing));
+		bullets.add(new Bullet(this, position, facing));
 	}
 	
 }

@@ -50,9 +50,10 @@ public class GameplayScreen extends ScreenAdapter {
 		AssetManager manager = new AssetManager();
 		//Initialize our own Assets class that handles rendering for entities.
 		Assets.instance.init(manager);
+		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
 		level = new Level(viewport);
 		batch = new SpriteBatch();
-		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
+		
 		chaseCam = new ChaseCam(viewport.getCamera(), level.player);
 		
 		
@@ -84,10 +85,11 @@ public class GameplayScreen extends ScreenAdapter {
 		//We are now telling our SpriteBatch to use this combined matrix to render things. Call this whenever you do something to
 		//the camera! Putting it in render() is also safe.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
-
+		batch.begin();
 		//Render the level! Renders everything in the level.
 		level.render(batch);
-
+		batch.end();
+		
 	}
 	
 	@Override

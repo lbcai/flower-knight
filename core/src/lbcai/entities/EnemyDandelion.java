@@ -48,6 +48,7 @@ public class EnemyDandelion extends Enemy {
 						position.x + Constants.dandelionMouth.x,
 						position.y);
 			}
+			//target = player. get the level the player is in and spawn a bullet in the level.
 			target.level.spawnBullet(bulletPosition, facing);
 			bulletShotLastTime = TimeUtils.nanoTime();
 		}

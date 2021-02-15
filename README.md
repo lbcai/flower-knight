@@ -15,12 +15,13 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [x] Add debug camera controls
 - [x] Implement enemies with behavior, sprites, death
 - [x] Add knockback
-- [ ] Add projectiles
+- [x] Add projectiles
 - [x] Add hit detection 
 - [ ] Add powerups 
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
 ### Custom Features
+- [ ] Create a graphics mockup for maintaining cohesive design.
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
 - [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform
@@ -32,6 +33,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
+- [ ] Allow projectiles to fly at angles and dissolve on hitting platforms.
 - [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets
