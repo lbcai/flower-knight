@@ -22,6 +22,7 @@ public class EnemyDandelion extends Enemy {
 		this.leftIdleAnim = Assets.instance.dandelionAssets.idleLeftAnim;
 		this.collisionRadius = Constants.dandelionCollisionRadius;
 		this.bulletShotLastTime = TimeUtils.nanoTime();
+		this.HP = Constants.dandelionHP;
 		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
 	}
 	

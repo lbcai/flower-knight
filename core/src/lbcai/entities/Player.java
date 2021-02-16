@@ -277,6 +277,29 @@ public class Player {
 					flinch(Facing.RIGHT);
 				}
 			}
+			
+			if (Gdx.input.isKeyJustPressed(Keys.X)) {
+				if (facing == Facing.LEFT) {
+					Rectangle attack = new Rectangle(
+						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+					if (attack.overlaps(enemyBound)) {
+						enemy.HP -= Constants.playerBaseDamage; 
+					}
+				} else {
+					Rectangle attack = new Rectangle(
+						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+					if (attack.overlaps(enemyBound)) {
+						enemy.HP -= Constants.playerBaseDamage; 
+					}
+				}
+
+			}
 		}
 		
 		for (Bullet bullet : level.getBullets()) {
@@ -351,7 +374,7 @@ public class Player {
 			jumpState = JumpState.FALLING;
 			position.y -= 10; 
 		}
-
+		
 
 	}
 	

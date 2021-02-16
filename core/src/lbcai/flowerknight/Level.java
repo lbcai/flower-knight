@@ -48,10 +48,16 @@ public class Level {
 	
 	public void update(float delta) {
 		player.update(delta, platforms);
+		
+		enemies.begin();
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
 			enemy.update(delta);
+			if (enemy.HP < 1) {
+				enemies.removeIndex(i);
+			}
 		}
+		enemies.end();
 		
 		//removals from the delayed removal array are queued after begin and actually performed after end.
 		bullets.begin();

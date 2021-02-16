@@ -21,6 +21,7 @@ public class Enemy {
 	float moveSpeed;
 	Animation<TextureRegion> leftIdleAnim;
 	float collisionRadius;
+	public int HP;
 	
 	
 	//default enemy type will be a potato beetle
@@ -30,6 +31,7 @@ public class Enemy {
 		this.moveSpeed = Constants.enemyMoveSpeed;
 		this.leftIdleAnim = Assets.instance.pBeetleAssets.idleLeftAnim;
 		this.collisionRadius = Constants.pBeetleCollisionRadius;
+		this.HP = Constants.pBeetleHP;
 		
 		position = new Vector2(platform.left, platform.top + eyeHeight.y);
 		facing = Facing.RIGHT;

@@ -42,6 +42,8 @@ public class Constants {
 	//Basic on-touch knockback velocity.
 	public static final Vector2 knockbackSpeed = new Vector2(600, 200);
 	public static final float iFrameLength = 1.0f;
+	public static final int playerBaseDamage = 20;
+	public static final Vector2 attackRange = new Vector2(100, 100);
 	
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(50, 50);
@@ -56,12 +58,14 @@ public class Constants {
 	
 	//enemies
 	public static final String pBeetle = "pbeetle";
+	public static final int pBeetleHP = 100;
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
 	public static final float enemyMoveSpeed = 250;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final float pBeetleCollisionRadius = 50;
 	public static final String dandelion = "dandelion";
+	public static final int dandelionHP = 50;
 	public static final Vector2 dandelionEyeHeight = new Vector2(100, 100);
 	public static final Vector2 dandelionMouth = new Vector2(56, 122);
 	public static final float dandelionMoveSpeed = 0;
