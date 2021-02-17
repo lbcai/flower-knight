@@ -39,7 +39,9 @@ public class EnemyDandelion extends Enemy {
 		
 		Vector2 bulletPosition;
 		float bulletWaitTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - bulletShotLastTime);
-		if (bulletWaitTime > Constants.bulletCooldown) {
+		//check if bullet is not on cooldown and if player is not below the dandelion (can't see below its own platform) before
+		//shooting at player.
+		if (bulletWaitTime > Constants.bulletCooldown && (target.position.y > position.y - Constants.dandelionEyeHeight.y)) {
 			if (facing == Facing.LEFT) {
 				bulletPosition = new Vector2(
 						position.x - Constants.dandelionMouth.x,

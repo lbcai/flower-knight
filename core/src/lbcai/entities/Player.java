@@ -303,19 +303,22 @@ public class Player {
 		}
 		
 		for (Bullet bullet : level.getBullets()) {
-			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
+			//(bottom left x, bottom left y, width, height)
 			Rectangle bulletBound = new Rectangle(
 					bullet.position.x - Constants.bulletCenter.x,
 					bullet.position.y - Constants.bulletCenter.y,
 					2 * Constants.bulletCenter.x,
 					2 * Constants.bulletCenter.y);
+			//if player comes in contact with bullet, stop player, make flinch, destroy bullet
 			if (playerBound.overlaps(bulletBound)) {
 				if (position.x < bullet.position.x && iFrame == false) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
+					bullet.active = false;
 				} else if (position.x > bullet.position.x && iFrame == false) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
+					bullet.active = false;
 				}
 			}
 		}

@@ -16,6 +16,7 @@ public class Platform {
 	float right;
 	float top;
 	float bottom;
+
 	//used to link enemies to platforms
 	String id;
 	

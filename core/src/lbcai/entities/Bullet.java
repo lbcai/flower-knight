@@ -16,11 +16,12 @@ public class Bullet {
 	private final Facing facing;
 	Vector2 position;
 	private long startTime;
-	Boolean flipx;
-	Level level;
+	private Boolean flipx;
+	private Level level;
 	//For deciding when the clean up the bullet object.
 	public Boolean active;
-	
+	private Vector2 targetPath;
+	private float angle;
 	
 	public Bullet(Level level, Vector2 position, Facing facing) {
 		this.position = position;
@@ -28,18 +29,34 @@ public class Bullet {
 		this.startTime = TimeUtils.nanoTime();
 		this.level = level;
 		active = true;
+		
+		float playerx = level.getPlayer().position.x;
+		float playery = level.getPlayer().position.y;
+		//make a vector from bullet origin point to player (target) and normalize to a unit vector, also get angle of vector
+		//relative to x-axis so we know what angle to tilt the sprite at
+		if (facing == Facing.LEFT) {
+			this.targetPath = new Vector2(position.x - playerx, position.y - playery).nor();
+		} else {
+			this.targetPath = new Vector2(playerx - position.x, playery - position.y).nor();
+		}
+	
+		this.angle = targetPath.angleDeg();
+		
+		
 	}
 	
 	
 	public void update(float delta) {
-		switch (facing) {
-		case LEFT:
-			position.x -= delta * Constants.bulletMoveSpeed;
-			break;
-		case RIGHT:
-			position.x += delta * Constants.bulletMoveSpeed;
-			break;
+		//set position of bullet based on the aim vector established above
+		if (facing == Facing.LEFT) {
+			position.x -= targetPath.x * Constants.bulletMoveSpeed * delta;
+			position.y -= targetPath.y * Constants.bulletMoveSpeed * delta;
+		} else {
+			position.x += targetPath.x * Constants.bulletMoveSpeed * delta;
+			position.y += targetPath.y * Constants.bulletMoveSpeed * delta;
 		}
+		
+
 		
 		//get width of screen from level viewport
 		final float worldWidth = level.getViewport().getWorldWidth();
@@ -47,7 +64,9 @@ public class Bullet {
 		final float cameraX = level.getViewport().getCamera().position.x;
 		//check if bullet goes off the screen, change to not active if so, in Level we destroy inactive bullets.
 		//this also has the benefit of dandelions not shooting at player until you share a screen with them.
-		if (position.x < cameraX - worldWidth / 2 || position.x > cameraX + worldWidth / 2) {
+		//decided to add an extra half screenwidth offscreen before deletion in case the player is moving fast and the bullet
+		//comes back on screen. it should still be there or else it's immersion-breaking
+		if (position.x < cameraX - worldWidth || position.x > cameraX + worldWidth) {
 			active = false;
 		}
 		
@@ -74,7 +93,7 @@ public class Bullet {
 				region.getRegionHeight(), 
 				1, 
 				1, 
-				0, 
+				angle, 
 				region.getRegionX(), 
 				region.getRegionY(), 
 				region.getRegionWidth(), 
