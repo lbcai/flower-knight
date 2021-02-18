@@ -250,8 +250,9 @@ public class Player {
 
 					}
 				} else {
-					jumpState = JumpState.FALLING;
-
+					if (jumpState == JumpState.WALL) {
+						jumpState = JumpState.FALLING;
+					}
 				}
 			}
 		}
@@ -369,7 +370,7 @@ public class Player {
 					startJump();
 					break;
 				}
-			
+		
 		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 			//downjump
 			//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
@@ -377,8 +378,6 @@ public class Player {
 			jumpState = JumpState.FALLING;
 			position.y -= 10; 
 		}
-		
-
 	}
 	
 	/**
