@@ -101,7 +101,12 @@ public class Player {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
-					region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(idleTime);
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
+						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
+					} else {
+						region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(idleTime);
+					}
+					
 				} else if (runState == RunState.RUN) {
 					//Calculate how long we have been running in seconds (nanoToSec just converts to seconds, 
 					//nanoTime gets current time).
@@ -121,7 +126,12 @@ public class Player {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
-					region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(idleTime);
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
+						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
+					} else {
+						region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(idleTime);
+					}
+					
 				} else if (runState == RunState.RUN) {
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
