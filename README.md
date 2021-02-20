@@ -24,7 +24,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [ ] Create a graphics mockup for maintaining cohesive design.
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
-- [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform
+- [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform, exit combat idle transition frame
 - [x] Add extra movement options: downjump, doublejump, wall climbing
 - [ ] Create wall climbing animations
 - [ ] Create platform tileset & background image
@@ -33,7 +33,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
-- [ ] Allow projectiles to fly at angles and dissolve on hitting platforms.
+- [x] Allow projectiles to fly at angles.
 - [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets

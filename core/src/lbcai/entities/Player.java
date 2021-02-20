@@ -40,6 +40,8 @@ public class Player {
 	private int jumpCounter = 0;
 	private boolean iFrame = false;
 	long timeSinceHit;
+	private int idleTransitionCounter = 0;
+	private TextureRegion region;
 	
 	/**
 	 * Constructor: make a player.
@@ -67,6 +69,8 @@ public class Player {
 		jumpState = JumpState.FALLING;
 		runState = RunState.IDLE;
 		idleStartTime = TimeUtils.nanoTime();
+		//Initialize the region to display.
+		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
 	}
 	
 	/**
@@ -93,17 +97,25 @@ public class Player {
 	 */
 	public void render(SpriteBatch batch) {
 
-		//Initialize the region to display.
-		TextureRegion region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
-		
 		//Change the display depending on the direction the character faces.
 		if (facing == Facing.RIGHT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
+					//0 = catch breath idle, 1 = transition animation, 2 = normal idle
 					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
-					} else {
+						idleTransitionCounter = 1;
+					} else if (idleTransitionCounter == 0) {
+						idleTransitionCounter = 2;
+					} else if (idleTransitionCounter == 1) {
+						//placeholder!
+						region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(idleTime);
+						if (region == Assets.instance.playerAssets.runLeftAnim.getKeyFrame(2)) {
+							idleTransitionCounter = 2;
+						}
+					} else if (idleTransitionCounter == 2) {
 						region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(idleTime);
 					}
 					
@@ -126,12 +138,22 @@ public class Player {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					//use idle transition counter to figure out when to play transition animation between combat & normal idles
 					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
-					} else {
+						idleTransitionCounter = 1;
+					} else if (idleTransitionCounter == 0) {
+						idleTransitionCounter = 2;
+					} else if (idleTransitionCounter == 1) {
+						//placeholder!
+						region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(idleTime);
+						if (region == Assets.instance.playerAssets.runLeftAnim.getKeyFrame(2)) {
+							idleTransitionCounter = 2;
+						}
+					} else if (idleTransitionCounter == 2) {
 						region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(idleTime);
 					}
-					
+
 				} else if (runState == RunState.RUN) {
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
@@ -217,6 +239,7 @@ public class Player {
 				}
 			}
 			
+			//allows sticking to walls and walljumping
 			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING || jumpState == JumpState.WALL) {
 				
 				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -260,6 +283,7 @@ public class Player {
 
 					}
 				} else {
+					//makes the player fall off the wall if not actively trying to stick
 					if (jumpState == JumpState.WALL) {
 						jumpState = JumpState.FALLING;
 					}
@@ -267,11 +291,12 @@ public class Player {
 			}
 		}
 		
-		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
+		//check if invincible grace period is over.
 		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
 			iFrame = false;
 		}
 		
+		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
 			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
 			Rectangle enemyBound = new Rectangle(
@@ -313,6 +338,7 @@ public class Player {
 			}
 		}
 		
+		//check if projectiles are hitting player
 		for (Bullet bullet : level.getBullets()) {
 			//(bottom left x, bottom left y, width, height)
 			Rectangle bulletBound = new Rectangle(
@@ -352,6 +378,8 @@ public class Player {
 			} else {
 				if (runState != RunState.IDLE && jumpState == JumpState.GROUNDED) {
 					idleStartTime = TimeUtils.nanoTime();
+					//to keep track of when transition animation should be played for idle
+					idleTransitionCounter = 0;
 				}
 				runState = RunState.IDLE;
 			}

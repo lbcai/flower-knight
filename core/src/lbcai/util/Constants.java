@@ -41,7 +41,7 @@ public class Constants {
 	//Distance between player's feet, used to detect when player lands on platforms and when player should fall.
 	public static final float playerStance = 60.0f;
 	//Player's base move speed.
-	public static final float moveSpeed = 35000;
+	public static final float moveSpeed = 38000;
 	//Player's base jump speed and base time allowed in the air for jump.
 	public static final float jumpSpeed = 850;
 	//Basic on-touch knockback velocity.
