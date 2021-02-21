@@ -93,6 +93,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> jumpRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> runLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> runRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> hangLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> hangRight = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -102,6 +104,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> runLeftAnim;
 		public final Animation<TextureRegion> jumpLeftAnim;
 		public final Animation<TextureRegion> jumpRightAnim;
+		public final Animation<TextureRegion> hangLeftAnim;
+		public final Animation<TextureRegion> hangRightAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -192,6 +196,18 @@ public class Assets implements Disposable, AssetErrorListener {
 			runRight.add(atlas.findRegion(Constants.runRight, 10));
 			runRight.add(atlas.findRegion(Constants.runRight, 11));
 			runRightAnim = new Animation(Constants.runCycleTime, runRight, PlayMode.LOOP);
+			
+			hangLeft.add(atlas.findRegion(Constants.hangLeft, 1));
+			hangLeft.add(atlas.findRegion(Constants.hangLeft, 2));
+			hangLeft.add(atlas.findRegion(Constants.hangLeft, 3));
+			hangLeft.add(atlas.findRegion(Constants.hangLeft, 4));
+			hangLeftAnim = new Animation(Constants.idleCycleTime, hangLeft, PlayMode.LOOP);
+			
+			hangRight.add(atlas.findRegion(Constants.hangRight, 1));
+			hangRight.add(atlas.findRegion(Constants.hangRight, 2));
+			hangRight.add(atlas.findRegion(Constants.hangRight, 3));
+			hangRight.add(atlas.findRegion(Constants.hangRight, 4));
+			hangRightAnim = new Animation(Constants.idleCycleTime, hangRight, PlayMode.LOOP);
 		}
 	}
 	

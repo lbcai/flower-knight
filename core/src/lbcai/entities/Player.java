@@ -131,7 +131,8 @@ public class Player {
 			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
-				region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
+				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
+				region = Assets.instance.playerAssets.hangRightAnim.getKeyFrame(hangTime);
 			}
 			
 		} else if (facing == Facing.LEFT) {
@@ -164,7 +165,8 @@ public class Player {
 			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
-				region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(0);
+				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
+				region = Assets.instance.playerAssets.hangLeftAnim.getKeyFrame(hangTime);
 			}
 			
 		}
@@ -245,10 +247,12 @@ public class Player {
 				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 					
 					if (stickToPlatformRight(platform)) {
-						
-						wallStartTime = TimeUtils.nanoTime();
-						jumpState = JumpState.WALL;
-						jumpCounter = 0;
+						if (jumpState != JumpState.WALL) {
+							wallStartTime = TimeUtils.nanoTime();
+							jumpState = JumpState.WALL;
+							jumpCounter = 0;
+						}
+
 						
 						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
 							position.x = platform.right + Constants.playerStance / 2;
@@ -265,10 +269,12 @@ public class Player {
 				} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 					
 					if (stickToPlatformLeft(platform)) {
+						if (jumpState != JumpState.WALL) {
+							wallStartTime = TimeUtils.nanoTime();
+							jumpState = JumpState.WALL;
+							jumpCounter = 0;
+						}
 
-						wallStartTime = TimeUtils.nanoTime();
-						jumpState = JumpState.WALL;
-						jumpCounter = 0;
 
 						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
 							position.x = platform.left - Constants.playerStance / 2;
@@ -511,7 +517,7 @@ public class Player {
 	boolean stickToPlatformLeft(Platform platform) {
 		if ((lastFramePosition.x + Constants.playerStance / 2) <= platform.left && 
 				(position.x + Constants.playerStance / 2) >= platform.left) {
-			if (position.y < platform.top && position.y > platform.bottom) {
+			if (position.y < platform.top - 30 && position.y > platform.bottom) {
 				return true;
 			}
 		}
@@ -521,7 +527,7 @@ public class Player {
 	boolean stickToPlatformRight(Platform platform) {
 		if ((lastFramePosition.x - Constants.playerStance / 2) >= platform.right && 
 				(position.x - Constants.playerStance / 2) <= platform.right) {
-			if (position.y < platform.top && position.y > platform.bottom) {
+			if (position.y < platform.top - 30 && position.y > platform.bottom) {
 				return true;
 			}	
 		}

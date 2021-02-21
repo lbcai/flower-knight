@@ -27,6 +27,8 @@ public class Constants {
 	public static final String runRight = "Runright";
 	public static final String slideLeft = "Slideleft";
 	public static final String slideRight = "Slideright";
+	public static final String hangLeft = "Hangleft";
+	public static final String hangRight = "Hangright";
 	
 	public static final float runCycleTime = 0.04f;
 	public static final float idleCycleTime = 0.4f;
