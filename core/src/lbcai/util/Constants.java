@@ -20,7 +20,9 @@ public class Constants {
 	public static final String idleRight = "Idleright";
 	public static final String idleLeft = "Idleleft";
 	public static final String idleBLeft = "Idlebleft";
+	public static final String idleBTransLeft = "Idlebtransleft";
 	public static final String idleBRight = "Idlebright";
+	public static final String idleBTransRight = "Idlebtransright";
 	public static final String jumpLeft = "Jumpleft";
 	public static final String jumpRight = "Jumpright";
 	public static final String runLeft = "Runleft";
@@ -32,6 +34,7 @@ public class Constants {
 	
 	public static final float runCycleTime = 0.04f;
 	public static final float idleCycleTime = 0.4f;
+	public static final float idleTransTime = 0.06f;
 	public static final float idleBTime = 3.0f;
 	public static final float jumpCycleTime = 0.04f;
 	public static final float wallTime = 0.05f;

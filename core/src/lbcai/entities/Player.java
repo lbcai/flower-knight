@@ -41,6 +41,7 @@ public class Player {
 	private boolean iFrame = false;
 	long timeSinceHit;
 	private int idleTransitionCounter = 0;
+	private long idleTransStartTime;
 	private TextureRegion region;
 	
 	/**
@@ -107,12 +108,13 @@ public class Player {
 					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
+						idleTransStartTime = TimeUtils.nanoTime();
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
-						//placeholder!
-						region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(idleTime);
-						if (region == Assets.instance.playerAssets.runLeftAnim.getKeyFrame(2)) {
+						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
+						region = Assets.instance.playerAssets.idleBTransRightAnim.getKeyFrame(idleTransTime);
+						if (region == Assets.instance.playerAssets.idleBTransRightAnim.getKeyFrame(4)) {
 							idleTransitionCounter = 2;
 						}
 					} else if (idleTransitionCounter == 2) {
@@ -143,12 +145,13 @@ public class Player {
 					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
+						idleTransStartTime = TimeUtils.nanoTime();
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
-						//placeholder!
-						region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(idleTime);
-						if (region == Assets.instance.playerAssets.runLeftAnim.getKeyFrame(2)) {
+						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
+						region = Assets.instance.playerAssets.idleBTransLeftAnim.getKeyFrame(idleTransTime);
+						if (region == Assets.instance.playerAssets.idleBTransLeftAnim.getKeyFrame(4)) {
 							idleTransitionCounter = 2;
 						}
 					} else if (idleTransitionCounter == 2) {

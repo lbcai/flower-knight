@@ -26,7 +26,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [x] Animate idle loop and jump
 - [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform, exit combat idle transition frame
 - [x] Add extra movement options: downjump, doublejump, wall climbing
-- [ ] Create wall climbing animations
+- [x] Create wall hanging animations
 - [ ] Create platform tileset & background image
 - [ ] Create custom platform class for nicer looking platforms
 - [ ] Add slanted ground/platforms

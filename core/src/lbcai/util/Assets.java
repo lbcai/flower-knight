@@ -89,6 +89,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> idleLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> idleBRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> idleBLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> idleBTransLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> idleBTransRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> jumpLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> jumpRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> runLeft = new Array<AtlasRegion>();
@@ -100,6 +102,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> idleLeftAnim;
 		public final Animation<TextureRegion> idleBRightAnim;
 		public final Animation<TextureRegion> idleBLeftAnim;
+		public final Animation<TextureRegion> idleBTransLeftAnim;
+		public final Animation<TextureRegion> idleBTransRightAnim;
 		public final Animation<TextureRegion> runRightAnim;
 		public final Animation<TextureRegion> runLeftAnim;
 		public final Animation<TextureRegion> jumpLeftAnim;
@@ -128,12 +132,26 @@ public class Assets implements Disposable, AssetErrorListener {
 			idleBRight.add(atlas.findRegion(Constants.idleBRight, 5));
 			idleBRightAnim = new Animation(Constants.idleCycleTime, idleBRight, PlayMode.LOOP);
 			
+			//transition animation from catch breath idle to normal idle
+			idleBTransRight.add(atlas.findRegion(Constants.idleBTransRight, 1));
+			idleBTransRight.add(atlas.findRegion(Constants.idleBTransRight, 2));
+			idleBTransRight.add(atlas.findRegion(Constants.idleBTransRight, 3));
+			idleBTransRight.add(atlas.findRegion(Constants.idleBTransRight, 4));
+			idleBTransRightAnim = new Animation(Constants.idleTransTime, idleBTransRight, PlayMode.NORMAL);
+			
 			idleLeft.add(atlas.findRegion(Constants.idleLeft, 1));
 			idleLeft.add(atlas.findRegion(Constants.idleLeft, 2));
 			idleLeft.add(atlas.findRegion(Constants.idleLeft, 3));
 			idleLeft.add(atlas.findRegion(Constants.idleLeft, 4));
 			idleLeft.add(atlas.findRegion(Constants.idleLeft, 5));
 			idleLeftAnim = new Animation(Constants.idleCycleTime, idleLeft, PlayMode.LOOP);
+			
+			//transition animation from catch breath idle to normal idle
+			idleBTransLeft.add(atlas.findRegion(Constants.idleBTransLeft, 1));
+			idleBTransLeft.add(atlas.findRegion(Constants.idleBTransLeft, 2));
+			idleBTransLeft.add(atlas.findRegion(Constants.idleBTransLeft, 3));
+			idleBTransLeft.add(atlas.findRegion(Constants.idleBTransLeft, 4));
+			idleBTransLeftAnim = new Animation(Constants.idleTransTime, idleBTransLeft, PlayMode.NORMAL);
 			
 			//catch breath before complete idle
 			idleBLeft.add(atlas.findRegion(Constants.idleBLeft, 1));
