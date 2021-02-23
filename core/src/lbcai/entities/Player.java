@@ -36,12 +36,14 @@ public class Player {
 	long runStartTime;
 	long idleStartTime;
 	long wallStartTime;
+
 	Level level;
 	private int jumpCounter = 0;
 	private boolean iFrame = false;
 	long timeSinceHit;
 	private int idleTransitionCounter = 0;
 	private long idleTransStartTime;
+	private long slideTransStartTime;
 	private TextureRegion region;
 	
 	/**
@@ -126,6 +128,9 @@ public class Player {
 					//nanoTime gets current time).
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runRightAnim.getKeyFrame(runTime);
+				} else if (runState == RunState.SKID) {
+					float skidTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime);
+					region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(skidTime);
 				} 
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
@@ -161,6 +166,9 @@ public class Player {
 				} else if (runState == RunState.RUN) {
 					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
 					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
+				} else if (runState == RunState.SKID) {
+					float skidTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime);
+					region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(skidTime);
 				}
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
@@ -385,12 +393,25 @@ public class Player {
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				moveRight(delta);
 			} else {
-				if (runState != RunState.IDLE && jumpState == JumpState.GROUNDED) {
-					idleStartTime = TimeUtils.nanoTime();
-					//to keep track of when transition animation should be played for idle
-					idleTransitionCounter = 0;
+				if (runState == RunState.RUN && jumpState == JumpState.GROUNDED) {
+					slideTransStartTime = TimeUtils.nanoTime();
+					runState = RunState.SKID;
 				}
-				runState = RunState.IDLE;
+				if (runState == RunState.SKID && jumpState == JumpState.GROUNDED) {
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime) < Constants.skidTime) {
+						if (facing == Facing.LEFT) {
+							moveLeft(delta);
+						} else {
+							moveRight(delta);
+						}
+					} else {
+						idleStartTime = TimeUtils.nanoTime();
+						//to keep track of when transition animation should be played for idle
+						idleTransitionCounter = 0;
+						runState = RunState.IDLE;
+					}
+				}
+
 			}
 		}
 		
@@ -443,7 +464,9 @@ public class Player {
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
 		}
-		runState = RunState.RUN;
+		if (runState != RunState.SKID) {
+			runState = RunState.RUN;
+		}
 		facing = Facing.LEFT;
 		velocity.x = -delta * Constants.moveSpeed;
 	}
@@ -452,7 +475,9 @@ public class Player {
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
 		}
-		runState = RunState.RUN;
+		if (runState != RunState.SKID) {
+			runState = RunState.RUN;
+		}
 		facing = Facing.RIGHT;
 		velocity.x = delta * Constants.moveSpeed;
 	}

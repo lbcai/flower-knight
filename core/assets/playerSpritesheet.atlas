@@ -557,28 +557,28 @@ Runright
   orig: 256, 256
   offset: 0, 0
   index: 11
-Slideleft
+Skidleft
   rotate: false
   xy: 2324, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
-Slideleft
+Skidleft
   rotate: false
   xy: 2596, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
-Slideright
+Skidright
   rotate: false
   xy: 2868, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
-Slideright
+Skidright
   rotate: false
   xy: 3140, 1236
   size: 256, 256

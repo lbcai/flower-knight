@@ -31,13 +31,17 @@ public class Constants {
 	public static final String slideRight = "Slideright";
 	public static final String hangLeft = "Hangleft";
 	public static final String hangRight = "Hangright";
+	public static final String skidLeft = "Skidleft";
+	public static final String skidRight = "Skidright";
 	
+	public static final float skidCycleTime = 0.01f;
 	public static final float runCycleTime = 0.04f;
 	public static final float idleCycleTime = 0.4f;
 	public static final float idleTransTime = 0.06f;
 	public static final float idleBTime = 3.0f;
 	public static final float jumpCycleTime = 0.04f;
 	public static final float wallTime = 0.05f;
+	public static final float skidTime = 0.2f;
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.

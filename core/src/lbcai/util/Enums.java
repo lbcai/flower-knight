@@ -17,7 +17,8 @@ public class Enums {
 		
 		public enum RunState {
 			IDLE,
-			RUN
+			RUN,
+			SKID
 		}
 		
 		
