@@ -233,10 +233,16 @@ public class Assets implements Disposable, AssetErrorListener {
 			
 			skidLeft.add(atlas.findRegion(Constants.skidLeft, 1));
 			skidLeft.add(atlas.findRegion(Constants.skidLeft, 2));
+			skidLeft.add(atlas.findRegion(Constants.skidLeft, 2));
+			skidLeft.add(atlas.findRegion(Constants.skidLeft, 2));
+			skidLeft.add(atlas.findRegion(Constants.skidLeft, 1));
 			skidLeftAnim = new Animation(Constants.skidCycleTime, skidLeft, PlayMode.NORMAL);
 			
 			skidRight.add(atlas.findRegion(Constants.skidRight, 1));
 			skidRight.add(atlas.findRegion(Constants.skidRight, 2));
+			skidRight.add(atlas.findRegion(Constants.skidRight, 2));
+			skidRight.add(atlas.findRegion(Constants.skidRight, 2));
+			skidRight.add(atlas.findRegion(Constants.skidRight, 1));
 			skidRightAnim = new Animation(Constants.skidCycleTime, skidRight, PlayMode.NORMAL);
 		}
 	}

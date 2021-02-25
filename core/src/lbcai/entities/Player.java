@@ -242,6 +242,7 @@ public class Player {
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
 		//Also collision detection with sides of platform.
 		for (Platform platform : platforms) {
+
 			if (landOnPlatform(platform)) {
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + Constants.playerEyeHeight;
@@ -250,6 +251,15 @@ public class Player {
 				if (jumpCounter >= 2) {
 					jumpCounter = 0;
 				}
+				//prevents player from skidding off platforms (for convenience)
+				if (runState == RunState.SKID) {
+					if (position.x > platform.right) {
+						position.x = platform.right;
+					} else if (position.x < platform.left) {
+						position.x = platform.left;
+					}
+				}
+				
 			}
 			
 			//allows sticking to walls and walljumping
@@ -388,14 +398,24 @@ public class Player {
 		//run (unavailable while flinching or otherwise iframe animation-locked, which is a shorter period of time than
 		//the actual invincible time)
 		if (jumpState != JumpState.IFRAME && jumpState != JumpState.WALL) {
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+			if (Gdx.input.isKeyPressed(Keys.LEFT) && !Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				moveLeft(delta);
-			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && !Gdx.input.isKeyPressed(Keys.LEFT)) {
 				moveRight(delta);
 			} else {
 				if (runState == RunState.RUN && jumpState == JumpState.GROUNDED) {
-					slideTransStartTime = TimeUtils.nanoTime();
-					runState = RunState.SKID;
+					//only slide to a stop if player has been running for long enough time
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime) > Constants.skidTimeLimitBreak &&
+							velocity.y == 0) {
+						slideTransStartTime = TimeUtils.nanoTime();
+						runState = RunState.SKID;
+					} else {
+						idleStartTime = TimeUtils.nanoTime();
+						//to keep track of when transition animation should be played for idle
+						idleTransitionCounter = 0;
+						runState = RunState.IDLE;
+					}
+
 				}
 				if (runState == RunState.SKID && jumpState == JumpState.GROUNDED) {
 					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime) < Constants.skidTime) {
@@ -414,7 +434,6 @@ public class Player {
 
 			}
 		}
-		
 		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
@@ -446,6 +465,7 @@ public class Player {
 			jumpState = JumpState.FALLING;
 			position.y -= 10; 
 		}
+
 	}
 	
 	/**
