@@ -9,12 +9,15 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lbcai.entities.Bullet;
+import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
+import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.RunState;
 
 public class Level {
 	//get each level
@@ -38,6 +41,8 @@ public class Level {
 	 */
 	private DelayedRemovalArray<Enemy> enemies;
 	private DelayedRemovalArray<Bullet> bullets;
+	private DelayedRemovalArray<DustCloud> dustClouds;
+	private int dustCloudCounter = 0;
 	
 	public Level(Viewport viewport) {
 		this.viewport = viewport;
@@ -48,6 +53,13 @@ public class Level {
 	
 	public void update(float delta) {
 		player.update(delta, platforms);
+		
+		if (player.runState == RunState.SKID && dustCloudCounter == 0) {
+			dustCloudCounter = 1;
+			spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing);
+		} else if (player.runState != RunState.SKID && dustCloudCounter == 1) {
+			dustCloudCounter = 0;
+		}
 		
 		enemies.begin();
 		for (int i = 0; i < enemies.size; i++) {
@@ -72,6 +84,15 @@ public class Level {
 		}
 		bullets.end();
 		
+		dustClouds.begin();
+		for (int i = 0; i < dustClouds.size; i++) {
+			dustClouds.get(i).update(delta);
+			if (dustClouds.get(i).isFinished()) {
+				dustClouds.removeIndex(i);
+			}
+		}
+		dustClouds.end();
+		
 	}
 	
 	/**
@@ -95,15 +116,20 @@ public class Level {
 			bullet.render(batch);
 		}
 		
+		for (DustCloud dustcloud : dustClouds) {
+			dustcloud.render(batch);
+		}
+		
 		
 	}
 	
 	private void initDebugLevel() {
 		
-		//Initialize the array of platforms and enemies.
+		//Initialize the array of platforms and enemies, etc.
 		platforms = new Array<Platform>();
 		enemies = new DelayedRemovalArray<Enemy>();
 		bullets = new DelayedRemovalArray<Bullet>();
+		dustClouds = new DelayedRemovalArray<DustCloud>();
 		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
@@ -149,6 +175,10 @@ public class Level {
 	
 	public void spawnBullet(Vector2 position, Facing facing) {
 		bullets.add(new Bullet(this, position, facing));
+	}
+	
+	public void spawnDustCloud(Vector2 position, Facing facing) {
+		dustClouds.add(new DustCloud(position, player.facing));
 	}
 	
 }

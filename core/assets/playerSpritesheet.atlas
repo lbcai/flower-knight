@@ -587,14 +587,14 @@ Skidright
   index: 2
 bulletseed
   rotate: false
-  xy: 2854, 926
+  xy: 2582, 668
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 3126, 1184
+  xy: 2854, 926
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -608,14 +608,14 @@ dandelion
   index: -1
 dust
   rotate: false
-  xy: 2324, 360
-  size: 100, 100
-  orig: 100, 100
+  xy: 3126, 1184
+  size: 50, 50
+  orig: 50, 50
   offset: 0, 0
   index: -1
 heal
   rotate: false
-  xy: 2582, 618
+  xy: 2324, 360
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

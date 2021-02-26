@@ -61,8 +61,9 @@ public class Constants {
 	public static final Vector2 attackRange = new Vector2(100, 100);
 	
 	public static final String runDust = "dust";
-	public static final Vector2 dustCenter = new Vector2(50, 50);
+	public static final Vector2 dustCenter = new Vector2(25, 25);
 	public static final float dustDuration = 0.5f;
+	public static final float dustAmplitude = 0.5f;
 	
 	
 	//tileset

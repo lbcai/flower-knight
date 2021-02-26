@@ -28,9 +28,9 @@ public class Player {
 	Vector2 velocity;
 	public Vector2 position;
 	//see enum below
-	Facing facing;
+	public Facing facing;
 	JumpState jumpState;
-	RunState runState;
+	public RunState runState;
 	//a long is like a 64-bit int. a BIG int.
 	long jumpStartTime;
 	long runStartTime;
@@ -116,7 +116,7 @@ public class Player {
 					} else if (idleTransitionCounter == 1) {
 						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
 						region = Assets.instance.playerAssets.idleBTransRightAnim.getKeyFrame(idleTransTime);
-						if (region == Assets.instance.playerAssets.idleBTransRightAnim.getKeyFrame(4)) {
+						if (Assets.instance.playerAssets.idleBTransRightAnim.isAnimationFinished(idleTransTime)) {
 							idleTransitionCounter = 2;
 						}
 					} else if (idleTransitionCounter == 2) {
@@ -156,7 +156,7 @@ public class Player {
 					} else if (idleTransitionCounter == 1) {
 						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
 						region = Assets.instance.playerAssets.idleBTransLeftAnim.getKeyFrame(idleTransTime);
-						if (region == Assets.instance.playerAssets.idleBTransLeftAnim.getKeyFrame(4)) {
+						if (Assets.instance.playerAssets.idleBTransLeftAnim.isAnimationFinished(idleTransTime)) {
 							idleTransitionCounter = 2;
 						}
 					} else if (idleTransitionCounter == 2) {
@@ -394,13 +394,20 @@ public class Player {
 		//	position.y = Constants.playerEyeHeight;
 		//	velocity.y = 0;
 		//}
-		
+
 		//run (unavailable while flinching or otherwise iframe animation-locked, which is a shorter period of time than
 		//the actual invincible time)
 		if (jumpState != JumpState.IFRAME && jumpState != JumpState.WALL) {
 			if (Gdx.input.isKeyPressed(Keys.LEFT) && !Gdx.input.isKeyPressed(Keys.RIGHT)) {
+				if (runState == RunState.SKID) {
+					runState = RunState.RUN;
+				}
 				moveLeft(delta);
+				
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && !Gdx.input.isKeyPressed(Keys.LEFT)) {
+				if (runState == RunState.SKID) {
+					runState = RunState.RUN;
+				}
 				moveRight(delta);
 			} else {
 				if (runState == RunState.RUN && jumpState == JumpState.GROUNDED) {
@@ -424,6 +431,7 @@ public class Player {
 						} else {
 							moveRight(delta);
 						}
+
 					} else {
 						idleStartTime = TimeUtils.nanoTime();
 						//to keep track of when transition animation should be played for idle
