@@ -2,6 +2,7 @@ package lbcai.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,7 +16,9 @@ import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
 public class Player {
@@ -31,6 +34,8 @@ public class Player {
 	public Facing facing;
 	JumpState jumpState;
 	public RunState runState;
+	HitState hitState;
+	LockState lockState;
 	//a long is like a 64-bit int. a BIG int.
 	long jumpStartTime;
 	long runStartTime;
@@ -39,9 +44,10 @@ public class Player {
 
 	Level level;
 	private int jumpCounter = 0;
-	private boolean iFrame = false;
+
 	long timeSinceHit;
 	private int idleTransitionCounter = 0;
+	private int flashCounter = 0;
 	private long idleTransStartTime;
 	private long slideTransStartTime;
 	private TextureRegion region;
@@ -71,6 +77,8 @@ public class Player {
 		facing = Facing.RIGHT;
 		jumpState = JumpState.FALLING;
 		runState = RunState.IDLE;
+		hitState = HitState.NOHIT;
+		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
@@ -135,11 +143,24 @@ public class Player {
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
-			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
+			} else if (jumpState == JumpState.FALLING) {
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
 				region = Assets.instance.playerAssets.hangRightAnim.getKeyFrame(hangTime);
+			}
+			
+			if (hitState == HitState.IFRAME) {
+				if (flashCounter == 0 || flashCounter % 5 != 0) {
+					flashCounter += 1;
+				} else if (flashCounter % 5 == 0) {
+					batch.setColor(183f/255f, 183f/255f, 183f/255f, 255f/255f);
+					flashCounter = 0;
+				}
+				
+				if (lockState == LockState.LOCK) {
+					region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
+				}
 			}
 			
 		} else if (facing == Facing.LEFT) {
@@ -170,18 +191,35 @@ public class Player {
 					float skidTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime);
 					region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(skidTime);
 				}
+				
+				
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
-			} else if (jumpState == JumpState.FALLING || jumpState == JumpState.IFRAME) {
+			} else if (jumpState == JumpState.FALLING) {
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
 				region = Assets.instance.playerAssets.hangLeftAnim.getKeyFrame(hangTime);
 			}
 			
+			if (hitState == HitState.IFRAME) {
+				if (flashCounter == 0 || flashCounter % 5 != 0) {
+					flashCounter += 1;
+				} else if (flashCounter % 5 == 0) {
+					batch.setColor(183f/255f, 183f/255f, 183f/255f, 255f/255f);
+					flashCounter = 0;
+				}
+				
+				if (lockState == LockState.LOCK) {
+					region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
+				}
+				
+			}
+			
 		}
-
+		
+		
 		//Actually draw the sprites.
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.playerHead.x), 
@@ -199,6 +237,7 @@ public class Player {
 				region.getRegionHeight(), 
 				false, 
 				false);
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	/**
@@ -318,9 +357,16 @@ public class Player {
 			}
 		}
 		
-		//check if invincible grace period is over.
-		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
-			iFrame = false;
+		
+		if (lockState == LockState.LOCK) {
+			if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.animLockTime) {
+				lockState = LockState.FREE;
+			}
+		} else {
+			//check if invincible grace period is over.
+			if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
+				hitState = HitState.NOHIT;
+			}
 		}
 		
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
@@ -332,10 +378,10 @@ public class Player {
 					2 * enemy.collisionRadius,
 					2 * enemy.collisionRadius);
 			if (playerBound.overlaps(enemyBound)) {
-				if (position.x < enemy.position.x && iFrame == false) {
+				if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
-				} else if (position.x > enemy.position.x && iFrame == false) {
+				} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
 				}
@@ -375,11 +421,11 @@ public class Player {
 					2 * Constants.bulletCenter.y);
 			//if player comes in contact with bullet, stop player, make flinch, destroy bullet
 			if (playerBound.overlaps(bulletBound)) {
-				if (position.x < bullet.position.x && iFrame == false) {
+				if (position.x < bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
 					bullet.active = false;
-				} else if (position.x > bullet.position.x && iFrame == false) {
+				} else if (position.x > bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
 					bullet.active = false;
@@ -397,7 +443,7 @@ public class Player {
 
 		//run (unavailable while flinching or otherwise iframe animation-locked, which is a shorter period of time than
 		//the actual invincible time)
-		if (jumpState != JumpState.IFRAME && jumpState != JumpState.WALL) {
+		if (lockState != LockState.LOCK && jumpState != JumpState.WALL) {
 			if (Gdx.input.isKeyPressed(Keys.LEFT) && !Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				if (runState == RunState.SKID) {
 					runState = RunState.RUN;
@@ -442,6 +488,9 @@ public class Player {
 
 			}
 		}
+		
+		
+		
 		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 			switch (jumpState) {
@@ -562,12 +611,19 @@ public class Player {
 		velocity.y = Constants.knockbackSpeed.y;
 		if (facing == Facing.LEFT) {
 			velocity.x = -Constants.knockbackSpeed.x;
+			position.x -= 10;
 		} else {
 			velocity.x = Constants.knockbackSpeed.x;
+			position.x += 10;
 		}
-		jumpState = JumpState.IFRAME;
+		hitState = HitState.IFRAME;
+		lockState = LockState.LOCK;
 		timeSinceHit = TimeUtils.nanoTime();
-		iFrame = true;
+		
+		if (jumpState == JumpState.WALL) {
+			jumpState = JumpState.FALLING;
+		}
+		
 	}
 	
 	boolean stickToPlatformLeft(Platform platform) {

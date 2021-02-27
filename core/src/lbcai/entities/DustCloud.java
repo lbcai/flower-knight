@@ -1,5 +1,6 @@
 package lbcai.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -36,9 +37,11 @@ public class DustCloud {
 	
 	public void render(SpriteBatch batch) {
 		
+		//decided to add transparency in sprites for fade out, tried using batch.setColor to control alpha
+		//but it isn't as smooth or nice
 		float dustTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
 		TextureRegion region = Assets.instance.dustAssets.dustAnim.getKeyFrame(dustTime);
-		
+
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.dustCenter.x), 
 				(position.y - Constants.dustCenter.y), 
@@ -55,6 +58,7 @@ public class DustCloud {
 				region.getRegionHeight(), 
 				flip, 
 				false);
+
 	}
 	
 	public void update(float delta) {

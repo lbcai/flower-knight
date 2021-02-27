@@ -43,6 +43,7 @@ public class Constants {
 	public static final float wallTime = 0.05f;
 	public static final float skidTime = 0.25f;
 	public static final float skidTimeLimitBreak = 0.25f;
+	public static final float animLockTime = 0.3f;
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.

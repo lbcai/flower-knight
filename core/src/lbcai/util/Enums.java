@@ -11,7 +11,6 @@ public class Enums {
 			GROUNDED,
 			JUMPING,
 			FALLING,
-			IFRAME,
 			WALL
 		}
 		
@@ -21,5 +20,14 @@ public class Enums {
 			SKID
 		}
 		
+		public enum HitState {
+			NOHIT,
+			IFRAME
+		}
+		
+		public enum LockState {
+			FREE,
+			LOCK
+		}
 		
 }
