@@ -612,7 +612,21 @@ dust
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
-  index: -1
+  index: 1
+dust
+  rotate: false
+  xy: 204, 152
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 2
+dust
+  rotate: false
+  xy: 3406, 1498
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 3
 heal
   rotate: false
   xy: 2324, 360

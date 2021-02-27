@@ -85,6 +85,7 @@ public class GameplayScreen extends ScreenAdapter {
 		//We are now telling our SpriteBatch to use this combined matrix to render things. Call this whenever you do something to
 		//the camera! Putting it in render() is also safe.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
+		
 		batch.begin();
 		//Render the level! Renders everything in the level.
 		level.render(batch);

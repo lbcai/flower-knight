@@ -62,9 +62,8 @@ public class Constants {
 	
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
-	public static final float dustDuration = 0.5f;
-	public static final float dustAmplitude = 0.5f;
-	
+	public static final float dustDuration = 0.3f;
+	public static final float dustCycleTime = 0.1f;
 	
 	//tileset
 	public static final String platformSprite = "Platform";

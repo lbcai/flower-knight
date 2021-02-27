@@ -34,6 +34,7 @@ Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.u
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
 - [x] Allow projectiles to fly at angles.
+- [ ] Add special effects: hit sparkles/wooshes, dust clouds, damage numbers, etc.
 - [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets

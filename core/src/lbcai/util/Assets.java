@@ -292,10 +292,14 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class DustAssets {
 		
-		public final AtlasRegion dust;
+		public final Array<AtlasRegion> dust = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> dustAnim;
 		
 		public DustAssets(TextureAtlas atlas) {
-			dust = atlas.findRegion(Constants.runDust);
+			dust.add(atlas.findRegion(Constants.runDust, 1));
+			dust.add(atlas.findRegion(Constants.runDust, 2));
+			dust.add(atlas.findRegion(Constants.runDust, 3));
+			dustAnim = new Animation(Constants.dustCycleTime, dust, PlayMode.NORMAL);
 		}
 		
 	}
