@@ -458,8 +458,7 @@ public class Player {
 			} else {
 				if (runState == RunState.RUN && jumpState == JumpState.GROUNDED) {
 					//only slide to a stop if player has been running for long enough time
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime) > Constants.skidTimeLimitBreak &&
-							velocity.y == 0) {
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime) > Constants.skidTimeLimitBreak) {
 						slideTransStartTime = TimeUtils.nanoTime();
 						runState = RunState.SKID;
 					} else {
@@ -488,7 +487,6 @@ public class Player {
 
 			}
 		}
-		
 		
 		
 		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump

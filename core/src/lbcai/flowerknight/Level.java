@@ -57,10 +57,11 @@ public class Level {
 		if (player.runState == RunState.SKID && dustCloudCounter == 0) {
 			dustCloudCounter = 1;
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing);
+
 		} else if (player.runState != RunState.SKID && dustCloudCounter == 1) {
 			dustCloudCounter = 0;
 		}
-		
+
 		enemies.begin();
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
@@ -83,7 +84,7 @@ public class Level {
 			}
 		}
 		bullets.end();
-		
+
 		dustClouds.begin();
 		for (int i = 0; i < dustClouds.size; i++) {
 			dustClouds.get(i).update(delta);

@@ -20,6 +20,7 @@ public class DustCloud {
 	private float scale;
 	private Facing facing;
 	private boolean flip;
+	private float dustTime;
 	
 	public DustCloud(Vector2 position, Facing facing) {
 		this.position = position;
@@ -39,7 +40,6 @@ public class DustCloud {
 		
 		//decided to add transparency in sprites for fade out, tried using batch.setColor to control alpha
 		//but it isn't as smooth or nice
-		float dustTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
 		TextureRegion region = Assets.instance.dustAssets.dustAnim.getKeyFrame(dustTime);
 
 		batch.draw(region.getTexture(), 
@@ -62,9 +62,10 @@ public class DustCloud {
 	}
 	
 	public void update(float delta) {
-
+		dustTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
 		//the equation for a parabola is y = ax^2 - b
-		position.y = (float) (0.1 * (Math.pow(Math.abs(position.x - origPosition.x), 2)) - Math.abs(origPosition.y));
+		position.y = (float) (origPosition.y + (0.1 * (Math.pow(Math.abs(position.x - origPosition.x), 2))));
+		System.out.println(position.y);
 		//position.y = (float) (Math.sin(position.x - origPosition.x) - Math.abs(origPosition.y));
 		if (facing == Facing.LEFT) {
 			flip = true;
