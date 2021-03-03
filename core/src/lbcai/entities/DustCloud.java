@@ -21,8 +21,9 @@ public class DustCloud {
 	private Facing facing;
 	private boolean flip;
 	private float dustTime;
+	private int type;
 	
-	public DustCloud(Vector2 position, Facing facing) {
+	public DustCloud(Vector2 position, Facing facing, int type) {
 		this.position = position;
 		this.origPosition = new Vector2();
 		this.origPosition.x = position.x;
@@ -33,6 +34,7 @@ public class DustCloud {
 		flip = false;
 		rotation = 0;
 		scale = 1.5f;
+		this.type = type;
 		
 	}
 	
@@ -63,10 +65,23 @@ public class DustCloud {
 	
 	public void update(float delta) {
 		dustTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
-		//the equation for a parabola is y = ax^2 - b
-		position.y = (float) (origPosition.y + (0.1 * (Math.pow(Math.abs(position.x - origPosition.x), 2))));
-		System.out.println(position.y);
-		//position.y = (float) (Math.sin(position.x - origPosition.x) - Math.abs(origPosition.y));
+		
+		if (type == 0) {
+			//ground dust
+			//the equation for a parabola is y = ax^2 - b
+			position.y = (float) (origPosition.y + (0.1 * (Math.pow(Math.abs(position.x - origPosition.x), 2))));
+			//position.y = (float) (Math.sin(position.x - origPosition.x) - Math.abs(origPosition.y));
+			//shrink the dust cloud as it flies off
+			scale -= 0.003 * Math.abs(position.x - origPosition.x);
+
+		} else if (type == 1) {
+			//double jump dust
+			position.y -= 1;
+			//shrink the dust cloud as it flies off
+			scale -= 0.008 * Math.abs(position.x - origPosition.x);
+
+		}
+		
 		if (facing == Facing.LEFT) {
 			flip = true;
 			//go the opposite direction of player facing
@@ -77,8 +92,7 @@ public class DustCloud {
 			position.x -= 1;
 			rotation -= 20;
 		}
-		//shrink the dust cloud as it flies off
-		scale -= 0.003 * Math.abs(position.x - origPosition.x);
+		
 	}
 	
 	public boolean isFinished() {

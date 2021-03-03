@@ -32,7 +32,7 @@ public class Player {
 	public Vector2 position;
 	//see enum below
 	public Facing facing;
-	JumpState jumpState;
+	public JumpState jumpState;
 	public RunState runState;
 	HitState hitState;
 	LockState lockState;
@@ -43,7 +43,7 @@ public class Player {
 	long wallStartTime;
 
 	Level level;
-	private int jumpCounter = 0;
+	public int jumpCounter = 0;
 
 	long timeSinceHit;
 	private int idleTransitionCounter = 0;
@@ -539,9 +539,12 @@ public class Player {
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
 		}
-		if (runState != RunState.SKID) {
+		if (runState != RunState.SKID && jumpState == JumpState.GROUNDED) {
 			runState = RunState.RUN;
+		} else if (runState != RunState.SKID && jumpState != JumpState.GROUNDED) {
+			runState = RunState.IDLE;
 		}
+
 		facing = Facing.LEFT;
 		velocity.x = -delta * Constants.moveSpeed;
 	}
@@ -550,8 +553,10 @@ public class Player {
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
 		}
-		if (runState != RunState.SKID) {
+		if (runState != RunState.SKID && jumpState == JumpState.GROUNDED) {
 			runState = RunState.RUN;
+		} else if (runState != RunState.SKID && jumpState != JumpState.GROUNDED) {
+			runState = RunState.IDLE;
 		}
 		facing = Facing.RIGHT;
 		velocity.x = delta * Constants.moveSpeed;

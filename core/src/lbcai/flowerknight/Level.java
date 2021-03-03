@@ -17,6 +17,7 @@ import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.JumpState;
 import lbcai.util.Enums.RunState;
 
 public class Level {
@@ -54,12 +55,19 @@ public class Level {
 	public void update(float delta) {
 		player.update(delta, platforms);
 		
-		if (player.runState == RunState.SKID && dustCloudCounter == 0) {
-			dustCloudCounter = 1;
-			spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing);
-
-		} else if (player.runState != RunState.SKID && dustCloudCounter == 1) {
-			dustCloudCounter = 0;
+		if (dustCloudCounter == 0) {
+			if (player.runState == RunState.SKID) {
+				spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing, 0);
+				dustCloudCounter = 1;
+			} else if (player.jumpCounter == 2) {
+				spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing, 1);
+				dustCloudCounter = 1;
+			}
+			
+		} else if (dustCloudCounter == 1) {
+			if (player.runState != RunState.SKID && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
+				dustCloudCounter = 0;
+			}
 		}
 
 		enemies.begin();
@@ -178,8 +186,8 @@ public class Level {
 		bullets.add(new Bullet(this, position, facing));
 	}
 	
-	public void spawnDustCloud(Vector2 position, Facing facing) {
-		dustClouds.add(new DustCloud(position, player.facing));
+	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
+		dustClouds.add(new DustCloud(position, player.facing, type));
 	}
 	
 }
