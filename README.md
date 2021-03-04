@@ -3,7 +3,7 @@
 
 Based on Udacity's ["How to Make a Platformer Using libGDX"](https://classroom.udacity.com/courses/ud406) tutorial.
 
-## 02/28/21 Update
+## 03/02/21 Update
 Currently, the game is using placeholder graphical assets. Here are a few gifs of some of the more interesting features that are currently available.
 * The turret-type dandelion monster is capable of shooting projectiles at the player in a 180 degree range. The monster does not shoot if the player is below it.
 * The combat idle, transition from combat idle to normal idle, and normal idle are all visible in this gif.

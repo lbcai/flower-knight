@@ -50,6 +50,7 @@ public class Player {
 	private int flashCounter = 0;
 	private long idleTransStartTime;
 	private long slideTransStartTime;
+	private long attackStartTime;
 	private TextureRegion region;
 	
 	/**
@@ -215,6 +216,14 @@ public class Player {
 					region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
 				}
 				
+			}
+			
+			if (lockState == LockState.ATTACK1LOCK) {
+				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
+				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
+					lockState = LockState.FREE;
+				}
 			}
 			
 		}
@@ -387,8 +396,10 @@ public class Player {
 				}
 			}
 			
-			if (Gdx.input.isKeyJustPressed(Keys.X)) {
+			if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE) {
 				if (facing == Facing.LEFT) {
+					lockState = LockState.ATTACK1LOCK;
+					attackStartTime = TimeUtils.nanoTime();
 					Rectangle attack = new Rectangle(
 						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
 						position.y - Constants.playerEyeHeight,
@@ -443,7 +454,7 @@ public class Player {
 
 		//run (unavailable while flinching or otherwise iframe animation-locked, which is a shorter period of time than
 		//the actual invincible time)
-		if (lockState != LockState.LOCK && jumpState != JumpState.WALL) {
+		if (lockState == LockState.FREE && jumpState != JumpState.WALL) {
 			if (Gdx.input.isKeyPressed(Keys.LEFT) && !Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				if (runState == RunState.SKID) {
 					runState = RunState.RUN;
@@ -486,40 +497,45 @@ public class Player {
 				}
 
 			}
+			
+			
+			//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
+			if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
+				switch (jumpState) {
+				case GROUNDED:
+					startJump();
+					break;
+
+				case JUMPING:
+					if (jumpCounter < 2) {
+						startJump();
+						break;
+					} 
+
+				case FALLING:
+					if (jumpCounter < 2) {
+						startJump();
+						break;
+					} 
+				case WALL:
+					if (jumpCounter < 2)
+						startJump();
+						break;
+					}
+			
+			} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
+				//downjump
+				//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
+				//downjumped off on accident
+				jumpState = JumpState.FALLING;
+				position.y -= 10; 
+			}
+			
+			
 		}
 		
 		
-		//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
-		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
-			switch (jumpState) {
-			case GROUNDED:
-				startJump();
-				break;
-
-			case JUMPING:
-				if (jumpCounter < 2) {
-					startJump();
-					break;
-				} 
-
-			case FALLING:
-				if (jumpCounter < 2) {
-					startJump();
-					break;
-				} 
-			case WALL:
-				if (jumpCounter < 2)
-					startJump();
-					break;
-				}
 		
-		} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
-			//downjump
-			//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
-			//downjumped off on accident
-			jumpState = JumpState.FALLING;
-			position.y -= 10; 
-		}
 
 	}
 	

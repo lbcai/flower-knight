@@ -4,597 +4,646 @@ size: 4096, 2048
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-Hangleft
+Attack1left
   rotate: false
-  xy: 826, 1494
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 1
-Hangleft
-  rotate: false
-  xy: 1102, 1752
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
-Hangleft
-  rotate: false
-  xy: 2, 462
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 3
-Hangleft
-  rotate: false
-  xy: 274, 720
-  size: 256, 256
-  orig: 256, 256
+  xy: 2, 1752
+  size: 370, 256
+  orig: 370, 256
   offset: 0, 0
   index: 4
-Hangright
+Attack1left
   rotate: false
-  xy: 546, 978
-  size: 256, 256
-  orig: 256, 256
+  xy: 2, 1494
+  size: 370, 256
+  orig: 370, 256
   offset: 0, 0
-  index: 1
-Hangright
+  index: 5
+Attack1left
   rotate: false
-  xy: 818, 1236
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
-Hangright
-  rotate: false
-  xy: 1084, 1494
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 3
-Hangright
-  rotate: false
-  xy: 1360, 1752
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 4
-Idlebleft
-  rotate: false
-  xy: 2, 978
+  xy: 650, 1494
   size: 270, 256
   orig: 270, 256
   offset: 0, 0
   index: 1
-Idlebleft
+Attack1left
   rotate: false
-  xy: 278, 1236
+  xy: 926, 1752
   size: 270, 256
   orig: 270, 256
   offset: 0, 0
   index: 2
-Idlebleft
-  rotate: false
-  xy: 554, 1494
-  size: 270, 256
-  orig: 270, 256
-  offset: 0, 0
-  index: 3
-Idlebleft
-  rotate: false
-  xy: 830, 1752
-  size: 270, 256
-  orig: 270, 256
-  offset: 0, 0
-  index: 4
-Idlebleft
+Attack1left
   rotate: false
   xy: 2, 720
   size: 270, 256
   orig: 270, 256
   offset: 0, 0
-  index: 5
-Idlebleft
+  index: 3
+Attack1left
   rotate: false
-  xy: 274, 978
+  xy: 278, 978
   size: 270, 256
   orig: 270, 256
   offset: 0, 0
   index: 6
-Idlebright
+Attack1left
   rotate: false
-  xy: 2, 1752
-  size: 274, 256
-  orig: 274, 256
+  xy: 554, 1236
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 7
+Hangleft
+  rotate: false
+  xy: 1470, 1752
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: 1
-Idlebright
-  rotate: false
-  xy: 2, 1494
-  size: 274, 256
-  orig: 274, 256
-  offset: 0, 0
-  index: 2
-Idlebright
-  rotate: false
-  xy: 278, 1752
-  size: 274, 256
-  orig: 274, 256
-  offset: 0, 0
-  index: 3
-Idlebright
-  rotate: false
-  xy: 2, 1236
-  size: 274, 256
-  orig: 274, 256
-  offset: 0, 0
-  index: 4
-Idlebright
-  rotate: false
-  xy: 278, 1494
-  size: 274, 256
-  orig: 274, 256
-  offset: 0, 0
-  index: 5
-Idlebright
-  rotate: false
-  xy: 554, 1752
-  size: 274, 256
-  orig: 274, 256
-  offset: 0, 0
-  index: 6
-Idlebtransleft
-  rotate: false
-  xy: 550, 1236
-  size: 266, 256
-  orig: 266, 256
-  offset: 0, 0
-  index: 1
-Idlebtransleft
+Hangleft
   rotate: false
   xy: 2, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
-Idlebtransleft
+Hangleft
   rotate: false
-  xy: 260, 462
+  xy: 274, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
-Idlebtransleft
+Hangleft
   rotate: false
-  xy: 532, 720
+  xy: 546, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
-Idlebtransright
+Hangright
   rotate: false
-  xy: 804, 978
+  xy: 822, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
-Idlebtransright
+Hangright
   rotate: false
-  xy: 1076, 1236
+  xy: 1098, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
-Idlebtransright
+Hangright
   rotate: false
-  xy: 1342, 1494
+  xy: 1462, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
-Idlebtransright
+Hangright
   rotate: false
-  xy: 1618, 1752
+  xy: 1728, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
-Idleleft
+Idlebleft
+  rotate: false
+  xy: 922, 1494
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 1
+Idlebleft
+  rotate: false
+  xy: 1198, 1752
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 2
+Idlebleft
+  rotate: false
+  xy: 2, 462
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 3
+Idlebleft
+  rotate: false
+  xy: 274, 720
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 4
+Idlebleft
+  rotate: false
+  xy: 550, 978
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 5
+Idlebleft
+  rotate: false
+  xy: 826, 1236
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 6
+Idlebright
+  rotate: false
+  xy: 374, 1752
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 1
+Idlebright
+  rotate: false
+  xy: 2, 1236
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 2
+Idlebright
+  rotate: false
+  xy: 374, 1494
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 3
+Idlebright
+  rotate: false
+  xy: 650, 1752
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 4
+Idlebright
+  rotate: false
+  xy: 2, 978
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 5
+Idlebright
+  rotate: false
+  xy: 278, 1236
+  size: 274, 256
+  orig: 274, 256
+  offset: 0, 0
+  index: 6
+Idlebtransleft
+  rotate: false
+  xy: 1194, 1494
+  size: 266, 256
+  orig: 266, 256
+  offset: 0, 0
+  index: 1
+Idlebtransleft
   rotate: false
   xy: 260, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 1
-Idleleft
-  rotate: false
-  xy: 518, 462
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
   index: 2
-Idleleft
+Idlebtransleft
   rotate: false
-  xy: 790, 720
+  xy: 532, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
-Idleleft
+Idlebtransleft
   rotate: false
-  xy: 1062, 978
+  xy: 804, 720
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 4
+Idlebtransright
+  rotate: false
+  xy: 1080, 978
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+Idlebtransright
+  rotate: false
+  xy: 1356, 1236
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+Idlebtransright
+  rotate: false
+  xy: 1720, 1494
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 3
+Idlebtransright
+  rotate: false
+  xy: 1986, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Idleleft
-  rotate: false
-  xy: 1334, 1236
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 5
-Idleright
-  rotate: false
-  xy: 1600, 1494
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 1
-Idleright
-  rotate: false
-  xy: 1876, 1752
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
-Idleright
   rotate: false
   xy: 518, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
+  index: 1
+Idleleft
+  rotate: false
+  xy: 790, 462
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+Idleleft
+  rotate: false
+  xy: 1062, 720
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 3
+Idleleft
+  rotate: false
+  xy: 1338, 978
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 4
+Idleleft
+  rotate: false
+  xy: 1614, 1236
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 5
+Idleright
+  rotate: false
+  xy: 1978, 1494
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+Idleright
+  rotate: false
+  xy: 2244, 1752
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+Idleright
+  rotate: false
+  xy: 776, 204
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
   index: 3
 Idleright
   rotate: false
-  xy: 776, 462
+  xy: 1048, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Idleright
   rotate: false
-  xy: 1048, 720
+  xy: 1320, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 5
 Jumpleft
   rotate: false
-  xy: 1320, 978
+  xy: 1596, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Jumpleft
   rotate: false
-  xy: 1592, 1236
+  xy: 1872, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Jumpleft
   rotate: false
-  xy: 1858, 1494
+  xy: 2236, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
 Jumpleft
   rotate: false
-  xy: 2134, 1752
+  xy: 2502, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Jumpleft
   rotate: false
-  xy: 776, 204
+  xy: 1034, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 5
 Jumpleft
   rotate: false
-  xy: 1034, 462
+  xy: 1306, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 6
 Jumpleft
   rotate: false
-  xy: 1306, 720
+  xy: 1578, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 7
 Jumpleft
   rotate: false
-  xy: 1578, 978
+  xy: 1854, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 8
 Jumpleft
   rotate: false
-  xy: 1850, 1236
+  xy: 2130, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 9
 Jumpright
   rotate: false
-  xy: 2116, 1494
+  xy: 2494, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Jumpright
   rotate: false
-  xy: 2392, 1752
+  xy: 2760, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Jumpright
   rotate: false
-  xy: 1034, 204
+  xy: 1292, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
 Jumpright
   rotate: false
-  xy: 1292, 462
+  xy: 1564, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Jumpright
   rotate: false
-  xy: 1564, 720
+  xy: 1836, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 5
 Jumpright
   rotate: false
-  xy: 1836, 978
+  xy: 2112, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 6
 Jumpright
   rotate: false
-  xy: 2108, 1236
+  xy: 2388, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 7
 Jumpright
   rotate: false
-  xy: 2374, 1494
+  xy: 2752, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 8
 Jumpright
   rotate: false
-  xy: 2650, 1752
+  xy: 3018, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 9
 Platform
   rotate: false
-  xy: 3682, 1908
+  xy: 2582, 360
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 Runleft
   rotate: false
-  xy: 1292, 204
+  xy: 1550, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Runleft
   rotate: false
-  xy: 1550, 462
+  xy: 1822, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Runleft
   rotate: false
-  xy: 1822, 720
+  xy: 2094, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
 Runleft
   rotate: false
-  xy: 2094, 978
+  xy: 2370, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Runleft
   rotate: false
-  xy: 2366, 1236
+  xy: 2646, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 5
 Runleft
   rotate: false
-  xy: 2632, 1494
+  xy: 3010, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 6
 Runleft
   rotate: false
-  xy: 2908, 1752
+  xy: 3276, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 7
 Runleft
   rotate: false
-  xy: 1550, 204
+  xy: 1808, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 8
 Runleft
   rotate: false
-  xy: 1808, 462
+  xy: 2080, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 9
 Runleft
   rotate: false
-  xy: 2080, 720
+  xy: 2352, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 10
 Runleft
   rotate: false
-  xy: 2352, 978
+  xy: 2628, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 11
 Runright
   rotate: false
-  xy: 2624, 1236
+  xy: 2904, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Runright
   rotate: false
-  xy: 2890, 1494
+  xy: 3268, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Runright
   rotate: false
-  xy: 3166, 1752
+  xy: 3534, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
-Runright
-  rotate: false
-  xy: 1808, 204
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 4
-Runright
-  rotate: false
-  xy: 2066, 462
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 5
-Runright
-  rotate: false
-  xy: 2338, 720
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 6
-Runright
-  rotate: false
-  xy: 2610, 978
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 7
-Runright
-  rotate: false
-  xy: 2882, 1236
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 8
-Runright
-  rotate: false
-  xy: 3148, 1494
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 9
-Runright
-  rotate: false
-  xy: 3424, 1752
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 10
 Runright
   rotate: false
   xy: 2066, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
+  index: 4
+Runright
+  rotate: false
+  xy: 2338, 462
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 5
+Runright
+  rotate: false
+  xy: 2610, 720
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 6
+Runright
+  rotate: false
+  xy: 2886, 978
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 7
+Runright
+  rotate: false
+  xy: 3162, 1236
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 8
+Runright
+  rotate: false
+  xy: 3526, 1494
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 9
+Runright
+  rotate: false
+  xy: 3792, 1752
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 10
+Runright
+  rotate: false
+  xy: 2324, 204
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
   index: 11
 Skidleft
   rotate: false
-  xy: 2324, 462
+  xy: 2596, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Skidleft
   rotate: false
-  xy: 2596, 720
+  xy: 2868, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Skidright
   rotate: false
-  xy: 2868, 978
+  xy: 3144, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Skidright
   rotate: false
-  xy: 3140, 1236
+  xy: 3420, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 bulletseed
   rotate: false
-  xy: 2582, 668
+  xy: 3126, 926
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 2854, 926
+  xy: 3402, 1184
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -608,7 +657,7 @@ dandelion
   index: -1
 dust
   rotate: false
-  xy: 3126, 1184
+  xy: 3678, 1442
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -622,21 +671,21 @@ dust
   index: 2
 dust
   rotate: false
-  xy: 3406, 1498
+  xy: 3784, 1498
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 3
 heal
   rotate: false
-  xy: 2324, 360
+  xy: 2854, 618
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 pbeetle
   rotate: false
-  xy: 3406, 1550
+  xy: 3784, 1550
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
