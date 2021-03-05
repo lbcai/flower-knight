@@ -16,6 +16,7 @@ public class Enums {
 		
 		public enum RunState {
 			IDLE,
+			COMBATIDLE,
 			RUN,
 			SKID
 		}
@@ -31,5 +32,5 @@ public class Enums {
 			ATTACK1LOCK
 		}
 		
-		
+
 }

@@ -5,7 +5,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -52,6 +55,11 @@ public class Player {
 	private long slideTransStartTime;
 	private long attackStartTime;
 	private TextureRegion region;
+	//for collision detection of player attacks vs enemy
+	private Rectangle attackHitBox;
+	private int attackComboCounter = 0;
+	Rectangle playerBound;
+
 	
 	/**
 	 * Constructor: make a player.
@@ -65,7 +73,7 @@ public class Player {
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();
 		init();
-
+		
 	}
 	
 	/**
@@ -116,7 +124,8 @@ public class Player {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
 					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
 					//0 = catch breath idle, 1 = transition animation, 2 = normal idle
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime || 
+							MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
@@ -164,12 +173,31 @@ public class Player {
 				}
 			}
 			
+			if (lockState == LockState.ATTACK1LOCK) {
+				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
+				if (region == Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(6)) {
+					lockState = LockState.FREE;
+				}
+			}
+			
+			if (lockState == LockState.FREE) {
+				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				if (attackComboCounter == 1) {
+					region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
+					if (Assets.instance.playerAssets.attack1RightAnim.isAnimationFinished(attackTime)) {
+						attackComboCounter = 0;
+					}
+				}
+			}
+			
 		} else if (facing == Facing.LEFT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
 					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
 					//use idle transition counter to figure out when to play transition animation between combat & normal idles
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime) {
+					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime || 
+							MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
@@ -221,18 +249,28 @@ public class Player {
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
-				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
+
+				if (region == Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(6)) {
 					lockState = LockState.FREE;
+				}
+			}
+
+			if (lockState == LockState.FREE) {
+				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				if (attackComboCounter == 1) {
+					region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
+					if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
+						attackComboCounter = 0;
+					}
 				}
 			}
 			
 		}
 		
-		
 		//Actually draw the sprites.
 		batch.draw(region.getTexture(), 
-				(position.x - Constants.playerHead.x), 
-				(position.y - Constants.playerHead.y), 
+				(position.x - Constants.playerHead.x + ((AtlasRegion) region).offsetX), 
+				(position.y - Constants.playerHead.y + ((AtlasRegion) region).offsetY), 
 				0, 
 				0, 
 				region.getRegionWidth(), 
@@ -247,6 +285,7 @@ public class Player {
 				false, 
 				false);
 		batch.setColor(1, 1, 1, 1);
+		
 	}
 	
 	/**
@@ -280,7 +319,7 @@ public class Player {
 		}
 		
 		//Use for collision detection of player.
-		Rectangle playerBound = new Rectangle(
+		playerBound = new Rectangle(
 				position.x - Constants.playerStance / 2,
 				position.y - Constants.playerEyeHeight + 40, 
 				Constants.playerStance,
@@ -381,12 +420,7 @@ public class Player {
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
 			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
-			Rectangle enemyBound = new Rectangle(
-					enemy.position.x - enemy.collisionRadius,
-					enemy.position.y - enemy.collisionRadius,
-					2 * enemy.collisionRadius,
-					2 * enemy.collisionRadius);
-			if (playerBound.overlaps(enemyBound)) {
+			if (playerBound.overlaps(enemy.hitBox)) {
 				if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
@@ -394,31 +428,6 @@ public class Player {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
 				}
-			}
-			
-			if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE) {
-				if (facing == Facing.LEFT) {
-					lockState = LockState.ATTACK1LOCK;
-					attackStartTime = TimeUtils.nanoTime();
-					Rectangle attack = new Rectangle(
-						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-					if (attack.overlaps(enemyBound)) {
-						enemy.HP -= Constants.playerBaseDamage; 
-					}
-				} else {
-					Rectangle attack = new Rectangle(
-						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-					if (attack.overlaps(enemyBound)) {
-						enemy.HP -= Constants.playerBaseDamage; 
-					}
-				}
-
 			}
 		}
 		
@@ -442,6 +451,36 @@ public class Player {
 					bullet.active = false;
 				}
 			}
+		}
+		
+		//player attacks and collision detection
+		if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE) {
+			if (lockState != LockState.ATTACK1LOCK) {
+				lockState = LockState.ATTACK1LOCK;
+				attackStartTime = TimeUtils.nanoTime();
+				attackComboCounter += 1;
+			}
+
+			if (facing == Facing.LEFT) {
+				attackHitBox = new Rectangle(
+					position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+					position.y - Constants.playerEyeHeight,
+					Constants.attackRange.x,
+					Constants.attackRange.y);
+			} else {
+				attackHitBox = new Rectangle(
+					position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+					position.y - Constants.playerEyeHeight,
+					Constants.attackRange.x,
+					Constants.attackRange.y);
+			}
+			
+			for (Enemy enemy: level.getEnemies()) {
+				if (attackHitBox.overlaps(enemy.hitBox)) {
+					enemy.HP -= Constants.playerBaseDamage; 
+				}
+			}
+			
 		}
 		
 		

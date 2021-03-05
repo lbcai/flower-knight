@@ -1,0 +1,14 @@
+Attack1left
+  rotate: false
+  xy: 830, 1752
+  size: 270, 256
+  orig: 270, 256
+  offset: -60, 0
+  index: 4
+Attack1left
+  rotate: false
+  xy: 2, 720
+  size: 270, 256
+  orig: 270, 256
+  offset: -60, 0
+  index: 5

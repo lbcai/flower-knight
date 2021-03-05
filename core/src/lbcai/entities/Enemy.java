@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.ai.GdxAI;
@@ -22,6 +23,7 @@ public class Enemy {
 	Animation<TextureRegion> leftIdleAnim;
 	float collisionRadius;
 	public int HP;
+	public Rectangle hitBox;
 	
 	
 	//default enemy type will be a potato beetle
@@ -36,6 +38,7 @@ public class Enemy {
 		position = new Vector2(platform.left, platform.top + eyeHeight.y);
 		facing = Facing.RIGHT;
 		startTime = TimeUtils.nanoTime();
+		
 	}
 
 	public void update(float delta) {
@@ -55,6 +58,11 @@ public class Enemy {
 			facing = Facing.LEFT;
 		}
 		
+		hitBox = new Rectangle(
+				position.x - collisionRadius,
+				position.y - collisionRadius,
+				2 * collisionRadius,
+				2 * collisionRadius);
 		
 	}
 	

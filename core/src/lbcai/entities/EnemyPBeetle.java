@@ -1,6 +1,7 @@
 package lbcai.entities;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Constants;
@@ -20,6 +21,7 @@ public class EnemyPBeetle extends Enemy {
 		//multiplier of amplitude = 1 + sin(2 PI elapsedTime / period)
 		final float floatMultiplier = 1 + MathUtils.sin(MathUtils.PI2 * (elapsedTime / Constants.floatpBeetlePeriod));
 		position.y = platform.top + Constants.pBeetleEyeHeight.y + (Constants.floatpBeetleAmplitude * floatMultiplier);
+		
 	}
 
 }

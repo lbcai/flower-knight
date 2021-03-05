@@ -1,6 +1,7 @@
 package lbcai.entities;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -24,6 +25,12 @@ public class EnemyDandelion extends Enemy {
 		this.bulletShotLastTime = TimeUtils.nanoTime();
 		this.HP = Constants.dandelionHP;
 		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
+		
+		hitBox = new Rectangle(
+				position.x - collisionRadius,
+				position.y - collisionRadius,
+				2 * collisionRadius,
+				2 * collisionRadius);
 	}
 	
 	/**

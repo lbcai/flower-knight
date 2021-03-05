@@ -100,6 +100,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> skidLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> skidRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1Left = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> attack1Right = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -116,6 +117,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> skidLeftAnim;
 		public final Animation<TextureRegion> skidRightAnim;
 		public final Animation<TextureRegion> attack1LeftAnim;
+		public final Animation<TextureRegion> attack1RightAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -255,7 +257,22 @@ public class Assets implements Disposable, AssetErrorListener {
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Left.add(atlas.findRegion(Constants.attack1Left, 6));
+			attack1Left.add(atlas.findRegion(Constants.attack1Left, 7));
 			attack1LeftAnim = new Animation(Constants.attack1CycleTime, attack1Left, PlayMode.NORMAL);
+			
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 1));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 2));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 3));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 3));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 4));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 6));
+			attack1Right.add(atlas.findRegion(Constants.attack1Left, 7));
+			attack1RightAnim = new Animation(Constants.attack1CycleTime, attack1Right, PlayMode.NORMAL);
+			
 		}
 	}
 	
