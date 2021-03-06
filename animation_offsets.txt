@@ -1,14 +1,63 @@
 Attack1left
   rotate: false
-  xy: 830, 1752
+  xy: 2, 978
   size: 270, 256
   orig: 270, 256
-  offset: -60, 0
+  offset: 0, 0
+  index: 1
+Attack1left
+  rotate: false
+  xy: 278, 1236
+  size: 270, 256
+  orig: 270, 256
+  offset: 0, 0
+  index: 2
+Attack1left
+  rotate: false
+  xy: 554, 1494
+  size: 270, 256
+  orig: 270, 256
+  offset: -10, 0
+  index: 8
+Attack1left
+  rotate: false
+  xy: 274, 720
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 3
+Attack1left
+  rotate: false
+  xy: 546, 978
+  size: 256, 256
+  orig: 256, 256
+  offset: -40, 0
   index: 4
 Attack1left
   rotate: false
-  xy: 2, 720
-  size: 270, 256
-  orig: 270, 256
-  offset: -60, 0
+  xy: 822, 1236
+  size: 256, 256
+  orig: 256, 256
+  offset: -40, 0
   index: 5
+Attack1left
+  rotate: false
+  xy: 1098, 1494
+  size: 256, 256
+  orig: 256, 256
+  offset: -40, 0
+  index: 6
+Attack1left
+  rotate: false
+  xy: 1374, 1752
+  size: 256, 256
+  orig: 256, 256
+  offset: -20, 0
+  index: 7
+Attack1left
+  rotate: false
+  xy: 2, 204
+  size: 256, 256
+  orig: 256, 256
+  offset: 20, 0
+  index: 9

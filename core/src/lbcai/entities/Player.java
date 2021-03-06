@@ -2,13 +2,9 @@ package lbcai.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -59,6 +55,7 @@ public class Player {
 	private Rectangle attackHitBox;
 	private int attackComboCounter = 0;
 	Rectangle playerBound;
+	private Vector2 targetPosition;
 
 	
 	/**
@@ -176,7 +173,7 @@ public class Player {
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
-				if (region == Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(6)) {
+				if (region == Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(5)) {
 					lockState = LockState.FREE;
 				}
 			}
@@ -250,7 +247,7 @@ public class Player {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
 
-				if (region == Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(6)) {
+				if (region == Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(5)) {
 					lockState = LockState.FREE;
 				}
 			}
@@ -454,11 +451,13 @@ public class Player {
 		}
 		
 		//player attacks and collision detection
-		if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE) {
+		if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
 			if (lockState != LockState.ATTACK1LOCK) {
 				lockState = LockState.ATTACK1LOCK;
 				attackStartTime = TimeUtils.nanoTime();
 				attackComboCounter += 1;
+				targetPosition = new Vector2(position.x - 25, position.y);
+				
 			}
 
 			if (facing == Facing.LEFT) {
@@ -481,6 +480,11 @@ public class Player {
 				}
 			}
 			
+		}
+		
+		//move player during attack animation
+		if (lockState == LockState.ATTACK1LOCK) {
+			position.lerp(targetPosition, (float) 0.5);
 		}
 		
 		
