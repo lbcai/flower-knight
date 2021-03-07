@@ -29,7 +29,8 @@ public class Enums {
 		public enum LockState {
 			FREE,
 			LOCK,
-			ATTACK1LOCK
+			ATTACK1LOCK,
+			ATTACKJUMP
 		}
 		
 

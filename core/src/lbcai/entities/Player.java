@@ -19,6 +19,7 @@ import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
 import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
+import lbcai.util.Utils;
 
 public class Player {
 
@@ -173,16 +174,18 @@ public class Player {
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
-				if (region == Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(5)) {
+
+				if (Assets.instance.playerAssets.attack1RightAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
+					attackStartTime = TimeUtils.nanoTime();
 				}
 			}
-			
-			if (lockState == LockState.FREE) {
-				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+
+			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
-					region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
-					if (Assets.instance.playerAssets.attack1RightAnim.isAnimationFinished(attackTime)) {
+					float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+					region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(attackTime);
+					if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(attackTime)) {
 						attackComboCounter = 0;
 					}
 				}
@@ -247,16 +250,17 @@ public class Player {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
 
-				if (region == Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(5)) {
+				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
+					attackStartTime = TimeUtils.nanoTime();
 				}
 			}
 
-			if (lockState == LockState.FREE) {
-				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
-					region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
-					if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
+					float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+					region = Assets.instance.playerAssets.attack1LeftEndAnim.getKeyFrame(attackTime);
+					if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(attackTime)) {
 						attackComboCounter = 0;
 					}
 				}
@@ -305,10 +309,7 @@ public class Player {
 		}
 
 		
-		//Enter falling state if dropping
-		if (velocity.y < 0) {
-			jumpState = JumpState.FALLING;
-		}
+
 		
 		//Return player to spawn if they fall off the map. Currently doesn't deduct lives or anything.
 		if (position.y < Constants.killPlane) {
@@ -338,9 +339,9 @@ public class Player {
 				//prevents player from skidding off platforms (for convenience)
 				if (runState == RunState.SKID) {
 					if (position.x > platform.right) {
-						position.x = platform.right;
+						position.x = platform.right - 10;
 					} else if (position.x < platform.left) {
-						position.x = platform.left;
+						position.x = platform.left + 10;
 					}
 				}
 				
@@ -451,27 +452,50 @@ public class Player {
 		}
 		
 		//player attacks and collision detection
-		if (Gdx.input.isKeyJustPressed(Keys.X) && lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
-			if (lockState != LockState.ATTACK1LOCK) {
-				lockState = LockState.ATTACK1LOCK;
-				attackStartTime = TimeUtils.nanoTime();
-				attackComboCounter += 1;
-				targetPosition = new Vector2(position.x - 25, position.y);
+		if (Gdx.input.isKeyJustPressed(Keys.X)) {
+			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
+				if (lockState != LockState.ATTACK1LOCK) {
+					lockState = LockState.ATTACK1LOCK;
+					attackStartTime = TimeUtils.nanoTime();
+					attackComboCounter = 1;
+				}
+	
+				if (facing == Facing.LEFT) {
+					targetPosition = new Vector2(position.x - 25, position.y);
+					attackHitBox = new Rectangle(
+						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+				} else {
+					targetPosition = new Vector2(position.x + 25, position.y);
+					attackHitBox = new Rectangle(
+						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+				}
 				
-			}
-
-			if (facing == Facing.LEFT) {
-				attackHitBox = new Rectangle(
-					position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
-					position.y - Constants.playerEyeHeight,
-					Constants.attackRange.x,
-					Constants.attackRange.y);
-			} else {
-				attackHitBox = new Rectangle(
-					position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
-					position.y - Constants.playerEyeHeight,
-					Constants.attackRange.x,
-					Constants.attackRange.y);
+			} else if (lockState == LockState.FREE && jumpState != JumpState.GROUNDED) {
+				if (lockState != LockState.ATTACKJUMP) {
+					lockState = LockState.ATTACKJUMP;
+					attackStartTime = TimeUtils.nanoTime();
+				}
+				
+				if (facing == Facing.LEFT) {
+					attackHitBox = new Rectangle(
+						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+				} else {
+					attackHitBox = new Rectangle(
+						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+						position.y - Constants.playerEyeHeight,
+						Constants.attackRange.x,
+						Constants.attackRange.y);
+				}
+				
 			}
 			
 			for (Enemy enemy: level.getEnemies()) {
@@ -479,12 +503,12 @@ public class Player {
 					enemy.HP -= Constants.playerBaseDamage; 
 				}
 			}
-			
 		}
+
 		
 		//move player during attack animation
 		if (lockState == LockState.ATTACK1LOCK) {
-			position.lerp(targetPosition, (float) 0.5);
+			Utils.lerpX(position, targetPosition, (float) 0.5);
 		}
 		
 		
@@ -577,7 +601,12 @@ public class Player {
 			
 		}
 		
-		
+		//Enter falling state if dropping, put this last because then we don't have issues where the player thinks it's falling
+		//but it's standing on the platform and this interacts badly with sticking to walls (allows head getting stuck on platform
+		//while running).
+		if (velocity.y < 0) {
+			jumpState = JumpState.FALLING;
+		}
 		
 
 	}
