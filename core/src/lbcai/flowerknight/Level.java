@@ -146,8 +146,8 @@ public class Level {
 		//platform height bug (jump distance)
 		platforms.add(new Platform(100, 85, 300, 50));
 		platforms.add(new Platform(100, 160, 500, 50));
-		//platforms.add(new Platform(0, 1000, 200, 800));
-		//platforms.add(new Platform(512, 1000, 200, 800));
+		platforms.add(new Platform(0, 1000, 200, 800));
+		platforms.add(new Platform(512, 1000, 200, 800));
 		platforms.add(new Platform(800, 0, 800, 50));
 		platforms.add(new Platform(0, -100, 10000, 50));
 		

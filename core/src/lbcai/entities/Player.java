@@ -57,6 +57,8 @@ public class Player {
 	private int attackComboCounter = 0;
 	Rectangle playerBound;
 	private Vector2 targetPosition;
+	private int boostCounter = 0;
+	private long boostStartTime;
 
 	
 	/**
@@ -191,6 +193,15 @@ public class Player {
 				}
 			}
 			
+			//placeholder anims
+			if (boostCounter == 1) {
+				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
+				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(boostTime);
+				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(boostTime)) {
+					boostCounter = 0;
+				}
+			}
+			
 		} else if (facing == Facing.LEFT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
@@ -263,6 +274,15 @@ public class Player {
 					if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(attackTime)) {
 						attackComboCounter = 0;
 					}
+				}
+			}
+			
+			//placeholder anims
+			if (boostCounter == 1) {
+				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
+				region = Assets.instance.playerAssets.attack1LeftEndAnim.getKeyFrame(boostTime);
+				if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(boostTime)) {
+					boostCounter = 0;
 				}
 			}
 			
@@ -598,6 +618,14 @@ public class Player {
 				position.y -= 10; 
 			}
 			
+			//allows boosting up to platform surfaces that player is just shy of
+			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+				for (Platform platform : platforms) {
+					if (boostUpToPlatform(platform)) {
+						position.y = platform.top + Constants.playerEyeHeight;
+					}
+				}
+			}
 			
 		}
 		
@@ -702,10 +730,10 @@ public class Player {
 		velocity.y = Constants.knockbackSpeed.y;
 		if (facing == Facing.LEFT) {
 			velocity.x = -Constants.knockbackSpeed.x;
-			position.x -= 10;
+			position.x -= 30;
 		} else {
 			velocity.x = Constants.knockbackSpeed.x;
-			position.x += 10;
+			position.x += 30;
 		}
 		hitState = HitState.IFRAME;
 		lockState = LockState.LOCK;
@@ -733,6 +761,17 @@ public class Player {
 			if (position.y < platform.top - 30 && position.y > platform.bottom) {
 				return true;
 			}	
+		}
+		return false;
+	}
+	
+	boolean boostUpToPlatform(Platform platform) {
+		if (position.x < platform.right && position.x > platform.left) {
+			if (position.y - Constants.playerEyeHeight < platform.top && position.y > platform.top) {
+				boostCounter = 1;
+				boostStartTime = TimeUtils.nanoTime();
+				return true;
+			}
 		}
 		return false;
 	}
