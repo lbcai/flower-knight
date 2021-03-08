@@ -3,6 +3,7 @@ package lbcai.util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 
 import lbcai.entities.Player;
 
@@ -20,9 +21,12 @@ public class ChaseCam {
 	 */
 	private Boolean following;
 	
+	private Vector2 camera2DPosition;
+	
 	public ChaseCam(Camera camera, Player target) {
 		this.camera = camera;
 		this.target = target;
+		camera2DPosition = new Vector2();
 		following = true;
 	}
 	
@@ -35,8 +39,12 @@ public class ChaseCam {
 		}
 		
 		if (following) {
-			camera.position.x = target.position.x;
-			camera.position.y = target.position.y;
+			camera2DPosition.x = camera.position.x;
+			camera2DPosition.y = camera.position.y;
+			camera2DPosition.lerp(target.position, 0.3f);
+			camera.position.x = camera2DPosition.x;
+			camera.position.y = camera2DPosition.y;
+			
 		} else {
 			if (Gdx.input.isKeyPressed(Keys.A)) {
 				camera.position.x -= delta * Constants.cameraMoveSpeed;

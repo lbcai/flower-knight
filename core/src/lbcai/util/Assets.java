@@ -103,6 +103,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> attack1LeftEnd = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1Right = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1RightEnd = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> boostToPlatLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> boostToPlatRight = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -122,6 +124,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> attack1LeftEndAnim;
 		public final Animation<TextureRegion> attack1RightAnim;
 		public final Animation<TextureRegion> attack1RightEndAnim;
+		public final Animation<TextureRegion> boostToPlatLeftAnim;
+		public final Animation<TextureRegion> boostToPlatRightAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -180,6 +184,7 @@ public class Assets implements Disposable, AssetErrorListener {
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 3));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 4));
+			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 5));
 			jumpLeft.add(atlas.findRegion(Constants.jumpLeft, 6));
@@ -260,10 +265,9 @@ public class Assets implements Disposable, AssetErrorListener {
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 4));
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1LeftAnim = new Animation(Constants.attack1CycleTime, attack1Left, PlayMode.NORMAL);
 			
-			
-			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 6));
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 7));
@@ -271,22 +275,44 @@ public class Assets implements Disposable, AssetErrorListener {
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 9));
 			attack1LeftEndAnim = new Animation(Constants.attack1CycleTime, attack1LeftEnd, PlayMode.NORMAL);
 			
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 1));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 2));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 3));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 3));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 4));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 5));
-			attack1Right.add(atlas.findRegion(Constants.attack1Left, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 1));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 2));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 3));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 3));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 4));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 5));
+			attack1Right.add(atlas.findRegion(Constants.attack1Right, 5));
 			attack1RightAnim = new Animation(Constants.attack1CycleTime, attack1Right, PlayMode.NORMAL);
 			
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 5));
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 5));
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 6));
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 7));
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 8));
-			attack1RightEnd.add(atlas.findRegion(Constants.attack1Left, 9));
+			attack1RightEnd.add(atlas.findRegion(Constants.attack1Right, 5));
+			attack1RightEnd.add(atlas.findRegion(Constants.attack1Right, 6));
+			attack1RightEnd.add(atlas.findRegion(Constants.attack1Right, 7));
+			attack1RightEnd.add(atlas.findRegion(Constants.attack1Right, 8));
+			attack1RightEnd.add(atlas.findRegion(Constants.attack1Right, 9));
 			attack1RightEndAnim = new Animation(Constants.attack1CycleTime, attack1RightEnd, PlayMode.NORMAL);
+			
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 1));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 2));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 3));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 4));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 5));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 5));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 6));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 7));
+			boostToPlatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 8));
+			boostToPlatLeftAnim = new Animation(Constants.boostCycleTime, boostToPlatLeft, PlayMode.NORMAL);
+			
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 1));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 2));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 3));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 4));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 5));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 5));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 6));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 7));
+			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 8));
+			boostToPlatRightAnim = new Animation(Constants.boostCycleTime, boostToPlatRight, PlayMode.NORMAL);
 			
 		}
 	}

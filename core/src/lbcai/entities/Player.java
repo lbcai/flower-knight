@@ -173,6 +173,12 @@ public class Player {
 				}
 			}
 			
+			if (lockState == LockState.ATTACKJUMP) {
+				if (jumpState == JumpState.GROUNDED) {
+					lockState = LockState.FREE;
+				}
+			}
+			
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
@@ -192,13 +198,13 @@ public class Player {
 					}
 				}
 			}
-			
-			//placeholder anims
+
 			if (boostCounter == 1) {
 				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
-				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(boostTime);
-				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(boostTime)) {
+				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(boostTime);
+				if (Assets.instance.playerAssets.boostToPlatRightAnim.isAnimationFinished(boostTime)) {
 					boostCounter = 0;
+					lockState = LockState.FREE;
 				}
 			}
 			
@@ -257,6 +263,12 @@ public class Player {
 				
 			}
 			
+			if (lockState == LockState.ATTACKJUMP) {
+				if (jumpState == JumpState.GROUNDED) {
+					lockState = LockState.FREE;
+				}
+			}
+			
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
@@ -276,18 +288,18 @@ public class Player {
 					}
 				}
 			}
-			
-			//placeholder anims
+
 			if (boostCounter == 1) {
 				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
-				region = Assets.instance.playerAssets.attack1LeftEndAnim.getKeyFrame(boostTime);
-				if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(boostTime)) {
+				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(boostTime);
+				if (Assets.instance.playerAssets.boostToPlatLeftAnim.isAnimationFinished(boostTime)) {
 					boostCounter = 0;
+					lockState = LockState.FREE;
 				}
 			}
 			
 		}
-		
+
 		//Actually draw the sprites.
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.playerHead.x + ((AtlasRegion) region).offsetX), 
@@ -766,11 +778,14 @@ public class Player {
 	}
 	
 	boolean boostUpToPlatform(Platform platform) {
-		if (position.x < platform.right && position.x > platform.left) {
-			if (position.y - Constants.playerEyeHeight < platform.top && position.y > platform.top) {
-				boostCounter = 1;
-				boostStartTime = TimeUtils.nanoTime();
-				return true;
+		if (lockState == LockState.FREE) {
+			if (position.x < platform.right && position.x > platform.left) {
+				if (position.y - Constants.playerEyeHeight < platform.top && position.y > platform.top) {
+					boostCounter = 1;
+					lockState = LockState.BOOSTLOCK;
+					boostStartTime = TimeUtils.nanoTime();
+					return true;
+				}
 			}
 		}
 		return false;

@@ -30,6 +30,7 @@ public class Enums {
 			FREE,
 			LOCK,
 			ATTACK1LOCK,
+			BOOSTLOCK,
 			ATTACKJUMP
 		}
 		
