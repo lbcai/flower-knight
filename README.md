@@ -34,27 +34,28 @@ Currently, the game is using placeholder graphical assets. Here are a few gifs o
 - [x] Add knockback
 - [x] Add projectiles
 - [x] Add hit detection 
-- [ ] Add powerups 
+- [ ] Add lootable "powerup" items
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
 ### Custom Features
-- [ ] Create a graphics mockup for maintaining cohesive design.
+- [ ] Create a graphics mockup for maintaining cohesive design
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
-- [ ] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform, exit combat idle transition frame
-- [x] Add extra movement options: downjump, doublejump, wall climbing
+- [x] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform, exit combat idle transition animation
+- [x] Add extra movement options: downjump, doublejump, wall climbing, boosting up onto a platform
 - [x] Create wall hanging animations
-- [ ] Create platform tileset & background image
+- [ ] Create platform tileset & background images
 - [ ] Create custom platform class for nicer looking platforms
 - [ ] Add slanted ground/platforms
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
-- [x] Allow projectiles to fly at angles.
-- [ ] Add special effects: hit sparkles/wooshes, dust clouds, damage numbers, etc.
+- [x] Allow projectiles to fly at angles
+- [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, etc.
 - [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets
 - [ ] Implement UI functionality
+- [ ] Allow player to reset keybinds through UI
 - [ ] Add "berserk mode"
 - [ ] Add fullscreen attack "ultimate"
