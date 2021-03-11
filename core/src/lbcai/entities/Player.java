@@ -41,6 +41,7 @@ public class Player {
 	long runStartTime;
 	long idleStartTime;
 	long wallStartTime;
+	long dodgeStartTime;
 
 	Level level;
 	public int jumpCounter = 0;
@@ -187,6 +188,13 @@ public class Player {
 					lockState = LockState.FREE;
 					attackStartTime = TimeUtils.nanoTime();
 				}
+			} else if (lockState == LockState.DODGE) {
+				float dodgeTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - dodgeStartTime);
+				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
+				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
+					lockState = LockState.FREE;
+					hitState = HitState.NOHIT;
+				}
 			}
 
 			if (lockState == LockState.FREE && runState == RunState.IDLE) {
@@ -276,6 +284,13 @@ public class Player {
 				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
 					attackStartTime = TimeUtils.nanoTime();
+				}
+			} else if (lockState == LockState.DODGE) {
+				float dodgeTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - dodgeStartTime);
+				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
+				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
+					lockState = LockState.FREE;
+					hitState = HitState.NOHIT;
 				}
 			}
 
@@ -382,50 +397,54 @@ public class Player {
 			//allows sticking to walls and walljumping
 			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING || jumpState == JumpState.WALL) {
 				
-				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-					
-					if (stickToPlatformRight(platform)) {
-						if (jumpState != JumpState.WALL) {
-							wallStartTime = TimeUtils.nanoTime();
-							jumpState = JumpState.WALL;
-							jumpCounter = 0;
-						}
+				if (Gdx.input.isKeyPressed(Keys.LEFT) && !(Gdx.input.isKeyPressed(Keys.RIGHT))) {
+					if (facing == Facing.LEFT) {
+						if (stickToPlatformRight(platform)) {
+							if (jumpState != JumpState.WALL) {
+								wallStartTime = TimeUtils.nanoTime();
+								jumpState = JumpState.WALL;
+								jumpCounter = 0;
+							}
 
-						
-						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
-							position.x = platform.right + Constants.playerStance / 2;
-							velocity.x = 0;
-							velocity.y = 0;
-						} 
-						
-						if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
-							position.x = (platform.right + Constants.playerStance / 2) - 10;
-							startJump();
+							
+							if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+								position.x = platform.right + Constants.playerStance / 2;
+								velocity.x = 0;
+								velocity.y = 0;
+							} 
+							
+							if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+								position.x = (platform.right + Constants.playerStance / 2) - 10;
+								startJump();
+							}
+							
 						}
-						
 					}
-				} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 					
-					if (stickToPlatformLeft(platform)) {
-						if (jumpState != JumpState.WALL) {
-							wallStartTime = TimeUtils.nanoTime();
-							jumpState = JumpState.WALL;
-							jumpCounter = 0;
+				} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && !(Gdx.input.isKeyPressed(Keys.LEFT))) {
+					if (facing == Facing.RIGHT) {
+						if (stickToPlatformLeft(platform)) {
+							if (jumpState != JumpState.WALL) {
+								wallStartTime = TimeUtils.nanoTime();
+								jumpState = JumpState.WALL;
+								jumpCounter = 0;
+							}
+
+
+							if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+								position.x = platform.left - Constants.playerStance / 2;
+								velocity.x = 0;
+								velocity.y = 0;
+							} 
+							
+							if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+								position.x = (platform.left - Constants.playerStance / 2) + 10;
+								startJump();
+							}
+
 						}
-
-
-						if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
-							position.x = platform.left - Constants.playerStance / 2;
-							velocity.x = 0;
-							velocity.y = 0;
-						} 
-						
-						if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
-							position.x = (platform.left - Constants.playerStance / 2) + 10;
-							startJump();
-						}
-
 					}
+					
 				} else {
 					//makes the player fall off the wall if not actively trying to stick
 					if (jumpState == JumpState.WALL) {
@@ -538,9 +557,15 @@ public class Player {
 		}
 
 		
-		//move player during attack animation
+		//move player during attack animation, dodge animation
 		if (lockState == LockState.ATTACK1LOCK) {
-			Utils.lerpX(position, targetPosition, (float) 0.5);
+			Utils.lerpX(position, targetPosition, 0.5f);
+		} else if (lockState == LockState.DODGE) {
+			if (facing == Facing.RIGHT) {
+				Utils.lerpX(position, new Vector2(position.x + 50, 0), 0.4f);
+			} else {
+				Utils.lerpX(position, new Vector2(position.x - 50, 0), 0.4f);
+			}
 		}
 		
 		
@@ -639,6 +664,17 @@ public class Player {
 				}
 			}
 			
+			//dodge roll
+			if (Gdx.input.isKeyJustPressed(Keys.C)) {
+				if (lockState != LockState.DODGE) {
+					lockState = LockState.DODGE;
+					hitState = HitState.DODGE;
+					dodgeStartTime = TimeUtils.nanoTime();
+				}
+			}
+			
+		
+			
 		}
 		
 		//Enter falling state if dropping, put this last because then we don't have issues where the player thinks it's falling
@@ -674,7 +710,12 @@ public class Player {
 		}
 
 		facing = Facing.LEFT;
-		velocity.x = -delta * Constants.moveSpeed;
+		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
+			velocity.x -= delta * 2;
+		} else {
+			velocity.x = -delta * Constants.moveSpeed;
+		}
+		
 	}
 	
 	private void moveRight(float delta) {
@@ -687,7 +728,12 @@ public class Player {
 			runState = RunState.IDLE;
 		}
 		facing = Facing.RIGHT;
-		velocity.x = delta * Constants.moveSpeed;
+		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
+			velocity.x += delta * 2;
+		} else {
+			velocity.x = delta * Constants.moveSpeed;
+		}
+		
 	}
 	
 	private void startJump() {
@@ -790,5 +836,6 @@ public class Player {
 		}
 		return false;
 	}
+
 	
 }

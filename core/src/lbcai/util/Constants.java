@@ -50,6 +50,7 @@ public class Constants {
 	public static final float animLockTime = 0.3f;
 	public static final float attack1CycleTime = 0.05f;
 	public static final float boostCycleTime = 0.05f;
+	public static final float dodgeCycleTime = 0.7f;
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.

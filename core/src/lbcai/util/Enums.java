@@ -23,12 +23,14 @@ public class Enums {
 		
 		public enum HitState {
 			NOHIT,
-			IFRAME
+			IFRAME,
+			DODGE
 		}
 		
 		public enum LockState {
 			FREE,
 			LOCK,
+			DODGE,
 			ATTACK1LOCK,
 			BOOSTLOCK,
 			ATTACKJUMP
