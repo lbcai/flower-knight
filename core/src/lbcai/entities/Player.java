@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.flowerknight.Level;
@@ -60,6 +61,8 @@ public class Player {
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
 	private long boostStartTime;
+	
+	private int health;
 
 	
 	/**
@@ -90,6 +93,7 @@ public class Player {
 		hitState = HitState.NOHIT;
 		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
+		health = Constants.baseHealth;
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
 	}
@@ -370,6 +374,26 @@ public class Player {
 				Constants.playerStance,
 				Constants.playerHeight - 20);
 		
+		//Loot items
+		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
+			DelayedRemovalArray<Item> items = level.getItems();
+			items.begin();
+			for (int i = 0; i < items.size; i++) {
+				Item item = items.get(i);
+				item.update(delta);
+				Rectangle itemBound = new Rectangle(
+						item.position.x - Constants.itemCenter.x,
+						item.position.y - Constants.itemCenter.y,
+						Constants.itemCenter.x * 2,
+						Constants.itemCenter.y * 2);
+				if (playerBound.overlaps(itemBound)) {
+					item.use();
+					items.removeIndex(i);
+				}
+			}
+			items.end();
+		}
+		
 		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
 		//Also collision detection with sides of platform.
@@ -397,8 +421,8 @@ public class Player {
 			//allows sticking to walls and walljumping
 			if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING || jumpState == JumpState.WALL) {
 				
-				if (Gdx.input.isKeyPressed(Keys.LEFT) && !(Gdx.input.isKeyPressed(Keys.RIGHT))) {
-					if (facing == Facing.LEFT) {
+				if (Gdx.input.isKeyPressed(Keys.LEFT) && !(Gdx.input.isKeyPressed(Keys.RIGHT)) && facing == Facing.LEFT) {
+
 						if (stickToPlatformRight(platform)) {
 							if (jumpState != JumpState.WALL) {
 								wallStartTime = TimeUtils.nanoTime();
@@ -406,7 +430,6 @@ public class Player {
 								jumpCounter = 0;
 							}
 
-							
 							if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
 								position.x = platform.right + Constants.playerStance / 2;
 								velocity.x = 0;
@@ -419,10 +442,9 @@ public class Player {
 							}
 							
 						}
-					}
 					
-				} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && !(Gdx.input.isKeyPressed(Keys.LEFT))) {
-					if (facing == Facing.RIGHT) {
+				} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && !(Gdx.input.isKeyPressed(Keys.LEFT)) && facing == Facing.RIGHT) {
+					
 						if (stickToPlatformLeft(platform)) {
 							if (jumpState != JumpState.WALL) {
 								wallStartTime = TimeUtils.nanoTime();
@@ -443,7 +465,6 @@ public class Player {
 							}
 
 						}
-					}
 					
 				} else {
 					//makes the player fall off the wall if not actively trying to stick
@@ -453,7 +474,7 @@ public class Player {
 				}
 			}
 		}
-		
+
 		
 		if (lockState == LockState.LOCK) {
 			if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.animLockTime) {
@@ -561,11 +582,7 @@ public class Player {
 		if (lockState == LockState.ATTACK1LOCK) {
 			Utils.lerpX(position, targetPosition, 0.5f);
 		} else if (lockState == LockState.DODGE) {
-			if (facing == Facing.RIGHT) {
-				Utils.lerpX(position, new Vector2(position.x + 50, 0), 0.4f);
-			} else {
-				Utils.lerpX(position, new Vector2(position.x - 50, 0), 0.4f);
-			}
+			Utils.lerpX(position, targetPosition, 0.5f);
 		}
 		
 		
@@ -670,6 +687,11 @@ public class Player {
 					lockState = LockState.DODGE;
 					hitState = HitState.DODGE;
 					dodgeStartTime = TimeUtils.nanoTime();
+					if (facing == Facing.LEFT) {
+						targetPosition = new Vector2(position.x - 250, position.y);
+					} else {
+						targetPosition = new Vector2(position.x + 250, position.y);
+					}
 				}
 			}
 			

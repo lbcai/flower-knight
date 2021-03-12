@@ -376,10 +376,12 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class LifeAssets {
 		
-		public final AtlasRegion life;
+		public final Array<AtlasRegion> life = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> lifeAnim;
 		
 		public LifeAssets(TextureAtlas atlas) {
-			life = atlas.findRegion(Constants.life);
+			life.add(atlas.findRegion(Constants.life));
+			lifeAnim = new Animation(Constants.dustCycleTime, life, PlayMode.LOOP);
 		}
 		
 	}

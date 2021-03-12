@@ -67,6 +67,7 @@ public class Constants {
 	public static final float iFrameLength = 1.0f;
 	public static final int playerBaseDamage = 20;
 	public static final Vector2 attackRange = new Vector2(100, 100);
+	public static final int baseHealth = 100;
 	
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
@@ -101,5 +102,5 @@ public class Constants {
 	
 	//item
 	public static final String life = "heal";
-	public static final Vector2 lifeCenter = new Vector2(50, 50);
+	public static final Vector2 itemCenter = new Vector2(50, 50);
 }

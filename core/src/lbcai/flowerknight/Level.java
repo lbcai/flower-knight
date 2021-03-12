@@ -13,6 +13,7 @@ import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
+import lbcai.entities.Item;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.util.Constants;
@@ -43,6 +44,7 @@ public class Level {
 	private DelayedRemovalArray<Enemy> enemies;
 	private DelayedRemovalArray<Bullet> bullets;
 	private DelayedRemovalArray<DustCloud> dustClouds;
+	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
 	
 	public Level(Viewport viewport) {
@@ -102,6 +104,8 @@ public class Level {
 		}
 		dustClouds.end();
 		
+		
+		
 	}
 	
 	/**
@@ -129,6 +133,10 @@ public class Level {
 			dustcloud.render(batch);
 		}
 		
+		for (Item item : items) {
+			item.render(batch);
+		}
+		
 		
 	}
 	
@@ -139,6 +147,7 @@ public class Level {
 		enemies = new DelayedRemovalArray<Enemy>();
 		bullets = new DelayedRemovalArray<Bullet>();
 		dustClouds = new DelayedRemovalArray<DustCloud>();
+		items = new DelayedRemovalArray<Item>();
 		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
@@ -159,6 +168,9 @@ public class Level {
 		//enemies.add(new EnemyPBeetle(enemyPlatform));
 		platforms.add(enemyPlatform);
 		
+		//add base item for testing
+		items.add(new Item(new Vector2(100, 100), this));
+		
 
 	}
 	
@@ -172,6 +184,10 @@ public class Level {
 	
 	public DelayedRemovalArray<Bullet> getBullets() {
 		return bullets;
+	}
+	
+	public DelayedRemovalArray<Item> getItems() {
+		return items;
 	}
 	
 	public Viewport getViewport() {
