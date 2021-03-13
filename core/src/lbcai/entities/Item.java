@@ -17,13 +17,15 @@ public class Item {
 	private Vector2 lastPosition = new Vector2();
 	private Vector2 startPosition = new Vector2();
 	private Vector2 velocity;
-	private TextureRegion region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
+	private TextureRegion region;
 	private long startTime;
 	private int counterUp = 0;
 	private Array<Platform> platforms;
-	public boolean expire;
+	private int expire;
 	private boolean falling = true;
 	private Player player;
+	private int rotation;
+	private long expireTime;
 	
 	public Item(Vector2 position, Level level) {
 		this.position = position;
@@ -32,10 +34,14 @@ public class Item {
 		lastPosition.x = position.x;
 		lastPosition.y = position.y;
 		
-		velocity = new Vector2(0, 0);
+		//start the item with upward velocity so it pops out of monsters/boxes/etc.
+		velocity = new Vector2(0, 500);
 		platforms = level.getPlatforms();
-		expire = false;
+		//0 = not expired, 1 = using, 2 = expired
+		expire = 0;
 		player = level.getPlayer();
+		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
+		startTime = TimeUtils.nanoTime();
 	}
 	
 	public void update(float delta) {
@@ -43,6 +49,9 @@ public class Item {
 		lastPosition.set(position);
 		
 		if (falling == true) {
+			if (rotation < 360) {
+				rotation += 15;
+			}
 			
 			velocity.y -= delta * Constants.worldGravity;
 			position.mulAdd(velocity, delta);
@@ -59,6 +68,7 @@ public class Item {
 				}
 			}
 		} else {
+			rotation = 0;
 			if (counterUp == 0) {
 				position.lerp(new Vector2(position.x, position.y + 25), 0.01f);
 				if (position.y >= startPosition.y + 10) {
@@ -72,27 +82,44 @@ public class Item {
 			}
 		}
 		
-		if (position.y < Constants.killPlane || MathUtils.nanoToSec * startTime > Constants.itemExpireTime) {
-			expire = true;
+		//if dropping off the map or sitting for 5 minutes, play expire animation and remove item from array
+		if (expire == 0) {
+			if (position.y < Constants.killPlane || MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime) > 
+			Constants.itemExpireTime) {
+				setExpireBoolean();
+			}
+		} else if (expire == 1) {
+			//if being used, send the item to the player while playing fade out animation
+			position.lerp(player.position, 0.1f);
 		}
-		
+
+		System.out.println(startTime + " " + TimeUtils.nanoTime() + " " + expireTime + " " + expire);
 	}
 	
 	public void render(SpriteBatch batch) {
 		
-		float animTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
-		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
+		if (expire == 0) {
+			float animTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
+			region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
+		} else {
+			float expireAnimTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - expireTime);
+			region = Assets.instance.lifeAssets.lifeFadeAnim.getKeyFrame(expireAnimTime);
+			if (Assets.instance.lifeAssets.lifeFadeAnim.isAnimationFinished(expireAnimTime)) {
+				expire = 3;
+			}
+		}
+		
 		
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.itemCenter.x), 
 				(position.y - Constants.itemCenter.y), 
-				0, 
-				0, 
+				Constants.itemCenter.x, 
+				Constants.itemCenter.y, 
 				region.getRegionWidth(), 
 				region.getRegionHeight(), 
 				1, 
 				1, 
-				0, 
+				rotation, 
 				region.getRegionX(), 
 				region.getRegionY(), 
 				region.getRegionWidth(), 
@@ -103,8 +130,22 @@ public class Item {
 	}
 	
 	public void use() {
-		//this is a full heal (will have to find a way to fill to full health even if max health is adjusted)
-		player.health = Constants.baseHealth;
+		//this is a full heal
+		player.health = player.maxHealth;
+		expire = 1;
+		expireTime = TimeUtils.nanoTime();
+	}
+	
+	void setExpireBoolean() {
+		expire = 2;
+		expireTime = TimeUtils.nanoTime();
+	}
+	
+	public boolean isExpired() {
+		if (expire == 3) {
+			return true;
+		}
+		return false;
 	}
 	
 }

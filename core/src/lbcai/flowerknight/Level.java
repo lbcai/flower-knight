@@ -107,7 +107,7 @@ public class Level {
 		items.begin();
 		for (Item item : items) {
 			item.update(delta);
-			if (item.expire == true) {
+			if (item.isExpired() == true) {
 				//if item expires or falls off map, remove
 				items.removeValue(item, false);
 			}
@@ -177,7 +177,7 @@ public class Level {
 		platforms.add(enemyPlatform);
 		
 		//add base item for testing
-		items.add(new Item(new Vector2(100, 100), this));
+		items.add(new Item(new Vector2(300, 300), this));
 		
 
 	}

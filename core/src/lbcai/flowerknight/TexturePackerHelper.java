@@ -85,11 +85,11 @@ public class TexturePackerHelper {
 	        			String[][] appropriateArray = map.get(atlasLine);
 	        			String x = appropriateArray[Integer.parseInt(indexNum) - 1][0];
 	        			String y = appropriateArray[Integer.parseInt(indexNum) - 1][1];
-	        			System.out.println(offsetLine);
+	        			
         				offsetLine.delete(10, offsetLine.length());
-        				System.out.println(offsetLine);
+        				
         				offsetLine.append(x + ", " + y);
-        				System.out.println(offsetLine);
+        				
         				buffWriter.write(offsetLine.toString() + "\n");
         				
 	        		}	

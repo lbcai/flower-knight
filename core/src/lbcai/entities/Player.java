@@ -63,6 +63,7 @@ public class Player {
 	private long boostStartTime;
 	
 	int health;
+	int maxHealth;
 
 	
 	/**
@@ -76,6 +77,8 @@ public class Player {
 		position = new Vector2();
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();
+		//set max health here so if player dies and respawns they can keep max health buffs
+		maxHealth = Constants.baseHealth;
 		init();
 		
 	}
@@ -94,6 +97,7 @@ public class Player {
 		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
 		health = Constants.baseHealth;
+		
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
 	}
@@ -387,7 +391,6 @@ public class Player {
 						Constants.itemCenter.y * 2);
 				if (playerBound.overlaps(itemBound)) {
 					item.use();
-					items.removeIndex(i);
 				}
 			}
 			items.end();

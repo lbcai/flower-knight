@@ -377,11 +377,19 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class LifeAssets {
 		
 		public final Array<AtlasRegion> life = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> lifeFade = new Array<AtlasRegion>();
 		public final Animation<TextureRegion> lifeAnim;
+		public final Animation<TextureRegion> lifeFadeAnim;
 		
 		public LifeAssets(TextureAtlas atlas) {
-			life.add(atlas.findRegion(Constants.life));
-			lifeAnim = new Animation(Constants.dustCycleTime, life, PlayMode.LOOP);
+			life.add(atlas.findRegion(Constants.life, 1));
+			life.add(atlas.findRegion(Constants.life, 1));
+			lifeAnim = new Animation(Constants.itemExpireCycleTime, life, PlayMode.LOOP);
+			
+			lifeFade.add(atlas.findRegion(Constants.life, 1));
+			lifeFade.add(atlas.findRegion(Constants.life, 2));
+			lifeFade.add(atlas.findRegion(Constants.life, 3));
+			lifeFadeAnim = new Animation(Constants.itemExpireCycleTime, lifeFade, PlayMode.NORMAL);
 		}
 		
 	}
