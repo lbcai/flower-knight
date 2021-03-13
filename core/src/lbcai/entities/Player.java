@@ -62,7 +62,7 @@ public class Player {
 	private int boostCounter = 0;
 	private long boostStartTime;
 	
-	private int health;
+	int health;
 
 	
 	/**
@@ -380,7 +380,6 @@ public class Player {
 			items.begin();
 			for (int i = 0; i < items.size; i++) {
 				Item item = items.get(i);
-				item.update(delta);
 				Rectangle itemBound = new Rectangle(
 						item.position.x - Constants.itemCenter.x,
 						item.position.y - Constants.itemCenter.y,
@@ -522,7 +521,7 @@ public class Player {
 				}
 			}
 		}
-		
+
 		//player attacks and collision detection
 		if (Gdx.input.isKeyJustPressed(Keys.X)) {
 			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {

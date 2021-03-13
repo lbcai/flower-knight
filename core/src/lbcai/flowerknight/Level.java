@@ -104,7 +104,15 @@ public class Level {
 		}
 		dustClouds.end();
 		
-		
+		items.begin();
+		for (Item item : items) {
+			item.update(delta);
+			if (item.expire == true) {
+				//if item expires or falls off map, remove
+				items.removeValue(item, false);
+			}
+		}
+		items.end();
 		
 	}
 	

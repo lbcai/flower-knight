@@ -103,4 +103,5 @@ public class Constants {
 	//item
 	public static final String life = "heal";
 	public static final Vector2 itemCenter = new Vector2(50, 50);
+	public static final float itemExpireTime = 300f;
 }
