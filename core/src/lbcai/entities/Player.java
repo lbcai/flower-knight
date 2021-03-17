@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -130,18 +129,18 @@ public class Player {
 		if (facing == Facing.RIGHT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
-					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					float idleTime = Utils.secondsSince(idleStartTime);
 					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
 					//0 = catch breath idle, 1 = transition animation, 2 = normal idle
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime || 
-							MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime) < Constants.idleBTime) {
+					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
+							Utils.secondsSince(attackStartTime) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
-						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
+						float idleTransTime = Utils.secondsSince(idleTransStartTime);
 						region = Assets.instance.playerAssets.idleBTransRightAnim.getKeyFrame(idleTransTime);
 						if (Assets.instance.playerAssets.idleBTransRightAnim.isAnimationFinished(idleTransTime)) {
 							idleTransitionCounter = 2;
@@ -153,19 +152,19 @@ public class Player {
 				} else if (runState == RunState.RUN) {
 					//Calculate how long we have been running in seconds (nanoToSec just converts to seconds, 
 					//nanoTime gets current time).
-					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
+					float runTime = Utils.secondsSince(runStartTime);
 					region = Assets.instance.playerAssets.runRightAnim.getKeyFrame(runTime);
 				} else if (runState == RunState.SKID) {
-					float skidTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime);
+					float skidTime = Utils.secondsSince(slideTransStartTime);
 					region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(skidTime);
 				} 
 			} else if (jumpState == JumpState.JUMPING) {
-				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
+				float jumpTime = Utils.secondsSince(jumpStartTime);
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
 			} else if (jumpState == JumpState.FALLING) {
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
-				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
+				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangRightAnim.getKeyFrame(hangTime);
 			}
 			
@@ -189,7 +188,7 @@ public class Player {
 			}
 			
 			if (lockState == LockState.ATTACK1LOCK) {
-				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				float attackTime = Utils.secondsSince(attackStartTime);
 				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
 
 				if (Assets.instance.playerAssets.attack1RightAnim.isAnimationFinished(attackTime)) {
@@ -197,7 +196,7 @@ public class Player {
 					attackStartTime = TimeUtils.nanoTime();
 				}
 			} else if (lockState == LockState.DODGE) {
-				float dodgeTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - dodgeStartTime);
+				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
 				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
@@ -207,7 +206,7 @@ public class Player {
 
 			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
-					float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+					float attackTime = Utils.secondsSince(attackStartTime);
 					region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(attackTime);
 					if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(attackTime)) {
 						attackComboCounter = 0;
@@ -216,7 +215,7 @@ public class Player {
 			}
 
 			if (boostCounter == 1) {
-				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
+				float boostTime = Utils.secondsSince(boostStartTime);
 				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(boostTime);
 				if (Assets.instance.playerAssets.boostToPlatRightAnim.isAnimationFinished(boostTime)) {
 					boostCounter = 0;
@@ -227,17 +226,17 @@ public class Player {
 		} else if (facing == Facing.LEFT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
-					float idleTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleStartTime);
+					float idleTime = Utils.secondsSince(idleStartTime);
 					//use idle transition counter to figure out when to play transition animation between combat & normal idles
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) < Constants.idleBTime || 
-							MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime) < Constants.idleBTime) {
+					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
+							Utils.secondsSince(attackStartTime) < Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
-						float idleTransTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - idleTransStartTime);
+						float idleTransTime = Utils.secondsSince(idleTransStartTime);
 						region = Assets.instance.playerAssets.idleBTransLeftAnim.getKeyFrame(idleTransTime);
 						if (Assets.instance.playerAssets.idleBTransLeftAnim.isAnimationFinished(idleTransTime)) {
 							idleTransitionCounter = 2;
@@ -247,21 +246,21 @@ public class Player {
 					}
 
 				} else if (runState == RunState.RUN) {
-					float runTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime);
+					float runTime = Utils.secondsSince(runStartTime);
 					region = Assets.instance.playerAssets.runLeftAnim.getKeyFrame(runTime);
 				} else if (runState == RunState.SKID) {
-					float skidTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime);
+					float skidTime = Utils.secondsSince(slideTransStartTime);
 					region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(skidTime);
 				}
 				
 				
 			} else if (jumpState == JumpState.JUMPING) {
-				float jumpTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime);
+				float jumpTime = Utils.secondsSince(jumpStartTime);
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
 			} else if (jumpState == JumpState.FALLING) {
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(12);
 			} else if (jumpState == JumpState.WALL) {
-				float hangTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime);
+				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangLeftAnim.getKeyFrame(hangTime);
 			}
 			
@@ -286,7 +285,7 @@ public class Player {
 			}
 			
 			if (lockState == LockState.ATTACK1LOCK) {
-				float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+				float attackTime = Utils.secondsSince(attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
 
 				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
@@ -294,7 +293,7 @@ public class Player {
 					attackStartTime = TimeUtils.nanoTime();
 				}
 			} else if (lockState == LockState.DODGE) {
-				float dodgeTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - dodgeStartTime);
+				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
 				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
@@ -304,7 +303,7 @@ public class Player {
 
 			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
-					float attackTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - attackStartTime);
+					float attackTime = Utils.secondsSince(attackStartTime);
 					region = Assets.instance.playerAssets.attack1LeftEndAnim.getKeyFrame(attackTime);
 					if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(attackTime)) {
 						attackComboCounter = 0;
@@ -313,7 +312,7 @@ public class Player {
 			}
 
 			if (boostCounter == 1) {
-				float boostTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - boostStartTime);
+				float boostTime = Utils.secondsSince(boostStartTime);
 				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(boostTime);
 				if (Assets.instance.playerAssets.boostToPlatLeftAnim.isAnimationFinished(boostTime)) {
 					boostCounter = 0;
@@ -432,7 +431,7 @@ public class Player {
 								jumpCounter = 0;
 							}
 
-							if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+							if ((Utils.secondsSince(wallStartTime)) < Constants.wallTime) {
 								position.x = platform.right + Constants.playerStance / 2;
 								velocity.x = 0;
 								velocity.y = 0;
@@ -455,7 +454,7 @@ public class Player {
 							}
 
 
-							if ((MathUtils.nanoToSec * (TimeUtils.nanoTime() - wallStartTime)) < Constants.wallTime) {
+							if ((Utils.secondsSince(wallStartTime)) < Constants.wallTime) {
 								position.x = platform.left - Constants.playerStance / 2;
 								velocity.x = 0;
 								velocity.y = 0;
@@ -479,12 +478,12 @@ public class Player {
 
 		
 		if (lockState == LockState.LOCK) {
-			if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.animLockTime) {
+			if (Utils.secondsSince(timeSinceHit) > Constants.animLockTime) {
 				lockState = LockState.FREE;
 			}
 		} else {
 			//check if invincible grace period is over.
-			if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeSinceHit) > Constants.iFrameLength) {
+			if (Utils.secondsSince(timeSinceHit) > Constants.iFrameLength) {
 				hitState = HitState.NOHIT;
 			}
 		}
@@ -612,7 +611,7 @@ public class Player {
 			} else {
 				if (runState == RunState.RUN && jumpState == JumpState.GROUNDED) {
 					//only slide to a stop if player has been running for long enough time
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - runStartTime) > Constants.skidTimeLimitBreak) {
+					if (Utils.secondsSince(runStartTime) > Constants.skidTimeLimitBreak) {
 						slideTransStartTime = TimeUtils.nanoTime();
 						runState = RunState.SKID;
 					} else {
@@ -624,7 +623,7 @@ public class Player {
 
 				}
 				if (runState == RunState.SKID && jumpState == JumpState.GROUNDED) {
-					if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - slideTransStartTime) < Constants.skidTime) {
+					if (Utils.secondsSince(slideTransStartTime) < Constants.skidTime) {
 						if (facing == Facing.LEFT) {
 							moveLeft(delta);
 						} else {
@@ -679,6 +678,8 @@ public class Player {
 				for (Platform platform : platforms) {
 					if (boostUpToPlatform(platform)) {
 						position.y = platform.top + Constants.playerEyeHeight;
+						velocity.x = 0;
+						velocity.y = 0;
 					}
 				}
 			}

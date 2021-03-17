@@ -1,12 +1,12 @@
 package lbcai.entities;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 
 public class EnemyDandelion extends Enemy {
@@ -45,7 +45,7 @@ public class EnemyDandelion extends Enemy {
 		}
 		
 		Vector2 bulletPosition;
-		float bulletWaitTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - bulletShotLastTime);
+		float bulletWaitTime = Utils.secondsSince(bulletShotLastTime);
 		//check if bullet is not on cooldown and if player is not below the dandelion (can't see below its own platform) before
 		//shooting at player.
 		if (bulletWaitTime > Constants.bulletCooldown && (target.position.y > position.y - Constants.dandelionEyeHeight.y)) {

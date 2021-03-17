@@ -1,6 +1,8 @@
 package lbcai.util;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Utils {
 	
@@ -10,6 +12,10 @@ public class Utils {
 		final float invAlpha = 1.0f - alpha;
 		position.x = (position.x * invAlpha) + (target.x * alpha);
 		return position;
+	}
+	
+	public static float secondsSince(long timeInNano) {
+		return MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeInNano);
 	}
 	
 }

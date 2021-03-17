@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 
 public class EnemyPBeetle extends Enemy {
 	
@@ -17,7 +18,7 @@ public class EnemyPBeetle extends Enemy {
 		super.update(delta);
 		
 		//makes the floating bob up and down
-		final float elapsedTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
+		final float elapsedTime = Utils.secondsSince(startTime);
 		//multiplier of amplitude = 1 + sin(2 PI elapsedTime / period)
 		final float floatMultiplier = 1 + MathUtils.sin(MathUtils.PI2 * (elapsedTime / Constants.floatpBeetlePeriod));
 		position.y = platform.top + Constants.pBeetleEyeHeight.y + (Constants.floatpBeetleAmplitude * floatMultiplier);

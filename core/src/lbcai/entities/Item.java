@@ -2,7 +2,6 @@ package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 
 public class Item {
 	
@@ -84,8 +84,7 @@ public class Item {
 		
 		//if dropping off the map or sitting for 5 minutes, play expire animation and remove item from array
 		if (expire == 0) {
-			if (position.y < Constants.killPlane || MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime) > 
-			Constants.itemExpireTime) {
+			if (position.y < Constants.killPlane || Utils.secondsSince(startTime) > Constants.itemExpireTime) {
 				setExpireBoolean();
 			}
 		} else if (expire == 1) {
@@ -93,16 +92,15 @@ public class Item {
 			position.lerp(player.position, 0.1f);
 		}
 
-		System.out.println(startTime + " " + TimeUtils.nanoTime() + " " + expireTime + " " + expire);
 	}
 	
 	public void render(SpriteBatch batch) {
 		
 		if (expire == 0) {
-			float animTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
+			float animTime = Utils.secondsSince(startTime);
 			region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
 		} else {
-			float expireAnimTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - expireTime);
+			float expireAnimTime = Utils.secondsSince(expireTime);
 			region = Assets.instance.lifeAssets.lifeFadeAnim.getKeyFrame(expireAnimTime);
 			if (Assets.instance.lifeAssets.lifeFadeAnim.isAnimationFinished(expireAnimTime)) {
 				expire = 3;

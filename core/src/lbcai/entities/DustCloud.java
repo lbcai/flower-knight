@@ -1,14 +1,13 @@
 package lbcai.entities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 
 public class DustCloud {
@@ -64,7 +63,7 @@ public class DustCloud {
 	}
 	
 	public void update(float delta) {
-		dustTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
+		dustTime = Utils.secondsSince(startTime);
 		
 		if (type == 0) {
 			//ground dust
@@ -96,7 +95,7 @@ public class DustCloud {
 	}
 	
 	public boolean isFinished() {
-		if (MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime) > Constants.dustDuration) {
+		if (Utils.secondsSince(startTime) > Constants.dustDuration) {
 			return true;
 		} else {
 			return false;

@@ -34,7 +34,7 @@ Currently, the game is using placeholder graphical assets. Here are a few gifs o
 - [x] Add knockback
 - [x] Add projectiles
 - [x] Add hit detection 
-- [ ] Add lootable "powerup" items
+- [x] Add lootable "powerup" items
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
 ### Custom Features

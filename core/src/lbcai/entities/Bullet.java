@@ -2,13 +2,13 @@ package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 
 public class Bullet {
@@ -75,7 +75,7 @@ public class Bullet {
 	public void render(SpriteBatch batch) {
 		TextureRegion region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		
-		float animTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTime);
+		float animTime = Utils.secondsSince(startTime);
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
 		
 		if (facing == Facing.LEFT) {

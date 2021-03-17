@@ -103,6 +103,6 @@ public class Constants {
 	//item
 	public static final String life = "heal";
 	public static final Vector2 itemCenter = new Vector2(37.5f, 37.5f);
-	public static final float itemExpireTime = 5f;
+	public static final float itemExpireTime = 300f;
 	public static final float itemExpireCycleTime = 0.1f;
 }
