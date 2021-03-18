@@ -63,7 +63,12 @@ public class Player {
 	
 	int health;
 	int maxHealth;
-
+	
+	//for allowing player to rebind controls
+	private int attackKey = Keys.X;
+	private int jumpKey = Keys.ALT_LEFT;
+	private int dodgeKey = Keys.C;
+	private int lootKey = Keys.Z;
 	
 	/**
 	 * Constructor: make a player.
@@ -166,6 +171,9 @@ public class Player {
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangRightAnim.getKeyFrame(hangTime);
+			} else if (jumpState == JumpState.SQUAT) {
+				//placeholder
+				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(0.25f);
 			}
 			
 			if (hitState == HitState.IFRAME) {
@@ -262,6 +270,9 @@ public class Player {
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangLeftAnim.getKeyFrame(hangTime);
+			} else if (jumpState == JumpState.SQUAT) {
+				//placeholder, need transition
+				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(0.25f);
 			}
 			
 			if (hitState == HitState.IFRAME) {
@@ -371,14 +382,23 @@ public class Player {
 		}
 		
 		//Use for collision detection of player.
-		playerBound = new Rectangle(
-				position.x - Constants.playerStance / 2,
-				position.y - Constants.playerEyeHeight + 40, 
-				Constants.playerStance,
-				Constants.playerHeight - 20);
+		if (jumpState != JumpState.SQUAT) {
+			playerBound = new Rectangle(
+					position.x - Constants.playerStance / 2,
+					position.y - Constants.playerEyeHeight + 40, 
+					Constants.playerStance,
+					Constants.playerHeight - 20);
+		} else {
+			//placeholder, need to write a debug shaperenderer to check the actual hitbox.
+			playerBound = new Rectangle(
+					position.x - Constants.playerStance / 2,
+					position.y - Constants.playerEyeHeight + 40, 
+					Constants.playerStance,
+					Constants.playerHeight - 200);
+		}
 		
 		//Loot items
-		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
+		if (Gdx.input.isKeyJustPressed(lootKey)) {
 			DelayedRemovalArray<Item> items = level.getItems();
 			items.begin();
 			for (int i = 0; i < items.size; i++) {
@@ -437,7 +457,7 @@ public class Player {
 								velocity.y = 0;
 							} 
 							
-							if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+							if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(jumpKey))) {
 								position.x = (platform.right + Constants.playerStance / 2) - 10;
 								startJump();
 							}
@@ -460,7 +480,7 @@ public class Player {
 								velocity.y = 0;
 							} 
 							
-							if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(Keys.ALT_LEFT))) {
+							if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(jumpKey))) {
 								position.x = (platform.left - Constants.playerStance / 2) + 10;
 								startJump();
 							}
@@ -525,7 +545,7 @@ public class Player {
 		}
 
 		//player attacks and collision detection
-		if (Gdx.input.isKeyJustPressed(Keys.X)) {
+		if (Gdx.input.isKeyJustPressed(attackKey)) {
 			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
 				if (lockState != LockState.ATTACK1LOCK) {
 					lockState = LockState.ATTACK1LOCK;
@@ -573,7 +593,9 @@ public class Player {
 			
 			for (Enemy enemy: level.getEnemies()) {
 				if (attackHitBox.overlaps(enemy.hitBox)) {
-					enemy.HP -= Constants.playerBaseDamage; 
+					enemy.isDamaged(Constants.playerBaseDamage); 
+					//will need to add randomness aspect: allow hit effect to spawn around the actual position
+					level.spawnHitEffect(enemy.position, enemy.facing);
 				}
 			}
 		}
@@ -636,13 +658,19 @@ public class Player {
 						idleTransitionCounter = 0;
 						runState = RunState.IDLE;
 					}
+				} 
+				
+				if (runState == RunState.IDLE && jumpState == JumpState.GROUNDED || jumpState == JumpState.SQUAT) {
+					if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+						jumpState = JumpState.SQUAT;
+					}
 				}
 
 			}
 			
 			
 			//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
-			if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
+			if (Gdx.input.isKeyJustPressed(jumpKey) && !Gdx.input.isKeyPressed(Keys.DOWN)) {
 				switch (jumpState) {
 				case GROUNDED:
 					startJump();
@@ -665,7 +693,7 @@ public class Player {
 						break;
 					}
 			
-			} else if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.DOWN)) {
+			} else if (Gdx.input.isKeyJustPressed(jumpKey) && Gdx.input.isKeyPressed(Keys.DOWN)) {
 				//downjump
 				//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
 				//downjumped off on accident
@@ -685,7 +713,7 @@ public class Player {
 			}
 			
 			//dodge roll
-			if (Gdx.input.isKeyJustPressed(Keys.C)) {
+			if (Gdx.input.isKeyJustPressed(dodgeKey)) {
 				if (lockState != LockState.DODGE) {
 					lockState = LockState.DODGE;
 					hitState = HitState.DODGE;
@@ -814,9 +842,11 @@ public class Player {
 		if (facing == Facing.LEFT) {
 			velocity.x = -Constants.knockbackSpeed.x;
 			position.x -= 30;
+			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing);
 		} else {
 			velocity.x = Constants.knockbackSpeed.x;
 			position.x += 30;
+			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing);
 		}
 		hitState = HitState.IFRAME;
 		lockState = LockState.LOCK;

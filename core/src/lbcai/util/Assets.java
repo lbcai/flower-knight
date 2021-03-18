@@ -43,6 +43,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public DustAssets dustAssets;
 	public LifeAssets lifeAssets;
 	public BulletAssets bulletAssets;
+	public HitAssets hitAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -76,6 +77,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		dustAssets = new DustAssets(atlas);
 		lifeAssets = new LifeAssets(atlas);
 		bulletAssets = new BulletAssets(atlas);
+		hitAssets = new HitAssets(atlas);
 	}
 	
 	/**
@@ -406,6 +408,20 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 	}
+	
+	public class HitAssets {
+			
+			public final Array<AtlasRegion> hitOne = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitOneAnim;
+			
+			public HitAssets(TextureAtlas atlas) {
+				hitOne.add(atlas.findRegion(Constants.hitOne, 1));
+				hitOne.add(atlas.findRegion(Constants.hitOne, 2));
+				hitOne.add(atlas.findRegion(Constants.hitOne, 3));
+				hitOneAnim = new Animation(Constants.hitEffectCycleTime, hitOne, PlayMode.NORMAL);
+			}
+			
+		}
 	
 	/**
 	 * Disposable interface allows us to dispose of things like SpriteBatches and TextureAtlases when we don't need them anymore

@@ -9,7 +9,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.ai.GdxAI;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
+import lbcai.util.Enums.LockState;
+import lbcai.util.Enums.RunState;
 
 public class Enemy {
 	//extend later when adding more enemy types
@@ -23,6 +27,10 @@ public class Enemy {
 	float collisionRadius;
 	public int HP;
 	public Rectangle hitBox;
+	HitState hitState;
+	RunState runState;
+	LockState lockState;
+	private long hitStartTime;
 	
 	
 	//default enemy type will be a potato beetle
@@ -33,7 +41,9 @@ public class Enemy {
 		this.leftIdleAnim = Assets.instance.pBeetleAssets.idleLeftAnim;
 		this.collisionRadius = Constants.pBeetleCollisionRadius;
 		this.HP = Constants.pBeetleHP;
-		
+		hitState = HitState.NOHIT;
+		runState = RunState.IDLE;
+		lockState = LockState.FREE;
 		position = new Vector2(platform.left, platform.top + eyeHeight.y);
 		facing = Facing.RIGHT;
 		startTime = TimeUtils.nanoTime();
@@ -70,11 +80,45 @@ public class Enemy {
 		TextureRegion region = leftIdleAnim.getKeyFrame(0);
 		Boolean flipx = false;
 		
+		//placeholder animations
 		if (facing == Facing.LEFT) {
-			region = leftIdleAnim.getKeyFrame(0);
+			if (runState == RunState.IDLE) {
+				region = leftIdleAnim.getKeyFrame(0);
+			} else if (runState == RunState.RUN) {
+				region = leftIdleAnim.getKeyFrame(0);
+			}
+			
+			if (hitState == HitState.IFRAME) {
+				region = leftIdleAnim.getKeyFrame(0);
+				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+					hitState = HitState.NOHIT;
+				}
+			}
+			//use for attacking animation
+			if (lockState == LockState.LOCK) {
+				region = leftIdleAnim.getKeyFrame(0);
+			}
+			
 			flipx = false;
+			
 		} else if (facing == Facing.RIGHT) {
-			region = leftIdleAnim.getKeyFrame(0);
+			if (runState == RunState.IDLE) {
+				region = leftIdleAnim.getKeyFrame(0);
+			} else if (runState == RunState.RUN) {
+				region = leftIdleAnim.getKeyFrame(0);
+			}
+			
+			if (hitState == HitState.IFRAME) {
+				region = leftIdleAnim.getKeyFrame(0);
+				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+					hitState = HitState.NOHIT;
+				}
+			}
+			
+			if (lockState == LockState.LOCK) {
+				region = leftIdleAnim.getKeyFrame(0);
+			}
+			
 			flipx = true;
 		}
 		
@@ -95,5 +139,12 @@ public class Enemy {
 				region.getRegionHeight(), 
 				flipx, 
 				false);
+	}
+	
+	public void isDamaged(int damage) {
+		HP -= damage;
+		// using iframe to denote flinch animation but no actual iframe for mobs
+		hitState = HitState.IFRAME;
+		hitStartTime = TimeUtils.nanoTime();
 	}
 }

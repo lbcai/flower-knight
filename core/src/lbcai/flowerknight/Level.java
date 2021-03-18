@@ -13,6 +13,7 @@ import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
+import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
@@ -44,6 +45,7 @@ public class Level {
 	private DelayedRemovalArray<Enemy> enemies;
 	private DelayedRemovalArray<Bullet> bullets;
 	private DelayedRemovalArray<DustCloud> dustClouds;
+	private DelayedRemovalArray<HitEffect> hitEffects;
 	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
 	
@@ -114,6 +116,14 @@ public class Level {
 		}
 		items.end();
 		
+		hitEffects.begin();
+		for (HitEffect effect : hitEffects) {
+			if (effect.isExpired() == true) {
+				hitEffects.removeValue(effect, false);
+			}
+		}
+		hitEffects.end();
+		
 	}
 	
 	/**
@@ -128,9 +138,11 @@ public class Level {
 		for (Platform platform : platforms) {
 			platform.render(batch);
 		}
+		
 		for (Enemy enemy : enemies) {
 			enemy.render(batch);
 		}
+		
 		player.render(batch);
 		
 		for (Bullet bullet : bullets) {
@@ -145,6 +157,9 @@ public class Level {
 			item.render(batch);
 		}
 		
+		for (HitEffect effect : hitEffects) {
+			effect.render(batch);
+		}
 		
 	}
 	
@@ -155,6 +170,7 @@ public class Level {
 		enemies = new DelayedRemovalArray<Enemy>();
 		bullets = new DelayedRemovalArray<Bullet>();
 		dustClouds = new DelayedRemovalArray<DustCloud>();
+		hitEffects = new DelayedRemovalArray<HitEffect>();
 		items = new DelayedRemovalArray<Item>();
 		
 		//left, top, width, height
@@ -211,7 +227,11 @@ public class Level {
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
-		dustClouds.add(new DustCloud(position, player.facing, type));
+		dustClouds.add(new DustCloud(position, facing, type));
+	}
+	
+	public void spawnHitEffect(Vector2 position, Facing facing) {
+		hitEffects.add(new HitEffect(position, facing));
 	}
 	
 }

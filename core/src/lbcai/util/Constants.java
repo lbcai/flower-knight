@@ -69,10 +69,14 @@ public class Constants {
 	public static final Vector2 attackRange = new Vector2(100, 100);
 	public static final int baseHealth = 100;
 	
+	//effect
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
 	public static final float dustDuration = 0.3f;
 	public static final float dustCycleTime = 0.1f;
+	public static final String hitOne = "hit";
+	public static final float hitEffectCycleTime = 0.08f;
+	public static final Vector2 hitEffectCenter = new Vector2(50, 50);
 	
 	//tileset
 	public static final String platformSprite = "Platform";
@@ -99,6 +103,7 @@ public class Constants {
 	public static final float bulletCycleTime = 0.2f;
 	public static final float bulletCooldown = 1.5f;
 	public static final Vector2 bulletCenter = new Vector2(25, 25);
+	public static final float enemyFlinchTime = 0.3f;
 	
 	//item
 	public static final String life = "heal";
