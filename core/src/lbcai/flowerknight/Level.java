@@ -26,8 +26,7 @@ public class Level {
 	//get each level
 	public static final String className = Level.class.getName();
 	private Viewport viewport;
-	
-	
+
 	/**
 	 * Make the player.
 	 */
@@ -173,6 +172,7 @@ public class Level {
 		hitEffects = new DelayedRemovalArray<HitEffect>();
 		items = new DelayedRemovalArray<Item>();
 		
+		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
 		platforms.add(new Platform(0, 0, 512, 50));
@@ -231,7 +231,11 @@ public class Level {
 	}
 	
 	public void spawnHitEffect(Vector2 position, Facing facing) {
-		hitEffects.add(new HitEffect(position, facing));
+		// an equation to get random numbers in a range:
+		// Math.random() * (max - min + 1) + min
+		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
+		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
+		hitEffects.add(new HitEffect(new Vector2(x, y), facing));
 	}
 	
 }

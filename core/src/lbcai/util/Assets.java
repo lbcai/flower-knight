@@ -107,6 +107,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> attack1RightEnd = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> boostToPlatLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> boostToPlatRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> dodgeRight = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -128,6 +129,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> attack1RightEndAnim;
 		public final Animation<TextureRegion> boostToPlatLeftAnim;
 		public final Animation<TextureRegion> boostToPlatRightAnim;
+		public final Animation<TextureRegion> dodgeRightAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -315,6 +317,16 @@ public class Assets implements Disposable, AssetErrorListener {
 			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 7));
 			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 8));
 			boostToPlatRightAnim = new Animation(Constants.boostCycleTime, boostToPlatRight, PlayMode.NORMAL);
+			
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 1));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 3));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 4));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 5));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 6));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 7));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 8));
+			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 9));
+			dodgeRightAnim = new Animation(Constants.dodgeCycleTime, dodgeRight, PlayMode.NORMAL);
 			
 		}
 	}

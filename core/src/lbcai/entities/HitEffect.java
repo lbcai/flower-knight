@@ -32,10 +32,10 @@ public class HitEffect {
 		
 		//plan to, when spawning hit effect, input the facing direction that the entity is being attacked from
 		if (facing == Facing.LEFT) {
-			flipx = true;
+			flipx = false;
 			position.x -= 20;
 		} else {
-			flipx = false;
+			flipx = true;
 			position.x += 20;
 		}
 		

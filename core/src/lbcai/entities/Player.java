@@ -138,7 +138,8 @@ public class Player {
 					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
 					//0 = catch breath idle, 1 = transition animation, 2 = normal idle
 					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
-							Utils.secondsSince(attackStartTime) < Constants.idleBTime) {
+							Utils.secondsSince(attackStartTime) < Constants.idleBTime || Utils.secondsSince(dodgeStartTime) <
+							Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
@@ -205,8 +206,8 @@ public class Player {
 				}
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
-				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
-				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
+				region = Assets.instance.playerAssets.dodgeRightAnim.getKeyFrame(dodgeTime);
+				if (Assets.instance.playerAssets.dodgeRightAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
 					hitState = HitState.NOHIT;
 				}
@@ -237,7 +238,8 @@ public class Player {
 					float idleTime = Utils.secondsSince(idleStartTime);
 					//use idle transition counter to figure out when to play transition animation between combat & normal idles
 					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
-							Utils.secondsSince(attackStartTime) < Constants.idleBTime) {
+							Utils.secondsSince(attackStartTime) < Constants.idleBTime || Utils.secondsSince(dodgeStartTime) <
+							Constants.idleBTime) {
 						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
 						idleTransitionCounter = 1;
 						idleTransStartTime = TimeUtils.nanoTime();
@@ -305,6 +307,7 @@ public class Player {
 				}
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
+				//placeholder
 				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
 				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
@@ -605,7 +608,7 @@ public class Player {
 		if (lockState == LockState.ATTACK1LOCK) {
 			Utils.lerpX(position, targetPosition, 0.5f);
 		} else if (lockState == LockState.DODGE) {
-			Utils.lerpX(position, targetPosition, 0.5f);
+			Utils.lerpX(position, targetPosition, 0.1f);
 		}
 		
 		
