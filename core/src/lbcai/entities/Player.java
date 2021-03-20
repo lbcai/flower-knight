@@ -42,6 +42,8 @@ public class Player {
 	long idleStartTime;
 	long wallStartTime;
 	long dodgeStartTime;
+	long squatStartTime;
+	private long boostStartTime;
 
 	Level level;
 	public int jumpCounter = 0;
@@ -59,10 +61,12 @@ public class Player {
 	Rectangle playerBound;
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
-	private long boostStartTime;
+	
 	
 	int health;
 	int maxHealth;
+	int baseDamage;
+	int baseRange;
 	
 	//for allowing player to rebind controls
 	private int attackKey = Keys.X;
@@ -81,8 +85,10 @@ public class Player {
 		position = new Vector2();
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();
-		//set max health here so if player dies and respawns they can keep max health buffs
+		//set max health here so if player dies and respawns they can keep max health buffs, same with damage buffs
 		maxHealth = Constants.baseHealth;
+		baseDamage = Constants.playerBaseDamage;
+		baseRange = Constants.playerBaseRange;
 		init();
 		
 	}
@@ -136,7 +142,7 @@ public class Player {
 				if (runState == RunState.IDLE) {
 					float idleTime = Utils.secondsSince(idleStartTime);
 					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
-					//0 = catch breath idle, 1 = transition animation, 2 = normal idle
+					//0 = catch breath idle, 1 = transition animation, 2 = normal idle, 3 = transition from squat
 					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
 							Utils.secondsSince(attackStartTime) < Constants.idleBTime || Utils.secondsSince(dodgeStartTime) <
 							Constants.idleBTime) {
@@ -153,6 +159,11 @@ public class Player {
 						}
 					} else if (idleTransitionCounter == 2) {
 						region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(idleTime);
+					} else if (idleTransitionCounter == 3) {
+						region = Assets.instance.playerAssets.squatRightUpAnim.getKeyFrame(idleTime);
+						if (Assets.instance.playerAssets.squatRightUpAnim.isAnimationFinished(idleTime)) {
+							idleTransitionCounter = 2;
+						}
 					}
 					
 				} else if (runState == RunState.RUN) {
@@ -163,7 +174,11 @@ public class Player {
 				} else if (runState == RunState.SKID) {
 					float skidTime = Utils.secondsSince(slideTransStartTime);
 					region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(skidTime);
-				} 
+				} else if (runState == RunState.SQUAT) {
+					float squatTime = Utils.secondsSince(squatStartTime);
+					region = Assets.instance.playerAssets.squatRightAnim.getKeyFrame(squatTime);
+					idleTransitionCounter = 3;			
+				}
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = Utils.secondsSince(jumpStartTime);
 				region = Assets.instance.playerAssets.jumpRightAnim.getKeyFrame(jumpTime);
@@ -172,9 +187,6 @@ public class Player {
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangRightAnim.getKeyFrame(hangTime);
-			} else if (jumpState == JumpState.SQUAT) {
-				//placeholder
-				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(0.25f);
 			}
 			
 			if (hitState == HitState.IFRAME) {
@@ -253,6 +265,11 @@ public class Player {
 						}
 					} else if (idleTransitionCounter == 2) {
 						region = Assets.instance.playerAssets.idleLeftAnim.getKeyFrame(idleTime);
+					} else if (idleTransitionCounter == 3) {
+						region = Assets.instance.playerAssets.squatLeftUpAnim.getKeyFrame(idleTime);
+						if (Assets.instance.playerAssets.squatLeftUpAnim.isAnimationFinished(idleTime)) {
+							idleTransitionCounter = 2;
+						}
 					}
 
 				} else if (runState == RunState.RUN) {
@@ -261,9 +278,12 @@ public class Player {
 				} else if (runState == RunState.SKID) {
 					float skidTime = Utils.secondsSince(slideTransStartTime);
 					region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(skidTime);
+				} else if (runState == RunState.SQUAT) {
+					float squatTime = Utils.secondsSince(squatStartTime);
+					region = Assets.instance.playerAssets.squatLeftAnim.getKeyFrame(squatTime);
+					idleTransitionCounter = 3;			
 				}
-				
-				
+
 			} else if (jumpState == JumpState.JUMPING) {
 				float jumpTime = Utils.secondsSince(jumpStartTime);
 				region = Assets.instance.playerAssets.jumpLeftAnim.getKeyFrame(jumpTime);
@@ -272,9 +292,6 @@ public class Player {
 			} else if (jumpState == JumpState.WALL) {
 				float hangTime = Utils.secondsSince(wallStartTime);
 				region = Assets.instance.playerAssets.hangLeftAnim.getKeyFrame(hangTime);
-			} else if (jumpState == JumpState.SQUAT) {
-				//placeholder, need transition
-				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(0.25f);
 			}
 			
 			if (hitState == HitState.IFRAME) {
@@ -385,7 +402,7 @@ public class Player {
 		}
 		
 		//Use for collision detection of player.
-		if (jumpState != JumpState.SQUAT) {
+		if (runState != RunState.SQUAT) {
 			playerBound = new Rectangle(
 					position.x - Constants.playerStance / 2,
 					position.y - Constants.playerEyeHeight + 40, 
@@ -548,7 +565,7 @@ public class Player {
 				}
 			}
 		}
-		System.out.println(hitState);
+		
 		//player attacks and collision detection
 		if (Gdx.input.isKeyJustPressed(attackKey)) {
 			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
@@ -598,8 +615,13 @@ public class Player {
 			
 			for (Enemy enemy: level.getEnemies()) {
 				if (attackHitBox.overlaps(enemy.hitBox)) {
-					enemy.isDamaged(Constants.playerBaseDamage); 
-					//will need to add randomness aspect: allow hit effect to spawn around the actual position
+					//random number in range min, max: Math.random() * (max - min + 1) + min
+					int damage = (int) (Math.random() * ((baseDamage + baseRange) - 
+							(baseDamage - baseRange) + 1) + 
+							(baseDamage - baseRange));
+					enemy.isDamaged(damage); 
+					//placeholder
+					System.out.println(damage);
 					level.spawnHitEffect(enemy.position, enemy.facing, 1);
 				}
 			}
@@ -642,10 +664,7 @@ public class Player {
 						slideTransStartTime = TimeUtils.nanoTime();
 						runState = RunState.SKID;
 					} else {
-						idleStartTime = TimeUtils.nanoTime();
-						//to keep track of when transition animation should be played for idle
-						idleTransitionCounter = 0;
-						runState = RunState.IDLE;
+						goToIdle();
 					}
 
 				}
@@ -658,16 +677,21 @@ public class Player {
 						}
 
 					} else {
-						idleStartTime = TimeUtils.nanoTime();
-						//to keep track of when transition animation should be played for idle
-						idleTransitionCounter = 0;
-						runState = RunState.IDLE;
+						goToIdle();
 					}
 				} 
 				
-				if (runState == RunState.IDLE && jumpState == JumpState.GROUNDED || jumpState == JumpState.SQUAT) {
+				if ((runState == RunState.IDLE || runState == RunState.SQUAT) && jumpState == JumpState.GROUNDED) {
 					if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-						jumpState = JumpState.SQUAT;
+						if (runState != RunState.SQUAT) {
+							squatStartTime = TimeUtils.nanoTime();
+							runState = RunState.SQUAT;
+						}
+					} else {
+						if (runState == RunState.SQUAT) {
+							goToIdle();
+						}
+
 					}
 				}
 
@@ -897,6 +921,15 @@ public class Player {
 			}
 		}
 		return false;
+	}
+	
+	void goToIdle() {
+		idleStartTime = TimeUtils.nanoTime();
+		//to keep track of when transition animation should be played for idle, if 4 then coming out of squat and ignore this
+		if (idleTransitionCounter != 3) {
+			idleTransitionCounter = 0;
+		}
+		runState = RunState.IDLE;
 	}
 
 	

@@ -37,6 +37,8 @@ public class Constants {
 	public static final String attack1Right = "Attack1right";
 	public static final String boostToPlatLeft = "Boosttoplatleft";
 	public static final String boostToPlatRight = "Boosttoplatright";
+	public static final String squatRight = "Squatright";
+	public static final String squatLeft = "Squatleft";
 	public static final String dodgeRight = "Dodgeright";
 	
 	public static final float skidCycleTime = 0.025f;
@@ -53,6 +55,7 @@ public class Constants {
 	public static final float boostCycleTime = 0.05f;
 	public static final float dodgeCycleTime = 0.07f; //0.07
 	public static final float dodgeCDTime = 0.5f;
+	public static final float squatCycleTime = 0.01f; //0.01
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
@@ -68,6 +71,7 @@ public class Constants {
 	public static final Vector2 knockbackSpeed = new Vector2(600, 200);
 	public static final float iFrameLength = 1.0f;
 	public static final int playerBaseDamage = 20;
+	public static final int playerBaseRange = playerBaseDamage/2;
 	public static final Vector2 attackRange = new Vector2(100, 100);
 	public static final int baseHealth = 100;
 	

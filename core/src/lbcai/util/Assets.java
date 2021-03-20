@@ -108,6 +108,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> boostToPlatLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> boostToPlatRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> dodgeRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> squatRight = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> squatLeft = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -130,6 +132,10 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> boostToPlatLeftAnim;
 		public final Animation<TextureRegion> boostToPlatRightAnim;
 		public final Animation<TextureRegion> dodgeRightAnim;
+		public final Animation<TextureRegion> squatRightAnim;
+		public final Animation<TextureRegion> squatRightUpAnim;
+		public final Animation<TextureRegion> squatLeftAnim;
+		public final Animation<TextureRegion> squatLeftUpAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -317,6 +323,20 @@ public class Assets implements Disposable, AssetErrorListener {
 			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 7));
 			boostToPlatRight.add(atlas.findRegion(Constants.boostToPlatRight, 8));
 			boostToPlatRightAnim = new Animation(Constants.boostCycleTime, boostToPlatRight, PlayMode.NORMAL);
+			
+			squatRight.add(atlas.findRegion(Constants.squatRight, 1));
+			squatRight.add(atlas.findRegion(Constants.squatRight, 2));
+			squatRight.add(atlas.findRegion(Constants.boostToPlatRight, 4));
+			squatRight.add(atlas.findRegion(Constants.boostToPlatRight, 5));
+			squatRightAnim = new Animation(Constants.squatCycleTime, squatRight, PlayMode.NORMAL);
+			squatRightUpAnim = new Animation(Constants.squatCycleTime, squatRight, PlayMode.REVERSED);
+			
+			squatLeft.add(atlas.findRegion(Constants.squatLeft, 1));
+			squatLeft.add(atlas.findRegion(Constants.squatLeft, 2));
+			squatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 4));
+			squatLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 5));
+			squatLeftAnim = new Animation(Constants.squatCycleTime, squatLeft, PlayMode.NORMAL);
+			squatLeftUpAnim = new Animation(Constants.squatCycleTime, squatLeft, PlayMode.REVERSED);
 			
 			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 1));
 			dodgeRight.add(atlas.findRegion(Constants.dodgeRight, 3));
