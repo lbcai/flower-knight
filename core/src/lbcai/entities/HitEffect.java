@@ -21,12 +21,14 @@ public class HitEffect {
 	private final long startTime;
 	private Facing facing;
 	private boolean flipx;
-	TextureRegion region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(0);
+	private TextureRegion region;
+	private int type = 0;
 	
 	//may need to add an int counter or something to indicate what kind of hit effect: slash, explosion, impact, etc.
-	public HitEffect(Vector2 position, Facing facing) {
+	public HitEffect(Vector2 position, Facing facing, int type) {
 		this.position = position;
 		this.facing = facing;
+		this.type = type;
 		flipx = false;
 		startTime = TimeUtils.nanoTime();
 		
@@ -39,12 +41,26 @@ public class HitEffect {
 			position.x += 20;
 		}
 		
+		if (type == 0) {
+			//impact
+			 region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(0);
+		} else if (type == 1) {
+			//slash
+			region = Assets.instance.hitAssets.hitSlashOneAnim.getKeyFrame(0);
+		}
+		
 	}
 	
 	public void render(SpriteBatch batch) {
 		
 		float animTime = Utils.secondsSince(startTime);
-		region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(animTime);
+		if (type == 0) {
+			//impact
+			 region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(animTime);
+		} else if (type == 1) {
+			//slash
+			region = Assets.instance.hitAssets.hitSlashOneAnim.getKeyFrame(animTime);
+		}
 		
 		
 		batch.draw(region.getTexture(), 

@@ -34,7 +34,7 @@ public class Player {
 	public Facing facing;
 	public JumpState jumpState;
 	public RunState runState;
-	HitState hitState;
+	public HitState hitState;
 	LockState lockState;
 	//a long is like a 64-bit int. a BIG int.
 	long jumpStartTime;
@@ -206,8 +206,8 @@ public class Player {
 				}
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
-				region = Assets.instance.playerAssets.dodgeRightAnim.getKeyFrame(dodgeTime);
-				if (Assets.instance.playerAssets.dodgeRightAnim.isAnimationFinished(dodgeTime)) {
+				region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(dodgeTime);
+				if (Assets.instance.playerAssets.skidRightAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
 					hitState = HitState.NOHIT;
 				}
@@ -308,8 +308,8 @@ public class Player {
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				//placeholder
-				region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(dodgeTime);
-				if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(dodgeTime)) {
+				region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(dodgeTime);
+				if (Assets.instance.playerAssets.skidLeftAnim.isAnimationFinished(dodgeTime)) {
 					lockState = LockState.FREE;
 					hitState = HitState.NOHIT;
 				}
@@ -397,7 +397,7 @@ public class Player {
 					position.x - Constants.playerStance / 2,
 					position.y - Constants.playerEyeHeight + 40, 
 					Constants.playerStance,
-					Constants.playerHeight - 200);
+					Constants.playerHeight - 150);
 		}
 		
 		//Loot items
@@ -507,7 +507,9 @@ public class Player {
 		} else {
 			//check if invincible grace period is over.
 			if (Utils.secondsSince(timeSinceHit) > Constants.iFrameLength) {
-				hitState = HitState.NOHIT;
+				if (hitState == HitState.IFRAME) {
+					hitState = HitState.NOHIT;
+				}
 			}
 		}
 		
@@ -546,7 +548,7 @@ public class Player {
 				}
 			}
 		}
-
+		System.out.println(hitState);
 		//player attacks and collision detection
 		if (Gdx.input.isKeyJustPressed(attackKey)) {
 			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
@@ -598,7 +600,7 @@ public class Player {
 				if (attackHitBox.overlaps(enemy.hitBox)) {
 					enemy.isDamaged(Constants.playerBaseDamage); 
 					//will need to add randomness aspect: allow hit effect to spawn around the actual position
-					level.spawnHitEffect(enemy.position, enemy.facing);
+					level.spawnHitEffect(enemy.position, enemy.facing, 1);
 				}
 			}
 		}
@@ -717,14 +719,16 @@ public class Player {
 			
 			//dodge roll
 			if (Gdx.input.isKeyJustPressed(dodgeKey)) {
-				if (lockState != LockState.DODGE) {
-					lockState = LockState.DODGE;
-					hitState = HitState.DODGE;
-					dodgeStartTime = TimeUtils.nanoTime();
-					if (facing == Facing.LEFT) {
-						targetPosition = new Vector2(position.x - 250, position.y);
-					} else {
-						targetPosition = new Vector2(position.x + 250, position.y);
+				if (Utils.secondsSince(dodgeStartTime) > Constants.dodgeCDTime) {
+					if (lockState != LockState.DODGE) {
+						lockState = LockState.DODGE;
+						hitState = HitState.DODGE;
+						dodgeStartTime = TimeUtils.nanoTime();
+						if (facing == Facing.LEFT) {
+							targetPosition = new Vector2(position.x - 400, position.y);
+						} else {
+							targetPosition = new Vector2(position.x + 400, position.y);
+						}
 					}
 				}
 			}
@@ -845,11 +849,11 @@ public class Player {
 		if (facing == Facing.LEFT) {
 			velocity.x = -Constants.knockbackSpeed.x;
 			position.x -= 30;
-			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing);
+			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
 		} else {
 			velocity.x = Constants.knockbackSpeed.x;
 			position.x += 30;
-			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing);
+			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
 		}
 		hitState = HitState.IFRAME;
 		lockState = LockState.LOCK;

@@ -234,42 +234,42 @@ Dodgeright
   xy: 1324, 2784
   size: 256, 256
   orig: 256, 256
-  offset: 10, -30
+  offset: 0, 0
   index: 4
 Dodgeright
   rotate: false
   xy: 1600, 3042
   size: 256, 256
   orig: 256, 256
-  offset: -25, 35
+  offset: 0, 0
   index: 5
 Dodgeright
   rotate: false
   xy: 1872, 3300
   size: 256, 256
   orig: 256, 256
-  offset: -27, 0
+  offset: 0, 0
   index: 6
 Dodgeright
   rotate: false
   xy: 2148, 3558
   size: 256, 256
   orig: 256, 256
-  offset: -22, 0
+  offset: 0, 0
   index: 7
 Dodgeright
   rotate: false
   xy: 2424, 3816
   size: 256, 256
   orig: 256, 256
-  offset: -3, 0
+  offset: 0, 0
   index: 8
 Dodgeright
   rotate: false
   xy: 2, 1236
   size: 256, 256
   orig: 256, 256
-  offset: -3, 0
+  offset: 0, 0
   index: 9
 Hangleft
   rotate: false
@@ -854,14 +854,14 @@ Skidright
   index: 2
 bulletseed
   rotate: false
-  xy: 3696, 3764
+  xy: 776, 668
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 3972, 4022
+  xy: 1034, 926
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -875,42 +875,42 @@ dandelion
   index: -1
 dust
   rotate: false
-  xy: 518, 410
+  xy: 1292, 1184
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 dust
   rotate: false
-  xy: 776, 668
+  xy: 204, 152
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 2
 dust
   rotate: false
-  xy: 1034, 926
+  xy: 1550, 1498
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 3
 heal
   rotate: false
-  xy: 2872, 2965
+  xy: 3696, 3739
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 1
 heal
   rotate: false
-  xy: 3148, 3223
+  xy: 3972, 3997
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 2
 heal
   rotate: false
-  xy: 3420, 3481
+  xy: 518, 385
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
@@ -932,6 +932,27 @@ hit
 hit
   rotate: false
   xy: 2596, 2682
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 3
+hitslash
+  rotate: false
+  xy: 2872, 2940
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 1
+hitslash
+  rotate: false
+  xy: 3148, 3198
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+hitslash
+  rotate: false
+  xy: 3420, 3456
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

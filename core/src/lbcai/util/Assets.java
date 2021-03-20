@@ -426,11 +426,19 @@ public class Assets implements Disposable, AssetErrorListener {
 			public final Array<AtlasRegion> hitOne = new Array<AtlasRegion>();
 			public final Animation<TextureRegion> hitOneAnim;
 			
+			public final Array<AtlasRegion> hitSlashOne = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitSlashOneAnim;
+			
 			public HitAssets(TextureAtlas atlas) {
 				hitOne.add(atlas.findRegion(Constants.hitOne, 1));
 				hitOne.add(atlas.findRegion(Constants.hitOne, 2));
 				hitOne.add(atlas.findRegion(Constants.hitOne, 3));
 				hitOneAnim = new Animation(Constants.hitEffectCycleTime, hitOne, PlayMode.NORMAL);
+				
+				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 1));
+				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 2));
+				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 3));
+				hitSlashOneAnim = new Animation(Constants.hitEffectCycleTime, hitSlashOne, PlayMode.NORMAL);
 			}
 			
 		}

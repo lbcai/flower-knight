@@ -19,6 +19,7 @@ import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
 import lbcai.util.Enums.RunState;
 
@@ -59,7 +60,7 @@ public class Level {
 		player.update(delta, platforms);
 		
 		if (dustCloudCounter == 0) {
-			if (player.runState == RunState.SKID) {
+			if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 				spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing, 0);
 				dustCloudCounter = 1;
 			} else if (player.jumpCounter == 2) {
@@ -68,7 +69,7 @@ public class Level {
 			}
 			
 		} else if (dustCloudCounter == 1) {
-			if (player.runState != RunState.SKID && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
+			if ((player.runState != RunState.SKID && player.hitState != HitState.DODGE) && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
 				dustCloudCounter = 0;
 			}
 		}
@@ -230,12 +231,12 @@ public class Level {
 		dustClouds.add(new DustCloud(position, facing, type));
 	}
 	
-	public void spawnHitEffect(Vector2 position, Facing facing) {
+	public void spawnHitEffect(Vector2 position, Facing facing, int type) {
 		// an equation to get random numbers in a range:
 		// Math.random() * (max - min + 1) + min
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
-		hitEffects.add(new HitEffect(new Vector2(x, y), facing));
+		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));
 	}
 	
 }

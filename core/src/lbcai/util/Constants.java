@@ -52,6 +52,7 @@ public class Constants {
 	public static final float attack1CycleTime = 0.05f;
 	public static final float boostCycleTime = 0.05f;
 	public static final float dodgeCycleTime = 0.07f; //0.07
+	public static final float dodgeCDTime = 0.5f;
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
@@ -76,6 +77,7 @@ public class Constants {
 	public static final float dustDuration = 0.3f;
 	public static final float dustCycleTime = 0.1f;
 	public static final String hitOne = "hit";
+	public static final String hitSlashOne = "hitslash";
 	public static final float hitEffectCycleTime = 0.1f;
 	public static final Vector2 hitEffectCenter = new Vector2(50, 50);
 	
