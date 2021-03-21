@@ -20,7 +20,7 @@ Attack1left
   rotate: false
   xy: 1106, 3816
   size: 270, 256
-  offset: 14, 0
+  offset: -10, 0
   index: 8
 Attack1left
   rotate: false
@@ -815,14 +815,14 @@ Squatright
   index: 2
 bulletseed
   rotate: false
-  xy: 3148, 3248
+  xy: 2872, 2990
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 3420, 3506
+  xy: 3148, 3248
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -836,21 +836,21 @@ dandelion
   index: -1
 dust
   rotate: false
-  xy: 3696, 3764
+  xy: 3420, 3506
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 dust
   rotate: false
-  xy: 3972, 4022
+  xy: 3696, 3764
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 2
 dust
   rotate: false
-  xy: 204, 152
+  xy: 3972, 4022
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -862,20 +862,13 @@ heal
   orig: 75, 75
   offset: 0, 0
   index: 1
-heal
+healsmall
   rotate: false
   xy: 2596, 2707
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
-  index: 2
-heal
-  rotate: false
-  xy: 2872, 2965
-  size: 75, 75
-  orig: 75, 75
-  offset: 0, 0
-  index: 3
+  index: 1
 hit
   rotate: false
   xy: 776, 876

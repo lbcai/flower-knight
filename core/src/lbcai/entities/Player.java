@@ -565,67 +565,6 @@ public class Player {
 				}
 			}
 		}
-		
-		//player attacks and collision detection
-		if (Gdx.input.isKeyJustPressed(attackKey)) {
-			if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
-				if (lockState != LockState.ATTACK1LOCK) {
-					lockState = LockState.ATTACK1LOCK;
-					attackStartTime = TimeUtils.nanoTime();
-					attackComboCounter = 1;
-				}
-	
-				if (facing == Facing.LEFT) {
-					targetPosition = new Vector2(position.x - 25, position.y);
-					attackHitBox = new Rectangle(
-						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-				} else {
-					targetPosition = new Vector2(position.x + 25, position.y);
-					attackHitBox = new Rectangle(
-						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-				}
-				
-			} else if (lockState == LockState.FREE && jumpState != JumpState.GROUNDED) {
-				if (lockState != LockState.ATTACKJUMP) {
-					lockState = LockState.ATTACKJUMP;
-					attackStartTime = TimeUtils.nanoTime();
-				}
-				
-				if (facing == Facing.LEFT) {
-					attackHitBox = new Rectangle(
-						position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-				} else {
-					attackHitBox = new Rectangle(
-						position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
-						position.y - Constants.playerEyeHeight,
-						Constants.attackRange.x,
-						Constants.attackRange.y);
-				}
-				
-			}
-			
-			for (Enemy enemy: level.getEnemies()) {
-				if (attackHitBox.overlaps(enemy.hitBox)) {
-					//random number in range min, max: Math.random() * (max - min + 1) + min
-					int damage = (int) (Math.random() * ((baseDamage + baseRange) - 
-							(baseDamage - baseRange) + 1) + 
-							(baseDamage - baseRange));
-					enemy.isDamaged(damage); 
-					//placeholder
-					System.out.println(damage);
-					level.spawnHitEffect(enemy.position, enemy.facing, 1);
-				}
-			}
-		}
 
 		
 		//move player during attack animation, dodge animation
@@ -697,6 +636,66 @@ public class Player {
 
 			}
 			
+			//player attacks and collision detection
+			if (Gdx.input.isKeyJustPressed(attackKey)) {
+				if (lockState == LockState.FREE && jumpState == JumpState.GROUNDED) {
+					if (lockState != LockState.ATTACK1LOCK) {
+						lockState = LockState.ATTACK1LOCK;
+						attackStartTime = TimeUtils.nanoTime();
+						attackComboCounter = 1;
+					}
+		
+					if (facing == Facing.LEFT) {
+						targetPosition = new Vector2(position.x - 25, position.y);
+						attackHitBox = new Rectangle(
+							position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+							position.y - Constants.playerEyeHeight,
+							Constants.attackRange.x,
+							Constants.attackRange.y);
+					} else {
+						targetPosition = new Vector2(position.x + 25, position.y);
+						attackHitBox = new Rectangle(
+							position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+							position.y - Constants.playerEyeHeight,
+							Constants.attackRange.x,
+							Constants.attackRange.y);
+					}
+					
+				} else if (lockState == LockState.FREE && jumpState != JumpState.GROUNDED) {
+					if (lockState != LockState.ATTACKJUMP) {
+						lockState = LockState.ATTACKJUMP;
+						attackStartTime = TimeUtils.nanoTime();
+					}
+					
+					if (facing == Facing.LEFT) {
+						attackHitBox = new Rectangle(
+							position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+							position.y - Constants.playerEyeHeight,
+							Constants.attackRange.x,
+							Constants.attackRange.y);
+					} else {
+						attackHitBox = new Rectangle(
+							position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+							position.y - Constants.playerEyeHeight,
+							Constants.attackRange.x,
+							Constants.attackRange.y);
+					}
+					
+				}
+				
+				for (Enemy enemy: level.getEnemies()) {
+					if (attackHitBox.overlaps(enemy.hitBox)) {
+						//random number in range min, max: Math.random() * (max - min + 1) + min
+						int damage = (int) (Math.random() * ((baseDamage + baseRange) - 
+								(baseDamage - baseRange) + 1) + 
+								(baseDamage - baseRange));
+						enemy.isDamaged(damage); 
+						//placeholder
+						System.out.println(damage);
+						level.spawnHitEffect(enemy.position, enemy.facing, 1);
+					}
+				}
+			}
 			
 			//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
 			if (Gdx.input.isKeyJustPressed(jumpKey) && !Gdx.input.isKeyPressed(Keys.DOWN)) {

@@ -14,18 +14,18 @@ import lbcai.util.Utils;
 public class Item {
 	
 	final public Vector2 position;
-	private Vector2 lastPosition = new Vector2();
-	private Vector2 startPosition = new Vector2();
-	private Vector2 velocity;
-	private TextureRegion region;
-	private long startTime;
-	private int counterUp = 0;
-	private Array<Platform> platforms;
-	private int expire;
-	private boolean falling = true;
-	private Player player;
-	private int rotation;
-	private long expireTime;
+	protected Vector2 lastPosition = new Vector2();
+	protected Vector2 startPosition = new Vector2();
+	protected Vector2 velocity;
+	protected TextureRegion region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
+	protected long startTime;
+	protected int counterUp = 0;
+	protected Array<Platform> platforms;
+	protected int expire;
+	protected boolean falling = true;
+	protected Player player;
+	protected int rotation;
+	protected float alpha = 255f/255f;
 	
 	public Item(Vector2 position, Level level) {
 		this.position = position;
@@ -40,7 +40,6 @@ public class Item {
 		//0 = not expired, 1 = using, 2 = expired
 		expire = 0;
 		player = level.getPlayer();
-		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
 		startTime = TimeUtils.nanoTime();
 	}
 	
@@ -95,19 +94,17 @@ public class Item {
 	}
 	
 	public void render(SpriteBatch batch) {
-		
-		if (expire == 0) {
-			float animTime = Utils.secondsSince(startTime);
+		float animTime = Utils.secondsSince(startTime);
+		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
+		if (expire != 0) {
 			region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
-		} else {
-			float expireAnimTime = Utils.secondsSince(expireTime);
-			region = Assets.instance.lifeAssets.lifeFadeAnim.getKeyFrame(expireAnimTime);
-			if (Assets.instance.lifeAssets.lifeFadeAnim.isAnimationFinished(expireAnimTime)) {
+			alpha -= 15f/255f;
+			if (alpha <= 0f/255f) {
 				expire = 3;
 			}
 		}
 		
-		
+		batch.setColor(1, 1, 1, alpha);
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.itemCenter.x), 
 				(position.y - Constants.itemCenter.y), 
@@ -124,19 +121,17 @@ public class Item {
 				region.getRegionHeight(), 
 				false, 
 				false);
-		
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	public void use() {
 		//this is a full heal
 		player.health = player.maxHealth;
 		expire = 1;
-		expireTime = TimeUtils.nanoTime();
 	}
 	
 	void setExpireBoolean() {
 		expire = 2;
-		expireTime = TimeUtils.nanoTime();
 	}
 	
 	public boolean isExpired() {

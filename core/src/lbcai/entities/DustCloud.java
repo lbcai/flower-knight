@@ -14,13 +14,13 @@ public class DustCloud {
 	
 	private Vector2 position;
 	private Vector2 origPosition;
-	private long startTime;
 	private int rotation;
 	private float scale;
 	private Facing facing;
 	private boolean flip;
-	private float dustTime;
 	private int type;
+	private float alpha = 255f/255f;
+	private TextureRegion region = Assets.instance.dustAssets.dust;
 	
 	public DustCloud(Vector2 position, Facing facing, int type) {
 		this.position = position;
@@ -29,7 +29,6 @@ public class DustCloud {
 		this.origPosition.y = position.y;
 		//if player is facing left, cloud goes right (goes opposite direction to facing)
 		this.facing = facing;
-		startTime = TimeUtils.nanoTime();
 		flip = false;
 		rotation = 0;
 		scale = 1.5f;
@@ -39,10 +38,8 @@ public class DustCloud {
 	
 	public void render(SpriteBatch batch) {
 		
-		//decided to add transparency in sprites for fade out, tried using batch.setColor to control alpha
-		//but it isn't as smooth or nice
-		TextureRegion region = Assets.instance.dustAssets.dustAnim.getKeyFrame(dustTime);
-
+		alpha -= 15f/255f;
+		batch.setColor(1, 1, 1, alpha);
 		batch.draw(region.getTexture(), 
 				(position.x - Constants.dustCenter.x), 
 				(position.y - Constants.dustCenter.y), 
@@ -59,11 +56,11 @@ public class DustCloud {
 				region.getRegionHeight(), 
 				flip, 
 				false);
+		batch.setColor(1, 1, 1, 1);
 
 	}
 	
 	public void update(float delta) {
-		dustTime = Utils.secondsSince(startTime);
 		
 		if (type == 0) {
 			//ground dust
@@ -95,7 +92,7 @@ public class DustCloud {
 	}
 	
 	public boolean isFinished() {
-		if (Utils.secondsSince(startTime) > Constants.dustDuration) {
+		if (alpha <= 0f/255f) {
 			return true;
 		} else {
 			return false;

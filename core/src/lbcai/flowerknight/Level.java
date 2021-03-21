@@ -15,6 +15,7 @@ import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
+import lbcai.entities.ItemHealSmall;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.util.Constants;
@@ -79,6 +80,9 @@ public class Level {
 			Enemy enemy = enemies.get(i);
 			enemy.update(delta);
 			if (enemy.HP < 1) {
+				//drop item check
+				dropItem(enemy);
+				//destroy enemy
 				enemies.removeIndex(i);
 			}
 		}
@@ -192,10 +196,7 @@ public class Level {
 		enemies.add(new EnemyDandelion(enemyPlatform, player));
 		//enemies.add(new EnemyPBeetle(enemyPlatform));
 		platforms.add(enemyPlatform);
-		
-		//add base item for testing
-		items.add(new Item(new Vector2(300, 300), this));
-		
+
 
 	}
 	
@@ -237,6 +238,20 @@ public class Level {
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
 		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));
+	}
+	
+	public void dropItem(Enemy enemy) {
+		//check the enemy's loot table and use randomness to see if item will drop and which item it will be
+		//drop item at enemy's position before death
+		// 0 = base item: full heal
+		// 1 = 20% small heal item
+		if (Math.random() <= Constants.itemRollChance) {
+			if (enemy.rollDrop() == 0) {
+				items.add(new Item(enemy.position, this));
+			} else if (enemy.rollDrop() == 1) {
+				items.add(new ItemHealSmall(enemy.position, this));
+			}
+		}
 	}
 	
 }

@@ -51,7 +51,7 @@ public class Constants {
 	public static final float skidTime = 0.25f;
 	public static final float skidTimeLimitBreak = 0.25f;
 	public static final float animLockTime = 0.3f;
-	public static final float attack1CycleTime = 0.05f;
+	public static final float attack1CycleTime = 0.05f; //0.05
 	public static final float boostCycleTime = 0.05f;
 	public static final float dodgeCycleTime = 0.07f; //0.07
 	public static final float dodgeCDTime = 0.5f;
@@ -78,8 +78,6 @@ public class Constants {
 	//effect
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
-	public static final float dustDuration = 0.3f;
-	public static final float dustCycleTime = 0.1f;
 	public static final String hitOne = "hit";
 	public static final String hitSlashOne = "hitslash";
 	public static final float hitEffectCycleTime = 0.1f;
@@ -114,7 +112,9 @@ public class Constants {
 	
 	//item
 	public static final String life = "heal";
+	public static final String healSmall = "healsmall";
 	public static final Vector2 itemCenter = new Vector2(37.5f, 37.5f);
 	public static final float itemExpireTime = 300f;
-	public static final float itemExpireCycleTime = 0.1f;
+	public static final float itemCycleTime = 0.1f;
+	public static final float itemRollChance = 0.2f; //0.2
 }

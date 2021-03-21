@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.badlogic.gdx.ai.GdxAI;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
@@ -32,6 +36,9 @@ public class Enemy {
 	LockState lockState;
 	private long hitStartTime;
 	
+	//placeholder drop list for basic enemy type: 
+	List<Integer> dropTable;
+	
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform) {
@@ -47,6 +54,15 @@ public class Enemy {
 		position = new Vector2(platform.left, platform.top + eyeHeight.y);
 		facing = Facing.RIGHT;
 		startTime = TimeUtils.nanoTime();
+		
+		hitBox = new Rectangle(
+				position.x - collisionRadius,
+				position.y - collisionRadius,
+				2 * collisionRadius,
+				2 * collisionRadius);
+		
+		//set drop table here so different enemy classes can have their own
+		dropTable = Arrays.asList(0, 1);
 		
 	}
 
@@ -146,5 +162,10 @@ public class Enemy {
 		// using iframe to denote flinch animation but no actual iframe for mobs
 		hitState = HitState.IFRAME;
 		hitStartTime = TimeUtils.nanoTime();
+	}
+	
+	public int rollDrop() {
+		int index = (int) (Math.random() * dropTable.size()); 
+		return dropTable.get(index);
 	}
 }

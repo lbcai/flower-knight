@@ -396,14 +396,10 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class DustAssets {
 		
-		public final Array<AtlasRegion> dust = new Array<AtlasRegion>();
-		public final Animation<TextureRegion> dustAnim;
+		public final AtlasRegion dust;
 		
 		public DustAssets(TextureAtlas atlas) {
-			dust.add(atlas.findRegion(Constants.runDust, 1));
-			dust.add(atlas.findRegion(Constants.runDust, 2));
-			dust.add(atlas.findRegion(Constants.runDust, 3));
-			dustAnim = new Animation(Constants.dustCycleTime, dust, PlayMode.NORMAL);
+			dust = atlas.findRegion(Constants.runDust);
 		}
 		
 	}
@@ -411,19 +407,20 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class LifeAssets {
 		
 		public final Array<AtlasRegion> life = new Array<AtlasRegion>();
-		public final Array<AtlasRegion> lifeFade = new Array<AtlasRegion>();
 		public final Animation<TextureRegion> lifeAnim;
-		public final Animation<TextureRegion> lifeFadeAnim;
+		
+		public final Array<AtlasRegion> healSmall = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> healSmallAnim;
 		
 		public LifeAssets(TextureAtlas atlas) {
 			life.add(atlas.findRegion(Constants.life, 1));
 			life.add(atlas.findRegion(Constants.life, 1));
-			lifeAnim = new Animation(Constants.itemExpireCycleTime, life, PlayMode.LOOP);
+			lifeAnim = new Animation(Constants.itemCycleTime, life, PlayMode.LOOP);
 			
-			lifeFade.add(atlas.findRegion(Constants.life, 1));
-			lifeFade.add(atlas.findRegion(Constants.life, 2));
-			lifeFade.add(atlas.findRegion(Constants.life, 3));
-			lifeFadeAnim = new Animation(Constants.itemExpireCycleTime, lifeFade, PlayMode.NORMAL);
+			healSmall.add(atlas.findRegion(Constants.healSmall, 1));
+			healSmallAnim = new Animation(Constants.itemCycleTime, healSmall, PlayMode.LOOP);
+			
+
 		}
 		
 	}

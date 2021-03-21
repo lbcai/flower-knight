@@ -51,7 +51,7 @@ Currently, the game is using placeholder graphical assets. Here are a few gifs o
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
 - [x] Allow projectiles to fly at angles
-- [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, etc.
+- [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, item effects, etc.
 - [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets
