@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lbcai.entities.Bullet;
+import lbcai.entities.DamageNum;
 import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
@@ -47,6 +48,7 @@ public class Level {
 	private DelayedRemovalArray<Bullet> bullets;
 	private DelayedRemovalArray<DustCloud> dustClouds;
 	private DelayedRemovalArray<HitEffect> hitEffects;
+	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
 	
@@ -128,6 +130,14 @@ public class Level {
 		}
 		hitEffects.end();
 		
+		damageNums.begin();
+		for (DamageNum damageNum : damageNums) {
+			if (damageNum.isExpired() == true) {
+				damageNums.removeValue(damageNum, false);
+			}
+		}
+		damageNums.end();
+		
 	}
 	
 	/**
@@ -165,6 +175,10 @@ public class Level {
 			effect.render(batch);
 		}
 		
+		for (DamageNum damageNum : damageNums) {
+			damageNum.render(batch);
+		}
+		
 	}
 	
 	private void initDebugLevel() {
@@ -175,6 +189,7 @@ public class Level {
 		bullets = new DelayedRemovalArray<Bullet>();
 		dustClouds = new DelayedRemovalArray<DustCloud>();
 		hitEffects = new DelayedRemovalArray<HitEffect>();
+		damageNums = new DelayedRemovalArray<DamageNum>();
 		items = new DelayedRemovalArray<Item>();
 		
 		
@@ -238,6 +253,10 @@ public class Level {
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
 		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));
+	}
+	
+	public void spawnDmgNum(Vector2 position, int number) {
+		damageNums.add(new DamageNum(position, number));
 	}
 	
 	public void dropItem(Enemy enemy) {

@@ -82,6 +82,8 @@ public class Constants {
 	public static final String hitSlashOne = "hitslash";
 	public static final float hitEffectCycleTime = 0.1f;
 	public static final Vector2 hitEffectCenter = new Vector2(50, 50);
+	public static final Vector2 dmgNumSize = new Vector2(45, 60);
+	public static final String dmg = "dmg";
 	
 	//tileset
 	public static final String platformSprite = "Platform";

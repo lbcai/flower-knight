@@ -44,6 +44,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public LifeAssets lifeAssets;
 	public BulletAssets bulletAssets;
 	public HitAssets hitAssets;
+	public DmgNumAssets dmgNumAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -78,6 +79,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		lifeAssets = new LifeAssets(atlas);
 		bulletAssets = new BulletAssets(atlas);
 		hitAssets = new HitAssets(atlas);
+		dmgNumAssets = new DmgNumAssets(atlas);
 	}
 	
 	/**
@@ -459,6 +461,34 @@ public class Assets implements Disposable, AssetErrorListener {
 			}
 			
 		}
+	
+	public class DmgNumAssets {
+		
+		public final AtlasRegion dmg0;
+		public final AtlasRegion dmg1;
+		public final AtlasRegion dmg2;
+		public final AtlasRegion dmg3;
+		public final AtlasRegion dmg4;
+		public final AtlasRegion dmg5;
+		public final AtlasRegion dmg6;
+		public final AtlasRegion dmg7;
+		public final AtlasRegion dmg8;
+		public final AtlasRegion dmg9;
+		
+		public DmgNumAssets(TextureAtlas atlas) {
+			dmg0 = atlas.findRegion(Constants.dmg, 0);
+			dmg1 = atlas.findRegion(Constants.dmg, 1);
+			dmg2 = atlas.findRegion(Constants.dmg, 2);
+			dmg3 = atlas.findRegion(Constants.dmg, 3);
+			dmg4 = atlas.findRegion(Constants.dmg, 4);
+			dmg5 = atlas.findRegion(Constants.dmg, 5);
+			dmg6 = atlas.findRegion(Constants.dmg, 6);
+			dmg7 = atlas.findRegion(Constants.dmg, 7);
+			dmg8 = atlas.findRegion(Constants.dmg, 8);
+			dmg9 = atlas.findRegion(Constants.dmg, 9);
+		}
+		
+	}
 	
 	/**
 	 * Disposable interface allows us to dispose of things like SpriteBatches and TextureAtlases when we don't need them anymore

@@ -691,6 +691,7 @@ public class Player {
 								(baseDamage - baseRange));
 						enemy.isDamaged(damage); 
 						//placeholder
+						level.spawnDmgNum(enemy.position, damage);
 						System.out.println(damage);
 						level.spawnHitEffect(enemy.position, enemy.facing, 1);
 					}

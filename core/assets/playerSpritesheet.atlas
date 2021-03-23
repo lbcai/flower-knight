@@ -815,14 +815,14 @@ Squatright
   index: 2
 bulletseed
   rotate: false
-  xy: 2872, 2990
+  xy: 260, 208
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 3148, 3248
+  xy: 878, 926
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -834,23 +834,93 @@ dandelion
   orig: 200, 200
   offset: 0, 0
   index: -1
+dmg
+  rotate: false
+  xy: 2872, 2980
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 0
+dmg
+  rotate: false
+  xy: 3148, 3238
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 1
+dmg
+  rotate: false
+  xy: 3420, 3496
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 2
+dmg
+  rotate: false
+  xy: 3696, 3754
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 3
+dmg
+  rotate: false
+  xy: 3972, 4012
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 4
+dmg
+  rotate: false
+  xy: 204, 142
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 5
+dmg
+  rotate: false
+  xy: 462, 400
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 6
+dmg
+  rotate: false
+  xy: 518, 556
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 7
+dmg
+  rotate: false
+  xy: 620, 658
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 8
+dmg
+  rotate: false
+  xy: 776, 814
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 9
 dust
   rotate: false
-  xy: 3420, 3506
+  xy: 1034, 1082
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 dust
   rotate: false
-  xy: 3696, 3764
+  xy: 1136, 1184
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 2
 dust
   rotate: false
-  xy: 3972, 4022
+  xy: 1292, 1340
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
