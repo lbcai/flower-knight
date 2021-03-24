@@ -8,15 +8,19 @@ import com.badlogic.gdx.math.Vector2;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Enums.Facing;
 
 public class DamageNum {
 	
 	ArrayList<Digit> digitsList;
 	Vector2 position;
+	float alpha = 255f/255f;
+	Facing directionOfTravel;
 	
 	class Digit {
 		
 		Vector2 position = new Vector2();
+		Vector2 positionStart = new Vector2();
 		TextureRegion region;
 		
 		//constructor, takes the position of the DamageNum and edits depending on the digit number in the DamageNum for the x 
@@ -48,43 +52,47 @@ public class DamageNum {
 				} else if (digit == 9) {
 					region = Assets.instance.dmgNumAssets.dmg9;
 				}
-			}
-			
-			this.position.x = position.x + (i * Constants.dmgNumSize.x);
+			}			
+
+			this.position.x = position.x + (i * Constants.dmgNumSize.x - (i * (Constants.dmgNumSize.x/3)));
+			this.positionStart.x = position.x + (i * Constants.dmgNumSize.x - (i * (Constants.dmgNumSize.x/3)));
 			
 			// Adds a random spread vertically for digits in the string of damage numbers.
-			// Math.random() * (max - min + 1) + min
-			this.position.y = (float) (Math.random() * (((position.y + 2) - (position.y - 2) + 1) + (position.y - 2)));
+			// random in a range equation: Math.random() * (max - min + 1) + min
+			this.position.y = (float) (Math.random() * ((position.y + 10) - (position.y - 10) + 1) + (position.y - 10));
+			this.positionStart.y = (float) (Math.random() * ((position.y + 10) - (position.y - 10) + 1) + (position.y - 10));
 		}
 		
 	}
 
 	//constructor
-	public DamageNum(Vector2 position, int number) {
+	public DamageNum(Vector2 position, int number, Facing facing) {
 		this.position = position;
 		this.digitsList = new ArrayList<Digit>();
+		this.directionOfTravel = facing;
 		//had to convert damage int to a string to iterate over it
 		String numString = Integer.toString(number);
 		for (int j = 0; j < numString.length(); j++) {
 			//change each char back into an int
 			int currentDigit = Character.getNumericValue(numString.charAt(j));
-			//construct the digit
+			//construct the digit and add it to the DamageNum
 			digitsList.add(new Digit(position, j, currentDigit));
 		}
 	}
 	
 	public void render(SpriteBatch batch) {
+		batch.setColor(1, 1, 1, alpha);
 		for (Digit digit : digitsList) {
 			batch.draw(digit.region.getTexture(), 
-					(digit.position.x - (Constants.dmgNumSize.x / 2)), 
-					(digit.position.y - (Constants.dmgNumSize.y / 2)), 
+					(digit.position.x - (Constants.dmgNumSize.x/2)), 
+					(digit.position.y - (Constants.dmgNumSize.y/2)), 
 					0, 
 					0, 
 					digit.region.getRegionWidth(), 
 					digit.region.getRegionHeight(), 
 					1, 
 					1, 
-					0, 
+					alpha, 
 					digit.region.getRegionX(), 
 					digit.region.getRegionY(), 
 					digit.region.getRegionWidth(), 
@@ -92,14 +100,30 @@ public class DamageNum {
 					false, 
 					false);
 		}
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	public void update(float delta) {
+		alpha -= 5f/255f;
+
+		//code to make each digit follow a parabola path
+		for (Digit digit : digitsList) {
+			if (directionOfTravel == Facing.LEFT) {
+				digit.position.x -= 3;
+			} else {
+				digit.position.x += 3;
+			}
+			
+			digit.position.y -= (0.001) * Math.pow(digit.position.x - digit.positionStart.x, 2) - 7;
+
+		}
 		
 	}
 	
 	public boolean isExpired() {
-		//placeholder
+		if (alpha <= 0f/255f) {
+			return true;
+		}
 		return false;
 	}
 	

@@ -24,6 +24,7 @@ public class EnemyDandelion extends Enemy {
 		this.collisionRadius = Constants.dandelionCollisionRadius;
 		this.bulletShotLastTime = TimeUtils.nanoTime();
 		this.HP = Constants.dandelionHP;
+		this.damage = Constants.dandelionDamage;
 		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
 		
 		hitBox = new Rectangle(
@@ -59,7 +60,7 @@ public class EnemyDandelion extends Enemy {
 						position.y);
 			}
 			//target = player. get the level the player is in and spawn a bullet in the level.
-			target.level.spawnBullet(bulletPosition, facing);
+			target.level.spawnBullet(bulletPosition, facing, damage);
 			bulletShotLastTime = TimeUtils.nanoTime();
 		}
 		

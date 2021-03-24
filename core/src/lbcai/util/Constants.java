@@ -93,6 +93,7 @@ public class Constants {
 	
 	//enemies
 	public static final String pBeetle = "pbeetle";
+	public static final int pBeetleDamage = 10;
 	public static final int pBeetleHP = 100;
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
 	public static final float enemyMoveSpeed = 250;
@@ -100,6 +101,7 @@ public class Constants {
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final float pBeetleCollisionRadius = 50;
 	public static final String dandelion = "dandelion";
+	public static final int dandelionDamage = 10;
 	public static final int dandelionHP = 50;
 	public static final Vector2 dandelionEyeHeight = new Vector2(100, 100);
 	public static final Vector2 dandelionMouth = new Vector2(56, 122);
@@ -118,5 +120,5 @@ public class Constants {
 	public static final Vector2 itemCenter = new Vector2(37.5f, 37.5f);
 	public static final float itemExpireTime = 300f;
 	public static final float itemCycleTime = 0.1f;
-	public static final float itemRollChance = 0.2f; //0.2
+	public static final float itemRollChance = 1f; //0.2
 }

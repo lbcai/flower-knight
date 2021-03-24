@@ -392,9 +392,6 @@ public class Player {
 			//gravity. Causes player to fall. Scaled by seconds (delta) to avoid the framerate problem.
 			position.mulAdd(velocity, delta);
 		}
-
-		
-
 		
 		//Return player to spawn if they fall off the map. Currently doesn't deduct lives or anything.
 		if (position.y < Constants.killPlane) {
@@ -418,6 +415,7 @@ public class Player {
 		}
 		
 		//Loot items
+		//away from the other input code so player can still loot if they're animation locked
 		if (Gdx.input.isKeyJustPressed(lootKey)) {
 			DelayedRemovalArray<Item> items = level.getItems();
 			items.begin();
@@ -536,10 +534,14 @@ public class Player {
 			if (playerBound.overlaps(enemy.hitBox)) {
 				if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
+					//player is on the left of the enemy
 					flinch(Facing.LEFT);
+					level.spawnDmgNum(position, enemy.damage, Facing.LEFT);
 				} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
+					//player is on the right of the enemy
 					flinch(Facing.RIGHT);
+					level.spawnDmgNum(position, enemy.damage, Facing.RIGHT);
 				}
 			}
 		}
@@ -557,10 +559,12 @@ public class Player {
 				if (position.x < bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
+					level.spawnDmgNum(position, bullet.damage, Facing.LEFT);
 					bullet.active = false;
 				} else if (position.x > bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
+					level.spawnDmgNum(position, bullet.damage, Facing.RIGHT);
 					bullet.active = false;
 				}
 			}
@@ -690,9 +694,7 @@ public class Player {
 								(baseDamage - baseRange) + 1) + 
 								(baseDamage - baseRange));
 						enemy.isDamaged(damage); 
-						//placeholder
-						level.spawnDmgNum(enemy.position, damage);
-						System.out.println(damage);
+						level.spawnDmgNum(enemy.position, damage, facing);
 						level.spawnHitEffect(enemy.position, enemy.facing, 1);
 					}
 				}
@@ -870,13 +872,17 @@ public class Player {
 	
 	private void flinch(Facing facing) {
 		velocity.y = Constants.knockbackSpeed.y;
-		if (facing == Facing.LEFT) {
-			velocity.x = -Constants.knockbackSpeed.x;
-			position.x -= 30;
+		if (boostCounter != 1) {
+			if (runState != RunState.SQUAT) {
+				velocity.x = -Constants.knockbackSpeed.x;
+				position.x -= 30;
+			}
 			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
 		} else {
-			velocity.x = Constants.knockbackSpeed.x;
-			position.x += 30;
+			if (boostCounter != 1) {
+				velocity.x = Constants.knockbackSpeed.x;
+				position.x += 30;
+			}
 			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
 		}
 		hitState = HitState.IFRAME;

@@ -132,6 +132,7 @@ public class Level {
 		
 		damageNums.begin();
 		for (DamageNum damageNum : damageNums) {
+			damageNum.update(delta);
 			if (damageNum.isExpired() == true) {
 				damageNums.removeValue(damageNum, false);
 			}
@@ -209,7 +210,7 @@ public class Level {
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
 		enemies.add(new EnemyDandelion(enemyPlatform, player));
-		//enemies.add(new EnemyPBeetle(enemyPlatform));
+		enemies.add(new EnemyPBeetle(enemyPlatform));
 		platforms.add(enemyPlatform);
 
 
@@ -239,8 +240,8 @@ public class Level {
 		return player;
 	}
 	
-	public void spawnBullet(Vector2 position, Facing facing) {
-		bullets.add(new Bullet(this, position, facing));
+	public void spawnBullet(Vector2 position, Facing facing, int damage) {
+		bullets.add(new Bullet(this, position, facing, damage));
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
@@ -255,8 +256,8 @@ public class Level {
 		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));
 	}
 	
-	public void spawnDmgNum(Vector2 position, int number) {
-		damageNums.add(new DamageNum(position, number));
+	public void spawnDmgNum(Vector2 position, int number, Facing facing) {
+		damageNums.add(new DamageNum(position, number, facing));
 	}
 	
 	public void dropItem(Enemy enemy) {

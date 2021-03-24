@@ -22,12 +22,14 @@ public class Bullet {
 	public Boolean active;
 	private Vector2 targetPath;
 	private float angle;
+	public int damage;
 	
-	public Bullet(Level level, Vector2 position, Facing facing) {
+	public Bullet(Level level, Vector2 position, Facing facing, int damage) {
 		this.position = position;
 		this.facing = facing;
 		this.startTime = TimeUtils.nanoTime();
 		this.level = level;
+		this.damage = damage;
 		active = true;
 		
 		float playerx = level.getPlayer().position.x;
@@ -41,10 +43,7 @@ public class Bullet {
 		}
 	
 		this.angle = targetPath.angleDeg();
-		
-		
 	}
-	
 	
 	public void update(float delta) {
 		//set position of bullet based on the aim vector established above

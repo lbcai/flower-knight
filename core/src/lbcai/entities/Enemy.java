@@ -35,6 +35,7 @@ public class Enemy {
 	RunState runState;
 	LockState lockState;
 	private long hitStartTime;
+	public int damage;
 	
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
@@ -48,6 +49,7 @@ public class Enemy {
 		this.leftIdleAnim = Assets.instance.pBeetleAssets.idleLeftAnim;
 		this.collisionRadius = Constants.pBeetleCollisionRadius;
 		this.HP = Constants.pBeetleHP;
+		this.damage = Constants.pBeetleDamage;
 		hitState = HitState.NOHIT;
 		runState = RunState.IDLE;
 		lockState = LockState.FREE;

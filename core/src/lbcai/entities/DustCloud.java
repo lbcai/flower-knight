@@ -65,7 +65,7 @@ public class DustCloud {
 		if (type == 0) {
 			//ground dust
 			//the equation for a parabola is y = ax^2 - b
-			position.y = (float) (origPosition.y + (0.1 * (Math.pow(Math.abs(position.x - origPosition.x), 2))));
+			position.y = (float) (origPosition.y + (0.1 * (Math.pow(position.x - origPosition.x, 2))));
 			//position.y = (float) (Math.sin(position.x - origPosition.x) - Math.abs(origPosition.y));
 			//shrink the dust cloud as it flies off
 			scale -= 0.003 * Math.abs(position.x - origPosition.x);
