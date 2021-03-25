@@ -19,7 +19,7 @@ import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
-public class Enemy {
+public class Enemy extends Entity {
 	//extend later when adding more enemy types
 	final Platform platform;
 	public Vector2 position;
@@ -30,7 +30,6 @@ public class Enemy {
 	Animation<TextureRegion> leftIdleAnim;
 	float collisionRadius;
 	public int HP;
-	public Rectangle hitBox;
 	HitState hitState;
 	RunState runState;
 	LockState lockState;

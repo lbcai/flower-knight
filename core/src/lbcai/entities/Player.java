@@ -21,7 +21,7 @@ import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 import lbcai.util.Utils;
 
-public class Player {
+public class Player extends Entity {
 
 	public final static String className = Player.class.getName();
 	
@@ -58,7 +58,6 @@ public class Player {
 	//for collision detection of player attacks vs enemy
 	private Rectangle attackHitBox;
 	private int attackComboCounter = 0;
-	Rectangle playerBound;
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
 	
@@ -400,14 +399,14 @@ public class Player {
 		
 		//Use for collision detection of player.
 		if (runState != RunState.SQUAT) {
-			playerBound = new Rectangle(
+			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
 					position.y - Constants.playerEyeHeight + 40, 
 					Constants.playerStance,
 					Constants.playerHeight - 20);
 		} else {
 			//placeholder, need to write a debug shaperenderer to check the actual hitbox.
-			playerBound = new Rectangle(
+			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
 					position.y - Constants.playerEyeHeight + 40, 
 					Constants.playerStance,
@@ -421,12 +420,8 @@ public class Player {
 			items.begin();
 			for (int i = 0; i < items.size; i++) {
 				Item item = items.get(i);
-				Rectangle itemBound = new Rectangle(
-						item.position.x - Constants.itemCenter.x,
-						item.position.y - Constants.itemCenter.y,
-						Constants.itemCenter.x * 2,
-						Constants.itemCenter.y * 2);
-				if (playerBound.overlaps(itemBound)) {
+				
+				if (hitBox.overlaps(item.hitBox)) {
 					item.use();
 				}
 			}
@@ -531,7 +526,7 @@ public class Player {
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
 			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
-			if (playerBound.overlaps(enemy.hitBox)) {
+			if (hitBox.overlaps(enemy.hitBox)) {
 				if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					//player is on the left of the enemy
@@ -555,7 +550,7 @@ public class Player {
 					2 * Constants.bulletCenter.x,
 					2 * Constants.bulletCenter.y);
 			//if player comes in contact with bullet, stop player, make flinch, destroy bullet
-			if (playerBound.overlaps(bulletBound)) {
+			if (hitBox.overlaps(bulletBound)) {
 				if (position.x < bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
@@ -872,8 +867,8 @@ public class Player {
 	
 	private void flinch(Facing facing) {
 		velocity.y = Constants.knockbackSpeed.y;
-		if (boostCounter != 1) {
-			if (runState != RunState.SQUAT) {
+		if (facing == Facing.LEFT) {
+			if (boostCounter != 1) {
 				velocity.x = -Constants.knockbackSpeed.x;
 				position.x -= 30;
 			}

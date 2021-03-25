@@ -120,5 +120,5 @@ public class Constants {
 	public static final Vector2 itemCenter = new Vector2(37.5f, 37.5f);
 	public static final float itemExpireTime = 300f;
 	public static final float itemCycleTime = 0.1f;
-	public static final float itemRollChance = 1f; //0.2
+	public static final float itemRollChance = 0.2f; //0.2
 }

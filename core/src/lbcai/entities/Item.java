@@ -2,6 +2,7 @@ package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -11,7 +12,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 
-public class Item {
+public class Item extends Entity {
 	
 	final public Vector2 position;
 	protected Vector2 lastPosition = new Vector2();
@@ -41,6 +42,13 @@ public class Item {
 		expire = 0;
 		player = level.getPlayer();
 		startTime = TimeUtils.nanoTime();
+		
+		hitBox = new Rectangle(
+				position.x - Constants.itemCenter.x,
+				position.y - Constants.itemCenter.y,
+				Constants.itemCenter.x * 2,
+				Constants.itemCenter.y * 2);
+		
 	}
 	
 	public void update(float delta) {
@@ -90,6 +98,12 @@ public class Item {
 			//if being used, send the item to the player while playing fade out animation
 			position.lerp(player.position, 0.1f);
 		}
+		
+		hitBox = new Rectangle(
+				position.x - Constants.itemCenter.x,
+				position.y - Constants.itemCenter.y,
+				Constants.itemCenter.x * 2,
+				Constants.itemCenter.y * 2);
 
 	}
 	

@@ -1,5 +1,7 @@
 package lbcai.flowerknight;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -51,6 +53,8 @@ public class Level {
 	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
+	
+	public boolean DEBUG = false;
 	
 	public Level(Viewport viewport) {
 		this.viewport = viewport;
@@ -138,6 +142,7 @@ public class Level {
 			}
 		}
 		damageNums.end();
+		
 		
 	}
 	
