@@ -19,6 +19,17 @@ Currently, the game is using placeholder graphical assets. Here are a few gifs o
   <img src="GithubImages/03_02_21_movement.gif?raw=true" alt="Showcase of basic movement systems.">
 </p>
 
+## 03/23/21 Update
+Here is an additional gif showcasing recent additions to the game with more placeholder graphical assets.
+* The player demonstrates boosting up onto a platform.
+* There is currently only one attack animation. Combos will be implemented at a later date when there are more types of attacks.
+* Hit effects (such as slashes and impact sparkles) and flying damage numbers are visible here.
+* The player demonstrates dodging through sources of damage to avoid taking hits. The first attempt was successful and the second was not. The dodge currently uses the same animations as the skid that happens when the player stops running.
+* Item looting is demonstrated as well. The drop rate of items was turned up for this demonstration.
+<br>
+<p align="center" width="100%">
+  <img src="GithubImages/03_23_21_battle.gif?raw=true" alt="Graphical effects during combat include flying numbers.">
+</p>
 
 ## TODO
 ### Tutorial Progress
