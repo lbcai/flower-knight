@@ -2,11 +2,13 @@ package lbcai.flowerknight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lbcai.util.Assets;
 import lbcai.util.ChaseCam;
@@ -36,6 +38,10 @@ public class GameplayScreen extends ScreenAdapter {
 	 */
 	SpriteBatch batch;
 	
+	//debug
+	boolean DEBUG = false;
+	ShapeRenderer shape;
+	
 	/**
 	 * Add a camera that follows the player around.
 	 */
@@ -53,6 +59,7 @@ public class GameplayScreen extends ScreenAdapter {
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
 		level = new Level(viewport);
 		batch = new SpriteBatch();
+		shape = new ShapeRenderer();
 		
 		chaseCam = new ChaseCam(viewport.getCamera(), level.player);
 		
@@ -86,10 +93,27 @@ public class GameplayScreen extends ScreenAdapter {
 		//the camera! Putting it in render() is also safe.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
+		
 		batch.begin();
 		//Render the level! Renders everything in the level.
 		level.render(batch);
 		batch.end();
+		
+		//debug renderer for rendering hitboxes
+		if (Gdx.input.isKeyJustPressed(Keys.F2)) {
+			if (DEBUG == false) {
+				DEBUG = true;
+			} else {
+				DEBUG = false;
+			}
+		}
+		
+		if (DEBUG == true) {
+			shape.setProjectionMatrix(viewport.getCamera().combined);
+			shape.begin(ShapeType.Line);
+			level.debugRender(shape);
+			shape.end();
+		}
 		
 	}
 	

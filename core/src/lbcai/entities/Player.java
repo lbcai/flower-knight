@@ -29,7 +29,6 @@ public class Player extends Entity {
 	Vector2 lastFramePosition;
 	Vector2 spawnLocation;
 	Vector2 velocity;
-	public Vector2 position;
 	//see enum below
 	public Facing facing;
 	public JumpState jumpState;
@@ -54,7 +53,6 @@ public class Player extends Entity {
 	private long idleTransStartTime;
 	private long slideTransStartTime;
 	private long attackStartTime;
-	private TextureRegion region;
 	//for collision detection of player attacks vs enemy
 	private Rectangle attackHitBox;
 	private int attackComboCounter = 0;
@@ -401,16 +399,16 @@ public class Player extends Entity {
 		if (runState != RunState.SQUAT) {
 			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
-					position.y - Constants.playerEyeHeight + 40, 
+					position.y - Constants.playerEyeHeight, 
 					Constants.playerStance,
 					Constants.playerHeight - 20);
 		} else {
 			//placeholder, need to write a debug shaperenderer to check the actual hitbox.
 			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
-					position.y - Constants.playerEyeHeight + 40, 
-					Constants.playerStance,
-					Constants.playerHeight - 150);
+					position.y - Constants.playerEyeHeight, 
+					Constants.playerStance + 50,
+					Constants.playerHeight - 70);
 		}
 		
 		//Loot items
@@ -522,7 +520,7 @@ public class Player extends Entity {
 				}
 			}
 		}
-		
+		System.out.println(health + " " + maxHealth);
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
 			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
@@ -531,36 +529,32 @@ public class Player extends Entity {
 					velocity.x = 0;
 					//player is on the left of the enemy
 					flinch(Facing.LEFT);
-					level.spawnDmgNum(position, enemy.damage, Facing.LEFT);
+					enemy.doesDamage(this, Facing.LEFT);
+
 				} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					//player is on the right of the enemy
 					flinch(Facing.RIGHT);
-					level.spawnDmgNum(position, enemy.damage, Facing.RIGHT);
+					enemy.doesDamage(this, Facing.RIGHT);
+
 				}
 			}
 		}
 		
 		//check if projectiles are hitting player
 		for (Bullet bullet : level.getBullets()) {
-			//(bottom left x, bottom left y, width, height)
-			Rectangle bulletBound = new Rectangle(
-					bullet.position.x - Constants.bulletCenter.x,
-					bullet.position.y - Constants.bulletCenter.y,
-					2 * Constants.bulletCenter.x,
-					2 * Constants.bulletCenter.y);
+
 			//if player comes in contact with bullet, stop player, make flinch, destroy bullet
-			if (hitBox.overlaps(bulletBound)) {
+			if (hitBox.overlaps(bullet.hitBox)) {
 				if (position.x < bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.LEFT);
-					level.spawnDmgNum(position, bullet.damage, Facing.LEFT);
-					bullet.active = false;
+					bullet.doesDamage(this, Facing.LEFT);
+					
 				} else if (position.x > bullet.position.x && hitState == HitState.NOHIT) {
 					velocity.x = 0;
 					flinch(Facing.RIGHT);
-					level.spawnDmgNum(position, bullet.damage, Facing.RIGHT);
-					bullet.active = false;
+					bullet.doesDamage(this, Facing.RIGHT);
 				}
 			}
 		}

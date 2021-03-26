@@ -99,14 +99,14 @@ public class Constants {
 	public static final float enemyMoveSpeed = 250;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
-	public static final float pBeetleCollisionRadius = 50;
+	public static final Vector2 pBeetleCollisionRadius = new Vector2(50, 50);
 	public static final String dandelion = "dandelion";
 	public static final int dandelionDamage = 10;
 	public static final int dandelionHP = 50;
 	public static final Vector2 dandelionEyeHeight = new Vector2(100, 100);
 	public static final Vector2 dandelionMouth = new Vector2(56, 122);
 	public static final float dandelionMoveSpeed = 0;
-	public static final float dandelionCollisionRadius = 60;
+	public static final Vector2 dandelionCollisionRadius = new Vector2 (60, 90);
 	public static final String bullet = "bulletseed";
 	public static final float bulletMoveSpeed = 600;
 	public static final float bulletCycleTime = 0.2f;

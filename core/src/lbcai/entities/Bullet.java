@@ -2,6 +2,7 @@ package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -11,10 +12,9 @@ import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 
-public class Bullet {
+public class Bullet extends Entity {
 	
 	private final Facing facing;
-	Vector2 position;
 	private long startTime;
 	private Boolean flipx;
 	private Level level;
@@ -23,26 +23,37 @@ public class Bullet {
 	private Vector2 targetPath;
 	private float angle;
 	public int damage;
+	private int range;
 	
 	public Bullet(Level level, Vector2 position, Facing facing, int damage) {
+		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position;
 		this.facing = facing;
 		this.startTime = TimeUtils.nanoTime();
 		this.level = level;
 		this.damage = damage;
+		this.range = damage/2;
 		active = true;
 		
-		float playerx = level.getPlayer().position.x;
-		float playery = level.getPlayer().position.y;
+		Vector2 playerHitBox = new Vector2();
+		level.getPlayer().hitBox.getCenter(playerHitBox);
 		//make a vector from bullet origin point to player (target) and normalize to a unit vector, also get angle of vector
 		//relative to x-axis so we know what angle to tilt the sprite at
 		if (facing == Facing.LEFT) {
-			this.targetPath = new Vector2(position.x - playerx, position.y - playery).nor();
+			this.targetPath = new Vector2(position.x - playerHitBox.x, position.y - playerHitBox.y).nor();
 		} else {
-			this.targetPath = new Vector2(playerx - position.x, playery - position.y).nor();
+			this.targetPath = new Vector2(playerHitBox.x - position.x, playerHitBox.y - position.y).nor();
 		}
 	
 		this.angle = targetPath.angleDeg();
+		
+		//(bottom left x, bottom left y, width, height)
+		hitBox = new Rectangle(
+				position.x - Constants.bulletCenter.x,
+				position.y - Constants.bulletCenter.y,
+				1.5f * Constants.bulletCenter.x,
+				1.5f * Constants.bulletCenter.y);
+		
 	}
 	
 	public void update(float delta) {
@@ -69,11 +80,16 @@ public class Bullet {
 			active = false;
 		}
 		
+		hitBox = new Rectangle(
+				position.x - Constants.bulletCenter.x,
+				position.y - Constants.bulletCenter.y,
+				1.5f * Constants.bulletCenter.x,
+				1.5f * Constants.bulletCenter.y);
+		
 	}
 	
 	public void render(SpriteBatch batch) {
-		TextureRegion region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
-		
+
 		float animTime = Utils.secondsSince(startTime);
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
 		
@@ -100,6 +116,16 @@ public class Bullet {
 				flipx, 
 				false);
 		
+	}
+	
+	public void doesDamage(Player player, Facing facing) {
+		//touch damage method
+		int damageInstance = (int) (Math.random() * ((damage + range) - 
+				(damage - range) + 1) + 
+				(damage - range));
+		player.health -= damageInstance;
+		player.level.spawnDmgNum(player.position, damageInstance, facing);
+		active = false;
 	}
 	
 }

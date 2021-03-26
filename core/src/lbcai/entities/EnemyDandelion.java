@@ -20,18 +20,19 @@ public class EnemyDandelion extends Enemy {
 		this.target = target;
 		this.eyeHeight = Constants.dandelionEyeHeight;
 		this.moveSpeed = Constants.dandelionMoveSpeed;
-		this.leftIdleAnim = Assets.instance.dandelionAssets.idleLeftAnim;
+		region = Assets.instance.dandelionAssets.idleLeftAnim.getKeyFrame(0);
 		this.collisionRadius = Constants.dandelionCollisionRadius;
 		this.bulletShotLastTime = TimeUtils.nanoTime();
-		this.HP = Constants.dandelionHP;
+		this.health = Constants.dandelionHP;
 		this.damage = Constants.dandelionDamage;
+	
 		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
 		
 		hitBox = new Rectangle(
-				position.x - collisionRadius,
-				position.y - collisionRadius,
-				2 * collisionRadius,
-				2 * collisionRadius);
+				position.x - collisionRadius.x,
+				position.y - eyeHeight.y,
+				2 * collisionRadius.x,
+				2 * collisionRadius.y);
 	}
 	
 	/**

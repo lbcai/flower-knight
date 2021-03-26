@@ -14,11 +14,10 @@ import lbcai.util.Utils;
 
 public class Item extends Entity {
 	
-	final public Vector2 position;
 	protected Vector2 lastPosition = new Vector2();
 	protected Vector2 startPosition = new Vector2();
 	protected Vector2 velocity;
-	protected TextureRegion region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
+
 	protected long startTime;
 	protected int counterUp = 0;
 	protected Array<Platform> platforms;
@@ -29,6 +28,7 @@ public class Item extends Entity {
 	protected float alpha = 255f/255f;
 	
 	public Item(Vector2 position, Level level) {
+		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
 		this.position = position;
 
 		//don't set lastPosition to the same value in memory as position or changing one changes the other

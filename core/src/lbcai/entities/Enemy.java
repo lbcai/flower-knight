@@ -22,19 +22,18 @@ import lbcai.util.Enums.RunState;
 public class Enemy extends Entity {
 	//extend later when adding more enemy types
 	final Platform platform;
-	public Vector2 position;
 	Facing facing;
 	final long startTime;
 	Vector2 eyeHeight;
 	float moveSpeed;
-	Animation<TextureRegion> leftIdleAnim;
-	float collisionRadius;
-	public int HP;
+	Vector2 collisionRadius;
+	public int health;
 	HitState hitState;
 	RunState runState;
 	LockState lockState;
 	private long hitStartTime;
 	public int damage;
+	private int range;
 	
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
@@ -42,13 +41,14 @@ public class Enemy extends Entity {
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform) {
+		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 		this.platform = platform;
 		this.eyeHeight = Constants.pBeetleEyeHeight;
 		this.moveSpeed = Constants.enemyMoveSpeed;
-		this.leftIdleAnim = Assets.instance.pBeetleAssets.idleLeftAnim;
 		this.collisionRadius = Constants.pBeetleCollisionRadius;
-		this.HP = Constants.pBeetleHP;
+		this.health = Constants.pBeetleHP;
 		this.damage = Constants.pBeetleDamage;
+		this.range = damage/2;
 		hitState = HitState.NOHIT;
 		runState = RunState.IDLE;
 		lockState = LockState.FREE;
@@ -57,10 +57,10 @@ public class Enemy extends Entity {
 		startTime = TimeUtils.nanoTime();
 		
 		hitBox = new Rectangle(
-				position.x - collisionRadius,
-				position.y - collisionRadius,
-				2 * collisionRadius,
-				2 * collisionRadius);
+				position.x - collisionRadius.x,
+				position.y - collisionRadius.y,
+				2 * collisionRadius.x,
+				2 * collisionRadius.y);
 		
 		//set drop table here so different enemy classes can have their own
 		dropTable = Arrays.asList(0, 1);
@@ -85,55 +85,54 @@ public class Enemy extends Entity {
 		}
 		
 		hitBox = new Rectangle(
-				position.x - collisionRadius,
-				position.y - collisionRadius,
-				2 * collisionRadius,
-				2 * collisionRadius);
+				position.x - collisionRadius.x,
+				position.y - collisionRadius.y,
+				2 * collisionRadius.x,
+				2 * collisionRadius.y);
 		
 	}
 	
 	public void render(SpriteBatch batch) {
 		
-		TextureRegion region = leftIdleAnim.getKeyFrame(0);
 		Boolean flipx = false;
 		
 		//placeholder animations
 		if (facing == Facing.LEFT) {
 			if (runState == RunState.IDLE) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			} else if (runState == RunState.RUN) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			}
 			
 			if (hitState == HitState.IFRAME) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
 					hitState = HitState.NOHIT;
 				}
 			}
 			//use for attacking animation
 			if (lockState == LockState.LOCK) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			}
 			
 			flipx = false;
 			
 		} else if (facing == Facing.RIGHT) {
 			if (runState == RunState.IDLE) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			} else if (runState == RunState.RUN) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			}
 			
 			if (hitState == HitState.IFRAME) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
 					hitState = HitState.NOHIT;
 				}
 			}
 			
 			if (lockState == LockState.LOCK) {
-				region = leftIdleAnim.getKeyFrame(0);
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 			}
 			
 			flipx = true;
@@ -159,10 +158,19 @@ public class Enemy extends Entity {
 	}
 	
 	public void isDamaged(int damage) {
-		HP -= damage;
+		health -= damage;
 		// using iframe to denote flinch animation but no actual iframe for mobs
 		hitState = HitState.IFRAME;
 		hitStartTime = TimeUtils.nanoTime();
+	}
+	
+	public void doesDamage(Player player, Facing facing) {
+		//touch damage method
+		int damageInstance = (int) (Math.random() * ((damage + range) - 
+				(damage - range) + 1) + 
+				(damage - range));
+		player.health -= damageInstance;
+		player.level.spawnDmgNum(player.position, damageInstance, facing);
 	}
 	
 	public int rollDrop() {

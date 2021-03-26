@@ -53,8 +53,7 @@ public class Level {
 	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
-	
-	public boolean DEBUG = false;
+
 	
 	public Level(Viewport viewport) {
 		this.viewport = viewport;
@@ -85,7 +84,7 @@ public class Level {
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
 			enemy.update(delta);
-			if (enemy.HP < 1) {
+			if (enemy.health < 1) {
 				//drop item check
 				dropItem(enemy);
 				//destroy enemy
@@ -153,7 +152,6 @@ public class Level {
 	 * @param renderer   Renders points, outlines, filled shapes, lines. Disposable.
 	 */
 	public void render(SpriteBatch batch) {
-
 		
 		for (Platform platform : platforms) {
 			platform.render(batch);
@@ -220,6 +218,25 @@ public class Level {
 
 
 	}
+	
+	public void debugRender(ShapeRenderer shape) {
+
+		for (Enemy enemy : enemies) {
+			enemy.debugRender(shape);
+		}
+		
+		player.debugRender(shape);
+		
+		for (Bullet bullet : bullets) {
+			bullet.debugRender(shape);
+		}
+		
+		
+		for (Item item : items) {
+			item.debugRender(shape);
+		}
+	
+		}
 	
 	public Array<Platform> getPlatforms() {
 		return platforms;
