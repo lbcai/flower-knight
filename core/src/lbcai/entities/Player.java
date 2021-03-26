@@ -59,12 +59,6 @@ public class Player extends Entity {
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
 	
-	
-	int health;
-	int maxHealth;
-	int baseDamage;
-	int baseRange;
-	
 	//for allowing player to rebind controls
 	private int attackKey = Keys.X;
 	private int jumpKey = Keys.ALT_LEFT;
@@ -84,8 +78,8 @@ public class Player extends Entity {
 		velocity = new Vector2();
 		//set max health here so if player dies and respawns they can keep max health buffs, same with damage buffs
 		maxHealth = Constants.baseHealth;
-		baseDamage = Constants.playerBaseDamage;
-		baseRange = Constants.playerBaseRange;
+		damage = Constants.playerBaseDamage;
+		range = Constants.playerBaseRange;
 		init();
 		
 	}
@@ -679,11 +673,11 @@ public class Player extends Entity {
 				for (Enemy enemy: level.getEnemies()) {
 					if (attackHitBox.overlaps(enemy.hitBox)) {
 						//random number in range min, max: Math.random() * (max - min + 1) + min
-						int damage = (int) (Math.random() * ((baseDamage + baseRange) - 
-								(baseDamage - baseRange) + 1) + 
-								(baseDamage - baseRange));
-						enemy.isDamaged(damage); 
-						level.spawnDmgNum(enemy.position, damage, facing);
+						int damageInstance = (int) (Math.random() * ((damage + range) - 
+								(damage - range) + 1) + 
+								(damage - range));
+						enemy.isDamaged(damageInstance); 
+						level.spawnDmgNum(enemy.position, damageInstance, facing);
 						level.spawnHitEffect(enemy.position, enemy.facing, 1);
 					}
 				}

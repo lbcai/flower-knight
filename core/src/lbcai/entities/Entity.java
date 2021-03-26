@@ -22,7 +22,10 @@ public abstract class Entity {
 	Rectangle hitBox;
 	public Vector2 position;
 	TextureRegion region;
-	
+	int damage;
+	int range;
+	int health;
+	int maxHealth;
 
 	public void debugRender(ShapeRenderer shape) {
 

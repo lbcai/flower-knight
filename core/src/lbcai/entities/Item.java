@@ -12,7 +12,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 
-public class Item extends Entity {
+public class Item {
 	
 	protected Vector2 lastPosition = new Vector2();
 	protected Vector2 startPosition = new Vector2();
@@ -26,6 +26,10 @@ public class Item extends Entity {
 	protected Player player;
 	protected int rotation;
 	protected float alpha = 255f/255f;
+	
+	Rectangle hitBox;
+	Vector2 position;
+	TextureRegion region;
 	
 	public Item(Vector2 position, Level level) {
 		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);

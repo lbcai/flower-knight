@@ -32,8 +32,7 @@ public class Enemy extends Entity {
 	RunState runState;
 	LockState lockState;
 	private long hitStartTime;
-	public int damage;
-	private int range;
+
 	
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
@@ -47,6 +46,7 @@ public class Enemy extends Entity {
 		this.moveSpeed = Constants.enemyMoveSpeed;
 		this.collisionRadius = Constants.pBeetleCollisionRadius;
 		this.health = Constants.pBeetleHP;
+		this.maxHealth = Constants.pBeetleHP;
 		this.damage = Constants.pBeetleDamage;
 		this.range = damage/2;
 		hitState = HitState.NOHIT;

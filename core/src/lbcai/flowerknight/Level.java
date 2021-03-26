@@ -231,10 +231,6 @@ public class Level {
 			bullet.debugRender(shape);
 		}
 		
-		
-		for (Item item : items) {
-			item.debugRender(shape);
-		}
 	
 		}
 	

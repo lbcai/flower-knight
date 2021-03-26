@@ -24,7 +24,9 @@ public class EnemyDandelion extends Enemy {
 		this.collisionRadius = Constants.dandelionCollisionRadius;
 		this.bulletShotLastTime = TimeUtils.nanoTime();
 		this.health = Constants.dandelionHP;
+		this.maxHealth = Constants.dandelionHP;
 		this.damage = Constants.dandelionDamage;
+		this.range = damage/2;
 	
 		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
 		

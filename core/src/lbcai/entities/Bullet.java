@@ -22,8 +22,6 @@ public class Bullet extends Entity {
 	public Boolean active;
 	private Vector2 targetPath;
 	private float angle;
-	public int damage;
-	private int range;
 	
 	public Bullet(Level level, Vector2 position, Facing facing, int damage) {
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
