@@ -29,8 +29,8 @@ public class TexturePackerHelper {
 	        
 	        //use lists to associate animation names with frames, and frames with appropriate x and y offset values
 	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", "Squatleft"};
-	        String[][] animFrames0 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"-40", "0"}, {"-40", "0"}, {"-40", "0"}, {"-20", "0"}, {"-10", "0"}, {"20", "0"}};
-	        String[][] animFrames1 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"80", "0"}, {"80", "0"}, {"80", "0"}, {"-17", "0"}, {"-17", "0"}, {"-17", "0"}};
+	        String[][] animFrames0 = {{"0", "0"}, {"0", "0"}, {"-10", "0"}, {"-55", "0"}, {"-55", "0"}, {"-55", "0"}, {"-20", "0"}, {"-4", "0"}, {"20", "0"}};
+	        String[][] animFrames1 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"70", "0"}, {"70", "0"}, {"70", "0"}, {"-17", "0"}, {"-17", "0"}, {"-17", "0"}};
 	        String[][] animFrames2 = {{"0", "-62"}, {"-15", "-70"}, {"-15", "-70"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}};
 	        String[][] animFrames3 = {{"0", "-62"}, {"0", "-70"}, {"0", "-70"}, {"14", "0"}, {"14", "0"}, {"14", "0"}, {"14", "0"}, {"14", "0"}};
 	        String[][] animFrames4 = {{"15", "0"}, {"15", "0"}};

@@ -10,18 +10,15 @@ import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Utils;
 
-public class HitEffect {
+public class HitEffect extends Effect {
 	
 	/**
 	 * Class for different sparkles/slash/impact hit effects that come out when entities are damaged. Does not include
 	 * swing effects for attacks.
 	 */
 	
-	private final Vector2 position;
 	private final long startTime;
-	private Facing facing;
 	private boolean flipx;
-	private TextureRegion region;
 	private int type = 0;
 	
 	//may need to add an int counter or something to indicate what kind of hit effect: slash, explosion, impact, etc.
@@ -81,6 +78,7 @@ public class HitEffect {
 				false);
 	}
 	
+	@Override
 	public boolean isExpired() {
 		final float elapsedTime = Utils.secondsSince(startTime);
 		//placeholder, also need to make multiple types of effects and add a randomization aspect

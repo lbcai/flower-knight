@@ -10,19 +10,17 @@ import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 
-public class DustCloud {
+public class DustCloud extends Effect {
 	
-	private Vector2 position;
 	private Vector2 origPosition;
 	private int rotation;
 	private float scale;
-	private Facing facing;
 	private boolean flip;
 	private int type;
-	private float alpha = 255f/255f;
-	private TextureRegion region = Assets.instance.dustAssets.dust;
+
 	
 	public DustCloud(Vector2 position, Facing facing, int type) {
+		region = Assets.instance.dustAssets.dust;
 		this.position = position;
 		this.origPosition = new Vector2();
 		this.origPosition.x = position.x;
@@ -91,12 +89,5 @@ public class DustCloud {
 		
 	}
 	
-	public boolean isFinished() {
-		if (alpha <= 0f/255f) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 }

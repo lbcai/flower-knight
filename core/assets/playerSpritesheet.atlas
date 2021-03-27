@@ -20,31 +20,31 @@ Attack1left
   rotate: false
   xy: 1106, 3816
   size: 270, 256
-  offset: -10, 0
+  offset: -4, 0
   index: 8
 Attack1left
   rotate: false
   xy: 274, 2526
   size: 256, 256
-  offset: 0, 0
+  offset: -10, 0
   index: 3
 Attack1left
   rotate: false
   xy: 550, 2784
   size: 256, 256
-  offset: -40, 0
+  offset: -55, 0
   index: 4
 Attack1left
   rotate: false
   xy: 826, 3042
   size: 256, 256
-  offset: -40, 0
+  offset: -55, 0
   index: 5
 Attack1left
   rotate: false
   xy: 1098, 3300
   size: 256, 256
-  offset: -40, 0
+  offset: -55, 0
   index: 6
 Attack1left
   rotate: false
@@ -98,19 +98,19 @@ Attack1right
   rotate: false
   xy: 2, 2010
   size: 256, 256
-  offset: 80, 0
+  offset: 70, 0
   index: 4
 Attack1right
   rotate: false
   xy: 270, 2268
   size: 256, 256
-  offset: 80, 0
+  offset: 70, 0
   index: 5
 Attack1right
   rotate: false
   xy: 532, 2526
   size: 256, 256
-  offset: 80, 0
+  offset: 70, 0
   index: 6
 Boosttoplatleft
   rotate: false
@@ -911,20 +911,6 @@ dust
   orig: 50, 50
   offset: 0, 0
   index: 1
-dust
-  rotate: false
-  xy: 1136, 1184
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: 2
-dust
-  rotate: false
-  xy: 1292, 1340
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: 3
 heal
   rotate: false
   xy: 2334, 2449

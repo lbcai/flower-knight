@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -54,7 +55,7 @@ public class Player extends Entity {
 	private long slideTransStartTime;
 	private long attackStartTime;
 	//for collision detection of player attacks vs enemy
-	private Rectangle attackHitBox;
+	private Rectangle attackHitBox = new Rectangle();
 	private int attackComboCounter = 0;
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
@@ -390,20 +391,45 @@ public class Player extends Entity {
 		}
 		
 		//Use for collision detection of player.
-		if (runState != RunState.SQUAT) {
+		if ((runState == RunState.SQUAT || boostCounter == 1) && jumpState != JumpState.FALLING) {
+
+			if (facing == Facing.RIGHT) {
+				hitBox = new Rectangle(
+						position.x - Constants.playerStance / 2,
+						position.y - Constants.playerEyeHeight, 
+						Constants.playerStance + 50,
+						Constants.playerHeight - 70);
+			} else {
+				hitBox = new Rectangle(
+						position.x - Constants.playerStance - 20,
+						position.y - Constants.playerEyeHeight, 
+						Constants.playerStance + 50,
+						Constants.playerHeight - 70);
+			}
+
+		} else if (jumpState == JumpState.WALL) {
 			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
-					position.y - Constants.playerEyeHeight, 
+					position.y - Constants.playerEyeHeight + 10, 
 					Constants.playerStance,
-					Constants.playerHeight - 20);
+					Constants.playerHeight);
 		} else {
-			//placeholder, need to write a debug shaperenderer to check the actual hitbox.
-			hitBox = new Rectangle(
-					position.x - Constants.playerStance / 2,
-					position.y - Constants.playerEyeHeight, 
-					Constants.playerStance + 50,
-					Constants.playerHeight - 70);
-		}
+			if (facing == Facing.LEFT) {
+				hitBox = new Rectangle(
+						position.x - Constants.playerStance / 2,
+						position.y - Constants.playerEyeHeight, 
+						Constants.playerStance,
+						Constants.playerHeight - 20);
+			} else {
+				hitBox = new Rectangle(
+						position.x - Constants.playerStance / 2 + 10,
+						position.y - Constants.playerEyeHeight, 
+						Constants.playerStance,
+						Constants.playerHeight - 20);
+			}
+
+			}
+
 		
 		//Loot items
 		//away from the other input code so player can still loot if they're animation locked
@@ -514,7 +540,7 @@ public class Player extends Entity {
 				}
 			}
 		}
-		System.out.println(health + " " + maxHealth);
+
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
 			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
@@ -635,17 +661,17 @@ public class Player extends Entity {
 					if (facing == Facing.LEFT) {
 						targetPosition = new Vector2(position.x - 25, position.y);
 						attackHitBox = new Rectangle(
-							position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+							position.x - (Constants.playerStance) - Constants.attackRange1.x,
 							position.y - Constants.playerEyeHeight,
-							Constants.attackRange.x,
-							Constants.attackRange.y);
+							Constants.attackRange1.x,
+							Constants.attackRange1.y);
 					} else {
 						targetPosition = new Vector2(position.x + 25, position.y);
 						attackHitBox = new Rectangle(
-							position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+							position.x + (Constants.playerStance) + 14,
 							position.y - Constants.playerEyeHeight,
-							Constants.attackRange.x,
-							Constants.attackRange.y);
+							Constants.attackRange1.x,
+							Constants.attackRange1.y);
 					}
 					
 				} else if (lockState == LockState.FREE && jumpState != JumpState.GROUNDED) {
@@ -656,16 +682,16 @@ public class Player extends Entity {
 					
 					if (facing == Facing.LEFT) {
 						attackHitBox = new Rectangle(
-							position.x - (Constants.playerStance / 2) - Constants.attackRange.x,
+							position.x - (Constants.playerStance / 2) - Constants.attackRange1.x,
 							position.y - Constants.playerEyeHeight,
-							Constants.attackRange.x,
-							Constants.attackRange.y);
+							Constants.attackRange1.x,
+							Constants.attackRange1.y);
 					} else {
 						attackHitBox = new Rectangle(
-							position.x + (Constants.playerStance / 2) + Constants.attackRange.x,
+							position.x + (Constants.playerStance / 2),
 							position.y - Constants.playerEyeHeight,
-							Constants.attackRange.x,
-							Constants.attackRange.y);
+							Constants.attackRange1.x,
+							Constants.attackRange1.y);
 					}
 					
 				}
@@ -920,6 +946,15 @@ public class Player extends Entity {
 		}
 		runState = RunState.IDLE;
 	}
-
+	
+	/**
+	 * Allow debug rendering of player's last attack damage zone. Other entity hitboxes are rendered with code in the Entity
+	 * class. Enemies with special attack zones should also use a similar method to this one.
+	 */
+	@Override
+	public void debugRender(ShapeRenderer shape) {
+		super.debugRender(shape);
+		shape.rect(attackHitBox.x, attackHitBox.y, attackHitBox.width, attackHitBox.height);
+	}
 	
 }

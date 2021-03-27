@@ -109,7 +109,7 @@ public class Level {
 		dustClouds.begin();
 		for (int i = 0; i < dustClouds.size; i++) {
 			dustClouds.get(i).update(delta);
-			if (dustClouds.get(i).isFinished()) {
+			if (dustClouds.get(i).isExpired()) {
 				dustClouds.removeIndex(i);
 			}
 		}

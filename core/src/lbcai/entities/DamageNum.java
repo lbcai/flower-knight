@@ -10,12 +10,11 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
 
-public class DamageNum {
+public class DamageNum extends Effect {
 	
 	ArrayList<Digit> digitsList;
-	Vector2 position;
-	float alpha = 255f/255f;
-	Facing directionOfTravel;
+	//direction of travel
+	Facing facing;
 	
 	class Digit {
 		
@@ -69,7 +68,7 @@ public class DamageNum {
 	public DamageNum(Vector2 position, int number, Facing facing) {
 		this.position = position;
 		this.digitsList = new ArrayList<Digit>();
-		this.directionOfTravel = facing;
+		this.facing = facing;
 		//had to convert damage int to a string to iterate over it
 		String numString = Integer.toString(number);
 		for (int j = 0; j < numString.length(); j++) {
@@ -108,7 +107,7 @@ public class DamageNum {
 
 		//code to make each digit follow a parabola path
 		for (Digit digit : digitsList) {
-			if (directionOfTravel == Facing.LEFT) {
+			if (facing == Facing.LEFT) {
 				digit.position.x -= 3;
 			} else {
 				digit.position.x += 3;
@@ -120,11 +119,5 @@ public class DamageNum {
 		
 	}
 	
-	public boolean isExpired() {
-		if (alpha <= 0f/255f) {
-			return true;
-		}
-		return false;
-	}
 	
 }
