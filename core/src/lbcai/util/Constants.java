@@ -35,6 +35,7 @@ public class Constants {
 	public static final String skidRight = "Skidright";
 	public static final String attack1Left = "Attack1left";
 	public static final String attack1Right = "Attack1right";
+	public static final String jumpAttack1Left = "Jumpattack1left";
 	public static final String boostToPlatLeft = "Boosttoplatleft";
 	public static final String boostToPlatRight = "Boosttoplatright";
 	public static final String squatRight = "Squatright";

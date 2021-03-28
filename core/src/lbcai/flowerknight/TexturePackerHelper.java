@@ -28,13 +28,14 @@ public class TexturePackerHelper {
 	        BufferedWriter buffWriter = new BufferedWriter(fileWriter);
 	        
 	        //use lists to associate animation names with frames, and frames with appropriate x and y offset values
-	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", "Squatleft"};
+	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", "Squatleft", "Jumpattack1left"};
 	        String[][] animFrames0 = {{"0", "0"}, {"0", "0"}, {"-10", "0"}, {"-55", "0"}, {"-55", "0"}, {"-55", "0"}, {"-20", "0"}, {"-4", "0"}, {"20", "0"}};
 	        String[][] animFrames1 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"70", "0"}, {"70", "0"}, {"70", "0"}, {"-17", "0"}, {"-17", "0"}, {"-17", "0"}};
 	        String[][] animFrames2 = {{"0", "-62"}, {"-15", "-70"}, {"-15", "-70"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}};
 	        String[][] animFrames3 = {{"0", "-62"}, {"0", "-70"}, {"0", "-70"}, {"14", "0"}, {"14", "0"}, {"14", "0"}, {"14", "0"}, {"14", "0"}};
 	        String[][] animFrames4 = {{"15", "0"}, {"15", "0"}};
 	        String[][] animFrames5 = {{"-13", "0"}, {"-15", "0"}};
+	        String[][] animFrames6 = {{"50", "0"}, {"50", "0"}, {"0", "0"}, {"-90", "0"}, {"-90", "-40"}, {"0", "0"}};
 	        
 	        //pair the information properly in a map
 	        Map<String, String[][]> map = new HashMap<>();
@@ -44,6 +45,7 @@ public class TexturePackerHelper {
 	        map.put(animNames[3], animFrames3);
 	        map.put(animNames[4], animFrames4);
 	        map.put(animNames[5], animFrames5);
+	        map.put(animNames[6], animFrames6);
 	        
 	        //fix the offset values in the appropriate place before putting the line into the new atlas
 	        //for all the lines in the file that aren't null, 

@@ -212,7 +212,7 @@ public class Level {
 		player = new Player(new Vector2(100, 200), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		enemies.add(new EnemyDandelion(enemyPlatform, player));
+		//enemies.add(new EnemyDandelion(enemyPlatform, player));
 		enemies.add(new EnemyPBeetle(enemyPlatform));
 		platforms.add(enemyPlatform);
 

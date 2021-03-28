@@ -195,6 +195,7 @@ public class Player extends Entity {
 			}
 			
 			if (lockState == LockState.ATTACKJUMP) {
+				//placeholder
 				if (jumpState == JumpState.GROUNDED) {
 					lockState = LockState.FREE;
 				}
@@ -301,7 +302,9 @@ public class Player extends Entity {
 			}
 			
 			if (lockState == LockState.ATTACKJUMP) {
-				if (jumpState == JumpState.GROUNDED) {
+				float attackTime = Utils.secondsSince(attackStartTime);
+				region = Assets.instance.playerAssets.jumpAttack1LeftAnim.getKeyFrame(attackTime);
+				if (Assets.instance.playerAssets.jumpAttack1LeftAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
 				}
 			}
@@ -907,7 +910,7 @@ public class Player extends Entity {
 	boolean stickToPlatformLeft(Platform platform) {
 		if ((lastFramePosition.x + Constants.playerStance / 2) <= platform.left && 
 				(position.x + Constants.playerStance / 2) >= platform.left) {
-			if (position.y < platform.top - 30 && position.y > platform.bottom) {
+			if (position.y < platform.top - 35 && position.y > platform.bottom) {
 				return true;
 			}
 		}
@@ -917,7 +920,7 @@ public class Player extends Entity {
 	boolean stickToPlatformRight(Platform platform) {
 		if ((lastFramePosition.x - Constants.playerStance / 2) >= platform.right && 
 				(position.x - Constants.playerStance / 2) <= platform.right) {
-			if (position.y < platform.top - 30 && position.y > platform.bottom) {
+			if (position.y < platform.top - 35 && position.y > platform.bottom) {
 				return true;
 			}	
 		}

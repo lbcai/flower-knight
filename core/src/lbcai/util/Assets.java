@@ -105,6 +105,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> skidRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1Left = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1LeftEnd = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> jumpAttack1Left = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1Right = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> attack1RightEnd = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> boostToPlatLeft = new Array<AtlasRegion>();
@@ -129,6 +130,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> skidRightAnim;
 		public final Animation<TextureRegion> attack1LeftAnim;
 		public final Animation<TextureRegion> attack1LeftEndAnim;
+		public final Animation<TextureRegion> jumpAttack1LeftAnim;
 		public final Animation<TextureRegion> attack1RightAnim;
 		public final Animation<TextureRegion> attack1RightEndAnim;
 		public final Animation<TextureRegion> boostToPlatLeftAnim;
@@ -279,6 +281,18 @@ public class Assets implements Disposable, AssetErrorListener {
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1Left.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1LeftAnim = new Animation(Constants.attack1CycleTime, attack1Left, PlayMode.NORMAL);
+			
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 1));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 2));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 2));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 3));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 3));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 5));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 5));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 5));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 5));
+			jumpAttack1Left.add(atlas.findRegion(Constants.jumpAttack1Left, 6));
+			jumpAttack1LeftAnim = new Animation(Constants.attack1CycleTime, jumpAttack1Left, PlayMode.NORMAL);
 			
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 5));
 			attack1LeftEnd.add(atlas.findRegion(Constants.attack1Left, 6));
