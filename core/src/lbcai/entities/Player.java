@@ -37,13 +37,14 @@ public class Player extends Entity {
 	public HitState hitState;
 	LockState lockState;
 	//a long is like a 64-bit int. a BIG int.
-	long jumpStartTime;
-	long runStartTime;
-	long idleStartTime;
-	long wallStartTime;
-	long dodgeStartTime;
-	long squatStartTime;
+	private long jumpStartTime;
+	private long runStartTime;
+	private long idleStartTime;
+	private long wallStartTime;
+	private long dodgeStartTime;
+	private long squatStartTime;
 	private long boostStartTime;
+	private long landStartTime;
 
 	Level level;
 	public int jumpCounter = 0;
@@ -134,13 +135,24 @@ public class Player extends Entity {
 				if (runState == RunState.IDLE) {
 					float idleTime = Utils.secondsSince(idleStartTime);
 					//use idle transition counter (set when idle begins to 0) to determine what idle state we are in:
-					//0 = catch breath idle, 1 = transition animation, 2 = normal idle, 3 = transition from squat
+					//0 = catch breath idle, 1 = transition animation, 2 = normal idle, 3 = transition from squat, 4 = 
+					//transition from falling (landing animation)
 					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
 							Utils.secondsSince(attackStartTime) < Constants.idleBTime || Utils.secondsSince(dodgeStartTime) <
 							Constants.idleBTime) {
-						region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
-						idleTransitionCounter = 1;
-						idleTransStartTime = TimeUtils.nanoTime();
+						if (idleTransitionCounter == 4) {
+							//combat landing into combat idle
+							float landTransTime = Utils.secondsSince(landStartTime);
+							region = Assets.instance.playerAssets.landRightCombatAnim.getKeyFrame(landTransTime);
+							if (Assets.instance.playerAssets.landRightCombatAnim.isAnimationFinished(landTransTime)) {
+								idleTransitionCounter = 2;
+							}
+						} else {
+							region = Assets.instance.playerAssets.idleBRightAnim.getKeyFrame(idleTime);
+							idleTransitionCounter = 1;
+							idleTransStartTime = TimeUtils.nanoTime();
+						}
+
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
@@ -154,6 +166,12 @@ public class Player extends Entity {
 					} else if (idleTransitionCounter == 3) {
 						region = Assets.instance.playerAssets.squatRightUpAnim.getKeyFrame(idleTime);
 						if (Assets.instance.playerAssets.squatRightUpAnim.isAnimationFinished(idleTime)) {
+							idleTransitionCounter = 2;
+						}
+					} else if (idleTransitionCounter == 4) {
+						float landTransTime = Utils.secondsSince(landStartTime);
+						region = Assets.instance.playerAssets.landRightAnim.getKeyFrame(landTransTime);
+						if (Assets.instance.playerAssets.landRightAnim.isAnimationFinished(landTransTime)) {
 							idleTransitionCounter = 2;
 						}
 					}
@@ -195,8 +213,9 @@ public class Player extends Entity {
 			}
 			
 			if (lockState == LockState.ATTACKJUMP) {
-				//placeholder
-				if (jumpState == JumpState.GROUNDED) {
+				float attackTime = Utils.secondsSince(attackStartTime);
+				region = Assets.instance.playerAssets.jumpAttack1RightAnim.getKeyFrame(attackTime);
+				if (Assets.instance.playerAssets.jumpAttack1RightAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
 				}
 			}
@@ -245,9 +264,19 @@ public class Player extends Entity {
 					if (Utils.secondsSince(timeSinceHit) < Constants.idleBTime || 
 							Utils.secondsSince(attackStartTime) < Constants.idleBTime || Utils.secondsSince(dodgeStartTime) <
 							Constants.idleBTime) {
-						region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
-						idleTransitionCounter = 1;
-						idleTransStartTime = TimeUtils.nanoTime();
+						if (idleTransitionCounter == 4) {
+							//combat landing into combat idle
+							float landTransTime = Utils.secondsSince(landStartTime);
+							region = Assets.instance.playerAssets.landLeftCombatAnim.getKeyFrame(landTransTime);
+							if (Assets.instance.playerAssets.landLeftCombatAnim.isAnimationFinished(landTransTime)) {
+								idleTransitionCounter = 2;
+							}
+						} else {
+							region = Assets.instance.playerAssets.idleBLeftAnim.getKeyFrame(idleTime);
+							idleTransitionCounter = 1;
+							idleTransStartTime = TimeUtils.nanoTime();
+						}
+
 					} else if (idleTransitionCounter == 0) {
 						idleTransitionCounter = 2;
 					} else if (idleTransitionCounter == 1) {
@@ -261,6 +290,12 @@ public class Player extends Entity {
 					} else if (idleTransitionCounter == 3) {
 						region = Assets.instance.playerAssets.squatLeftUpAnim.getKeyFrame(idleTime);
 						if (Assets.instance.playerAssets.squatLeftUpAnim.isAnimationFinished(idleTime)) {
+							idleTransitionCounter = 2;
+						}
+					} else if (idleTransitionCounter == 4) {
+						float landTransTime = Utils.secondsSince(landStartTime);
+						region = Assets.instance.playerAssets.landLeftAnim.getKeyFrame(landTransTime);
+						if (Assets.instance.playerAssets.landLeftAnim.isAnimationFinished(landTransTime)) {
 							idleTransitionCounter = 2;
 						}
 					}
@@ -303,7 +338,17 @@ public class Player extends Entity {
 			
 			if (lockState == LockState.ATTACKJUMP) {
 				float attackTime = Utils.secondsSince(attackStartTime);
-				region = Assets.instance.playerAssets.jumpAttack1LeftAnim.getKeyFrame(attackTime);
+				if (jumpState != JumpState.GROUNDED) {
+					region = Assets.instance.playerAssets.jumpAttack1LeftAnim.getKeyFrame(attackTime);
+				} else {
+					//placeholder...left side only currently. testing animation cancel, may have to make trans anim
+					float landTransTime = Utils.secondsSince(landStartTime);
+					region = Assets.instance.playerAssets.landLeftAnim.getKeyFrame(landTransTime);
+					if (Assets.instance.playerAssets.landLeftAnim.isAnimationFinished(landTransTime)) {
+						idleTransitionCounter = 2;
+					}
+				}
+				
 				if (Assets.instance.playerAssets.jumpAttack1LeftAnim.isAnimationFinished(attackTime)) {
 					lockState = LockState.FREE;
 				}
@@ -455,6 +500,9 @@ public class Player extends Entity {
 		for (Platform platform : platforms) {
 
 			if (landOnPlatform(platform)) {
+				if (jumpState == JumpState.FALLING) {
+					landStartTime = TimeUtils.nanoTime();
+				}
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + Constants.playerEyeHeight;
 				velocity.x = 0;
@@ -780,8 +828,8 @@ public class Player extends Entity {
 		//while running).
 		if (velocity.y < 0) {
 			jumpState = JumpState.FALLING;
+			idleTransitionCounter = 4;
 		}
-		
 
 	}
 	
@@ -943,8 +991,9 @@ public class Player extends Entity {
 	
 	void goToIdle() {
 		idleStartTime = TimeUtils.nanoTime();
-		//to keep track of when transition animation should be played for idle, if 4 then coming out of squat and ignore this
-		if (idleTransitionCounter != 3) {
+		//to keep track of when transition animation should be played for idle, if 3 then coming out of squat and ignore this
+		//if 4 then landing, ignore this
+		if (idleTransitionCounter != 3 && idleTransitionCounter != 4) {
 			idleTransitionCounter = 0;
 		}
 		runState = RunState.IDLE;

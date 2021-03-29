@@ -36,11 +36,16 @@ public class Constants {
 	public static final String attack1Left = "Attack1left";
 	public static final String attack1Right = "Attack1right";
 	public static final String jumpAttack1Left = "Jumpattack1left";
+	public static final String jumpAttack1Right = "Jumpattack1right";
 	public static final String boostToPlatLeft = "Boosttoplatleft";
 	public static final String boostToPlatRight = "Boosttoplatright";
 	public static final String squatRight = "Squatright";
 	public static final String squatLeft = "Squatleft";
 	public static final String dodgeRight = "Dodgeright";
+	public static final String landLeft = "Landleft";
+	public static final String landRight = "Landright";
+	public static final String landLeftCombat = "Landleft";
+	public static final String landRightCombat = "Jumpleftend";
 	
 	public static final float skidCycleTime = 0.025f;
 	public static final float runCycleTime = 0.04f;
@@ -52,11 +57,12 @@ public class Constants {
 	public static final float skidTime = 0.25f;
 	public static final float skidTimeLimitBreak = 0.25f;
 	public static final float animLockTime = 0.3f;
-	public static final float attack1CycleTime = 0.05f; //0.05
+	public static final float attack1CycleTime = 0.04f; //0.05
 	public static final float boostCycleTime = 0.05f;
 	public static final float dodgeCycleTime = 0.07f; //0.07
 	public static final float dodgeCDTime = 0.5f;
 	public static final float squatCycleTime = 0.01f; //0.01
+	public static final float landCycleTime = 0.05f; //placeholder
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
