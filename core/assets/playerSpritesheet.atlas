@@ -621,149 +621,155 @@ Jumpleft
   orig: 256, 256
   offset: 0, 0
   index: 9
-Jumpleftend
-  rotate: false
-  xy: 1034, 1494
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 13
-Jumpleftend
-  rotate: false
-  xy: 1292, 1752
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 14
-Jumpleftend
-  rotate: false
-  xy: 1550, 2010
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 15
-Jumpleftend
-  rotate: false
-  xy: 1818, 2268
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 16
-Jumpleftend
-  rotate: false
-  xy: 2080, 2526
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 17
-Jumpleftend
-  rotate: false
-  xy: 2356, 2784
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 18
 Jumpright
   rotate: false
-  xy: 2632, 3042
+  xy: 1034, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Jumpright
   rotate: false
-  xy: 2904, 3300
+  xy: 1292, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Jumpright
   rotate: false
-  xy: 3180, 3558
+  xy: 1550, 2010
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 3
 Jumpright
   rotate: false
-  xy: 3456, 3816
+  xy: 1818, 2268
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 4
 Jumpright
   rotate: false
-  xy: 2, 204
+  xy: 2080, 2526
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 5
 Jumpright
   rotate: false
-  xy: 260, 462
+  xy: 2356, 2784
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 6
 Jumpright
   rotate: false
-  xy: 518, 720
+  xy: 2632, 3042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 7
 Jumpright
   rotate: false
-  xy: 776, 978
+  xy: 2904, 3300
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 8
 Jumpright
   rotate: false
-  xy: 1034, 1236
+  xy: 3180, 3558
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 9
-Landleft
+Landcombatleft
+  rotate: false
+  xy: 3456, 3816
+  size: 256, 256
+  offset: 10, 0
+  index: 3
+Landcombatleft
+  rotate: false
+  xy: 2, 204
+  size: 256, 256
+  offset: 13, 0
+  index: 4
+Landcombatleft
+  rotate: false
+  xy: 260, 462
+  size: 256, 256
+  offset: 13, 0
+  index: 5
+Landcombatleft
+  rotate: false
+  xy: 518, 720
+  size: 256, 256
+  offset: 13, 0
+  index: 6
+Landcombatright
+  rotate: false
+  xy: 776, 978
+  size: 256, 256
+  offset: 10, 0
+  index: 3
+Landcombatright
+  rotate: false
+  xy: 1034, 1236
+  size: 256, 256
+  offset: 1, 0
+  index: 4
+Landcombatright
   rotate: false
   xy: 1292, 1494
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 1
-Landleft
+  offset: 1, 0
+  index: 5
+Landcombatright
   rotate: false
   xy: 1550, 1752
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
+  offset: 1, 0
+  index: 6
 Landleft
   rotate: false
   xy: 1808, 2010
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
+  index: 1
+Landleft
+  rotate: false
+  xy: 2076, 2268
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+Landleft
+  rotate: false
+  xy: 2338, 2526
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
   index: 3
 Landright
   rotate: false
-  xy: 2076, 2268
+  xy: 2614, 2784
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
 Landright
   rotate: false
-  xy: 2338, 2526
+  xy: 2890, 3042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
 Landright
   rotate: false
-  xy: 2614, 2784
+  xy: 3162, 3300
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -777,220 +783,220 @@ Platform
   index: -1
 Runleft
   rotate: false
-  xy: 2890, 3042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 1
-Runleft
-  rotate: false
-  xy: 3162, 3300
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
-Runleft
-  rotate: false
   xy: 3438, 3558
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 3
+  index: 1
 Runleft
   rotate: false
   xy: 3714, 3816
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 4
+  index: 2
 Runleft
   rotate: false
   xy: 260, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 5
+  index: 3
 Runleft
   rotate: false
   xy: 518, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 6
+  index: 4
 Runleft
   rotate: false
   xy: 776, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 7
+  index: 5
 Runleft
   rotate: false
   xy: 1034, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 8
+  index: 6
 Runleft
   rotate: false
   xy: 1292, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 9
+  index: 7
 Runleft
   rotate: false
   xy: 1550, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 10
+  index: 8
 Runleft
   rotate: false
   xy: 1808, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 11
-Runright
+  index: 9
+Runleft
   rotate: false
   xy: 2066, 2010
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 1
-Runright
+  index: 10
+Runleft
   rotate: false
   xy: 2334, 2268
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 2
+  index: 11
 Runright
   rotate: false
   xy: 2596, 2526
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 3
+  index: 1
 Runright
   rotate: false
   xy: 2872, 2784
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 4
+  index: 2
 Runright
   rotate: false
   xy: 3148, 3042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 5
+  index: 3
 Runright
   rotate: false
   xy: 3420, 3300
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 6
+  index: 4
 Runright
   rotate: false
   xy: 3696, 3558
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 7
+  index: 5
 Runright
   rotate: false
   xy: 518, 204
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 8
+  index: 6
 Runright
   rotate: false
   xy: 776, 462
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 9
+  index: 7
 Runright
   rotate: false
   xy: 1034, 720
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 10
+  index: 8
 Runright
   rotate: false
   xy: 1292, 978
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 11
-Skidleft
+  index: 9
+Runright
   rotate: false
   xy: 1550, 1236
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 1
-Skidleft
+  index: 10
+Runright
   rotate: false
   xy: 1808, 1494
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 2
-Skidright
+  index: 11
+Skidleft
   rotate: false
   xy: 2066, 1752
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 1
-Skidright
+Skidleft
   rotate: false
   xy: 2324, 2010
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 2
-Squatleft
+Skidright
   rotate: false
   xy: 2592, 2268
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+Skidright
+  rotate: false
+  xy: 2854, 2526
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+Squatleft
+  rotate: false
+  xy: 3130, 2784
   size: 256, 256
   offset: -13, 0
   index: 1
 Squatleft
   rotate: false
-  xy: 2854, 2526
+  xy: 3406, 3042
   size: 256, 256
   offset: -15, 0
   index: 2
 Squatright
   rotate: false
-  xy: 3130, 2784
+  xy: 3678, 3300
   size: 256, 256
   offset: 15, 0
   index: 1
 Squatright
   rotate: false
-  xy: 3406, 3042
+  xy: 776, 204
   size: 256, 256
   offset: 15, 0
   index: 2
 bulletseed
   rotate: false
-  xy: 3678, 3304
+  xy: 1808, 1340
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 1292, 824
+  xy: 1910, 1442
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -1004,35 +1010,35 @@ dandelion
   index: -1
 dmg
   rotate: false
-  xy: 2850, 2464
+  xy: 3388, 2980
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 0
 dmg
   rotate: false
-  xy: 3112, 2722
+  xy: 3664, 3238
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 1
 dmg
   rotate: false
-  xy: 3388, 2980
+  xy: 204, 142
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 2
 dmg
   rotate: false
-  xy: 204, 142
+  xy: 1034, 456
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 3
 dmg
   rotate: false
-  xy: 3880, 3496
+  xy: 1236, 658
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
@@ -1046,98 +1052,98 @@ dmg
   index: 5
 dmg
   rotate: false
-  xy: 776, 298
+  xy: 1292, 814
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 6
 dmg
   rotate: false
-  xy: 878, 400
+  xy: 1394, 916
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 7
 dmg
   rotate: false
-  xy: 1034, 556
+  xy: 1550, 1072
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 8
 dmg
   rotate: false
-  xy: 1136, 658
+  xy: 1652, 1174
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 9
 dust
   rotate: false
-  xy: 1394, 926
+  xy: 2066, 1598
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 heal
   rotate: false
-  xy: 2324, 1933
+  xy: 2850, 2449
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 1
 healsmall
   rotate: false
-  xy: 2582, 2191
+  xy: 3112, 2707
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 1
 hit
   rotate: false
-  xy: 776, 360
+  xy: 1292, 876
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: 1
 hit
-  rotate: false
-  xy: 1034, 618
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: 2
-hit
-  rotate: false
-  xy: 1292, 876
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: 3
-hitslash
   rotate: false
   xy: 1550, 1134
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
-  index: 1
-hitslash
+  index: 2
+hit
   rotate: false
   xy: 1808, 1392
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
-  index: 2
+  index: 3
 hitslash
   rotate: false
   xy: 2066, 1650
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
+  index: 1
+hitslash
+  rotate: false
+  xy: 2324, 1908
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+hitslash
+  rotate: false
+  xy: 2582, 2166
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
   index: 3
 pbeetle
   rotate: false
-  xy: 3678, 3356
+  xy: 1034, 518
   size: 200, 200
   orig: 200, 200
   offset: 0, 0

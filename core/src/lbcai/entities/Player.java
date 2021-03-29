@@ -734,15 +734,15 @@ public class Player extends Entity {
 					if (facing == Facing.LEFT) {
 						attackHitBox = new Rectangle(
 							position.x - (Constants.playerStance / 2) - Constants.attackRange1.x,
-							position.y - Constants.playerEyeHeight,
+							position.y - 30,
 							Constants.attackRange1.x,
-							Constants.attackRange1.y);
+							Constants.attackRange1.y + 20);
 					} else {
 						attackHitBox = new Rectangle(
-							position.x + (Constants.playerStance / 2),
-							position.y - Constants.playerEyeHeight,
+							position.x + (Constants.playerStance / 2) + 14,
+							position.y - 30,
 							Constants.attackRange1.x,
-							Constants.attackRange1.y);
+							Constants.attackRange1.y + 20);
 					}
 					
 				}

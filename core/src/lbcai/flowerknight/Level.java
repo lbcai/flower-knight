@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import lbcai.entities.BreakableObject;
 import lbcai.entities.Bullet;
 import lbcai.entities.DamageNum;
 import lbcai.entities.DustCloud;
@@ -52,6 +53,7 @@ public class Level {
 	private DelayedRemovalArray<HitEffect> hitEffects;
 	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
+	private DelayedRemovalArray<BreakableObject> bObjects;
 	private int dustCloudCounter = 0;
 
 	
@@ -142,6 +144,15 @@ public class Level {
 		}
 		damageNums.end();
 		
+		bObjects.begin();
+		for (BreakableObject object : bObjects) {
+			object.update(delta);
+			if (object.isExpired() == true) {
+				bObjects.removeValue(object, false);
+			}
+		}
+		bObjects.end();
+		
 		
 	}
 	
@@ -183,6 +194,10 @@ public class Level {
 			damageNum.render(batch);
 		}
 		
+		for (BreakableObject object : bObjects) {
+			object.render(batch);
+		}
+		
 	}
 	
 	private void initDebugLevel() {
@@ -195,7 +210,7 @@ public class Level {
 		hitEffects = new DelayedRemovalArray<HitEffect>();
 		damageNums = new DelayedRemovalArray<DamageNum>();
 		items = new DelayedRemovalArray<Item>();
-		
+		bObjects = new DelayedRemovalArray<BreakableObject>();
 		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
@@ -206,7 +221,11 @@ public class Level {
 		platforms.add(new Platform(0, 1000, 200, 800));
 		platforms.add(new Platform(512, 1000, 200, 800));
 		platforms.add(new Platform(800, 0, 800, 50));
-		platforms.add(new Platform(0, -100, 10000, 50));
+		Platform longPlatform = new Platform(0, -100, 10000, 50);
+		platforms.add(longPlatform);
+		bObjects.add(new BreakableObject(longPlatform));
+		bObjects.add(new BreakableObject(longPlatform));
+		
 		
 		//Add player to the level. Add a start position for the level as input.
 		player = new Player(new Vector2(100, 200), this);
@@ -231,7 +250,10 @@ public class Level {
 			bullet.debugRender(shape);
 		}
 		
-	
+		for (BreakableObject object : bObjects) {
+			object.debugRender(shape);
+		}
+		
 		}
 	
 	public Array<Platform> getPlatforms() {

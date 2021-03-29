@@ -397,7 +397,12 @@ public class Assets implements Disposable, AssetErrorListener {
 			landLeft.add(atlas.findRegion(Constants.boostToPlatLeft, 8));
 			landLeftAnim = new Animation(Constants.landCycleTime, landLeft, PlayMode.NORMAL);
 			
-			landLeftCombat.add(atlas.findRegion(Constants.landLeftCombat, 18));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeft, 1));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeft, 2));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeftCombat, 3));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeftCombat, 4));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeftCombat, 5));
+			landLeftCombat.add(atlas.findRegion(Constants.landLeftCombat, 6));
 			landLeftCombatAnim = new Animation(Constants.landCycleTime, landLeftCombat, PlayMode.NORMAL);
 			
 			landRight.add(atlas.findRegion(Constants.landRight, 1));
@@ -407,7 +412,12 @@ public class Assets implements Disposable, AssetErrorListener {
 			landRight.add(atlas.findRegion(Constants.boostToPlatRight, 8));
 			landRightAnim = new Animation(Constants.landCycleTime, landRight, PlayMode.NORMAL);
 			
-			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 18));
+			landRightCombat.add(atlas.findRegion(Constants.landRight, 1));
+			landRightCombat.add(atlas.findRegion(Constants.landRight, 2));
+			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 3));
+			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 4));
+			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 5));
+			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 6));
 			landRightCombatAnim = new Animation(Constants.landCycleTime, landRightCombat, PlayMode.NORMAL);
 			
 		}
