@@ -1,5 +1,6 @@
 package lbcai.entities;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -28,8 +29,6 @@ public class EnemyDandelion extends Enemy {
 		this.damage = Constants.dandelionDamage;
 		this.range = damage/2;
 	
-		position = new Vector2(platform.left + (platform.right - platform.left) / 2, platform.top + eyeHeight.y);
-		
 		hitBox = new Rectangle(
 				position.x - collisionRadius.x,
 				position.y - eyeHeight.y,
@@ -42,31 +41,46 @@ public class EnemyDandelion extends Enemy {
 	 */
 	@Override
 	public void update(float delta) {
-		if (target.position.x < position.x) {
-			facing = Facing.LEFT;
-		} else {
-			facing = Facing.RIGHT;
-		}
-		
-		Vector2 bulletPosition;
-		float bulletWaitTime = Utils.secondsSince(bulletShotLastTime);
-		//check if bullet is not on cooldown and if player is not below the dandelion (can't see below its own platform) before
-		//shooting at player.
-		if (bulletWaitTime > Constants.bulletCooldown && (target.position.y > position.y - Constants.dandelionEyeHeight.y)) {
-			if (facing == Facing.LEFT) {
-				bulletPosition = new Vector2(
-						position.x - Constants.dandelionMouth.x,
-						position.y);
+		if (inactive == false) {
+			if (target.position.x < position.x) {
+				facing = Facing.LEFT;
 			} else {
-				bulletPosition = new Vector2(
-						position.x + Constants.dandelionMouth.x,
-						position.y);
+				facing = Facing.RIGHT;
 			}
-			//target = player. get the level the player is in and spawn a bullet in the level.
-			target.level.spawnBullet(bulletPosition, facing, damage);
-			bulletShotLastTime = TimeUtils.nanoTime();
+			
+			Vector2 bulletPosition;
+			float bulletWaitTime = Utils.secondsSince(bulletShotLastTime);
+			//check if bullet is not on cooldown and if player is not below the dandelion (can't see below its own platform) before
+			//shooting at player.
+			if (bulletWaitTime > Constants.bulletCooldown && (target.position.y > position.y - Constants.dandelionEyeHeight.y)) {
+				if (facing == Facing.LEFT) {
+					bulletPosition = new Vector2(
+							position.x - Constants.dandelionMouth.x,
+							position.y);
+				} else {
+					bulletPosition = new Vector2(
+							position.x + Constants.dandelionMouth.x,
+							position.y);
+				}
+				//target = player. get the level the player is in and spawn a bullet in the level.
+				target.level.spawnBullet(bulletPosition, facing, damage);
+				bulletShotLastTime = TimeUtils.nanoTime();
+			}
+			
+			if (health <= 0) {
+				inactive = true;
+				alpha = 0f/255f;
+				inactiveTimer = TimeUtils.nanoTime();
+			}
+
+		} else {
+			//respawn if time is up
+			if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
+				health = maxHealth;
+				position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+				inactive = false;
+				alpha = 255f/255f;
+			}
 		}
-		
 	}
-	
 }

@@ -203,7 +203,7 @@ public class Player extends Entity {
 				if (flashCounter == 0 || flashCounter % 5 != 0) {
 					flashCounter += 1;
 				} else if (flashCounter % 5 == 0) {
-					batch.setColor(183f/255f, 183f/255f, 183f/255f, 255f/255f);
+					batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
 					flashCounter = 0;
 				}
 				
@@ -326,7 +326,7 @@ public class Player extends Entity {
 				if (flashCounter == 0 || flashCounter % 5 != 0) {
 					flashCounter += 1;
 				} else if (flashCounter % 5 == 0) {
-					batch.setColor(183f/255f, 183f/255f, 183f/255f, 255f/255f);
+					batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
 					flashCounter = 0;
 				}
 				
@@ -594,22 +594,25 @@ public class Player extends Entity {
 
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
-			//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
-			if (hitBox.overlaps(enemy.hitBox)) {
-				if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
-					velocity.x = 0;
-					//player is on the left of the enemy
-					flinch(Facing.LEFT);
-					enemy.doesDamage(this, Facing.LEFT);
+			if (enemy.inactive == false) {
+				//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
+				if (hitBox.overlaps(enemy.hitBox)) {
+					if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
+						velocity.x = 0;
+						//player is on the left of the enemy
+						flinch(Facing.LEFT);
+						enemy.doesDamage(this, Facing.LEFT);
 
-				} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
-					velocity.x = 0;
-					//player is on the right of the enemy
-					flinch(Facing.RIGHT);
-					enemy.doesDamage(this, Facing.RIGHT);
+					} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
+						velocity.x = 0;
+						//player is on the right of the enemy
+						flinch(Facing.RIGHT);
+						enemy.doesDamage(this, Facing.RIGHT);
 
+					}
 				}
 			}
+
 		}
 		
 		//check if projectiles are hitting player
@@ -748,14 +751,16 @@ public class Player extends Entity {
 				}
 				
 				for (Enemy enemy: level.getEnemies()) {
-					if (attackHitBox.overlaps(enemy.hitBox)) {
-						//random number in range min, max: Math.random() * (max - min + 1) + min
-						int damageInstance = (int) (Math.random() * ((damage + range) - 
-								(damage - range) + 1) + 
-								(damage - range));
-						enemy.isDamaged(damageInstance); 
-						level.spawnDmgNum(enemy.position, damageInstance, facing);
-						level.spawnHitEffect(enemy.position, enemy.facing, 1);
+					if (enemy.inactive == false) {
+						if (attackHitBox.overlaps(enemy.hitBox)) {
+							//random number in range min, max: Math.random() * (max - min + 1) + min
+							int damageInstance = (int) (Math.random() * ((damage + range) - 
+									(damage - range) + 1) + 
+									(damage - range));
+							enemy.isDamaged(damageInstance); 
+							level.spawnDmgNum(enemy.position, damageInstance, facing);
+							level.spawnHitEffect(enemy.position, enemy.facing, 1);
+						}
 					}
 				}
 			}

@@ -30,7 +30,7 @@ public class BreakableObject extends Entity {
 		maxHealth = Constants.breakableObjHealth;
 		health = maxHealth;
 		//spawn randomly on surface of platform
-		position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) - platform.left), platform.top + Constants.itemCenter.y);
+		position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + Constants.itemCenter.y);
 		//placeholder using item sprite
 		hitBox =  new Rectangle(
 				position.x - Constants.itemCenter.x,

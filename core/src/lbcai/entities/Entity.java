@@ -26,6 +26,7 @@ public abstract class Entity {
 	int range;
 	int health;
 	int maxHealth;
+	float alpha = 255f/255f;
 
 	public void debugRender(ShapeRenderer shape) {
 

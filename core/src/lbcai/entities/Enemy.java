@@ -3,6 +3,7 @@ package lbcai.entities;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -19,7 +20,7 @@ import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
-public class Enemy extends Entity {
+public abstract class Enemy extends Entity {
 	//extend later when adding more enemy types
 	final Platform platform;
 	Facing facing;
@@ -32,14 +33,18 @@ public class Enemy extends Entity {
 	RunState runState;
 	LockState lockState;
 	private long hitStartTime;
-
 	
+	//is enemy in the death state?
+	public boolean inactive;
+	long inactiveTimer;
+
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
 	
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform) {
+		inactive = false;
 		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 		this.platform = platform;
 		this.eyeHeight = Constants.pBeetleEyeHeight;
@@ -52,7 +57,8 @@ public class Enemy extends Entity {
 		hitState = HitState.NOHIT;
 		runState = RunState.IDLE;
 		lockState = LockState.FREE;
-		position = new Vector2(platform.left, platform.top + eyeHeight.y);
+		//spawn on a random spot on the surface of this platform
+		position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
 		facing = Facing.RIGHT;
 		startTime = TimeUtils.nanoTime();
 		
@@ -68,77 +74,101 @@ public class Enemy extends Entity {
 	}
 
 	public void update(float delta) {
-		switch (facing) {
-		case LEFT:
-			position.x -= moveSpeed * delta;
-			break;
-		case RIGHT:
-			position.x += moveSpeed * delta;
+		
+		if (inactive == false) {
+			//if not dead, do your thing
+			switch (facing) {
+			case LEFT:
+				position.x -= moveSpeed * delta;
+				break;
+			case RIGHT:
+				position.x += moveSpeed * delta;
+			}
+			
+			if (position.x < platform.left) {
+				position.x = platform.left;
+				facing = Facing.RIGHT;
+			} else if (position.x > platform.right) {
+				position.x = platform.right;
+				facing = Facing.LEFT;
+			}
+			
+			hitBox = new Rectangle(
+					position.x - collisionRadius.x,
+					position.y - collisionRadius.y,
+					2 * collisionRadius.x,
+					2 * collisionRadius.y);
+			
+			if (health <= 0) {
+				inactive = true;
+				alpha = 0f/255f;
+				inactiveTimer = TimeUtils.nanoTime();
+			}
+			
+		} else {
+			//respawn if time is up
+			if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
+				health = maxHealth;
+				position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+				inactive = false;
+				alpha = 255f/255f;
+			}
 		}
 		
-		if (position.x < platform.left) {
-			position.x = platform.left;
-			facing = Facing.RIGHT;
-		} else if (position.x > platform.right) {
-			position.x = platform.right;
-			facing = Facing.LEFT;
-		}
 		
-		hitBox = new Rectangle(
-				position.x - collisionRadius.x,
-				position.y - collisionRadius.y,
-				2 * collisionRadius.x,
-				2 * collisionRadius.y);
 		
 	}
 	
 	public void render(SpriteBatch batch) {
-		
 		Boolean flipx = false;
 		
-		//placeholder animations
-		if (facing == Facing.LEFT) {
-			if (runState == RunState.IDLE) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			} else if (runState == RunState.RUN) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			}
+		if (inactive == false) {
 			
-			if (hitState == HitState.IFRAME) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
-					hitState = HitState.NOHIT;
+			//placeholder animations
+			if (facing == Facing.LEFT) {
+				if (runState == RunState.IDLE) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				} else if (runState == RunState.RUN) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 				}
-			}
-			//use for attacking animation
-			if (lockState == LockState.LOCK) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			}
-			
-			flipx = false;
-			
-		} else if (facing == Facing.RIGHT) {
-			if (runState == RunState.IDLE) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			} else if (runState == RunState.RUN) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			}
-			
-			if (hitState == HitState.IFRAME) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-				if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
-					hitState = HitState.NOHIT;
+				
+				if (hitState == HitState.IFRAME) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+					if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+						hitState = HitState.NOHIT;
+					}
 				}
+				//use for attacking animation
+				if (lockState == LockState.LOCK) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				}
+				
+				flipx = false;
+				
+			} else if (facing == Facing.RIGHT) {
+				if (runState == RunState.IDLE) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				} else if (runState == RunState.RUN) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				}
+				
+				if (hitState == HitState.IFRAME) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+					if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+						hitState = HitState.NOHIT;
+					}
+				}
+				
+				if (lockState == LockState.LOCK) {
+					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				}
+				
+				flipx = true;
 			}
-			
-			if (lockState == LockState.LOCK) {
-				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-			}
-			
-			flipx = true;
 		}
 		
 		
+		batch.setColor(1, 1, 1, alpha);
 		batch.draw(region.getTexture(), 
 				(position.x - eyeHeight.x), 
 				(position.y - eyeHeight.y), 
@@ -155,6 +185,7 @@ public class Enemy extends Entity {
 				region.getRegionHeight(), 
 				flipx, 
 				false);
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	public void isDamaged(int damage) {
