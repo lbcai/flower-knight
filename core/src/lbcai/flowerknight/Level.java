@@ -89,7 +89,6 @@ public class Level {
 			if (enemy.health < 1 && enemy.inactive == false) {
 				//drop item check
 				dropItem(enemy);
-
 			}
 		}
 		enemies.end();

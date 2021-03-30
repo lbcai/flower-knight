@@ -42,6 +42,13 @@ public class EnemyDandelion extends Enemy {
 	@Override
 	public void update(float delta) {
 		if (inactive == false) {
+			
+			hitBox = new Rectangle(
+					position.x - collisionRadius.x,
+					position.y - eyeHeight.y,
+					2 * collisionRadius.x,
+					2 * collisionRadius.y);
+			
 			if (target.position.x < position.x) {
 				facing = Facing.LEFT;
 			} else {
@@ -76,10 +83,16 @@ public class EnemyDandelion extends Enemy {
 		} else {
 			//respawn if time is up
 			if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
-				health = maxHealth;
-				position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
-				inactive = false;
-				alpha = 255f/255f;
+				if (alpha == 0f/255f) {
+					position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+				}
+				alpha += 15f/255f;
+				if (alpha >= 255f/255f) {
+					health = maxHealth;
+					inactive = false;
+					alpha = 255f/255f;
+				}
+
 			}
 		}
 	}
