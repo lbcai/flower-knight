@@ -53,7 +53,6 @@ public class Level {
 	private DelayedRemovalArray<HitEffect> hitEffects;
 	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
-	private DelayedRemovalArray<BreakableObject> bObjects;
 	private int dustCloudCounter = 0;
 
 	
@@ -138,15 +137,6 @@ public class Level {
 		}
 		damageNums.end();
 		
-		bObjects.begin();
-		for (BreakableObject object : bObjects) {
-			object.update(delta);
-			if (object.isExpired() == true) {
-				bObjects.removeValue(object, false);
-			}
-		}
-		bObjects.end();
-		
 		
 	}
 	
@@ -188,10 +178,6 @@ public class Level {
 			damageNum.render(batch);
 		}
 		
-		for (BreakableObject object : bObjects) {
-			object.render(batch);
-		}
-		
 	}
 	
 	private void initDebugLevel() {
@@ -204,7 +190,6 @@ public class Level {
 		hitEffects = new DelayedRemovalArray<HitEffect>();
 		damageNums = new DelayedRemovalArray<DamageNum>();
 		items = new DelayedRemovalArray<Item>();
-		bObjects = new DelayedRemovalArray<BreakableObject>();
 		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
@@ -217,8 +202,8 @@ public class Level {
 		platforms.add(new Platform(800, 0, 800, 50));
 		Platform longPlatform = new Platform(0, -100, 10000, 50);
 		platforms.add(longPlatform);
-		bObjects.add(new BreakableObject(longPlatform));
-		bObjects.add(new BreakableObject(longPlatform));
+		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT));
+		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT));
 		
 		
 		//Add player to the level. Add a start position for the level as input.
@@ -242,10 +227,6 @@ public class Level {
 		
 		for (Bullet bullet : bullets) {
 			bullet.debugRender(shape);
-		}
-		
-		for (BreakableObject object : bObjects) {
-			object.debugRender(shape);
 		}
 		
 		}

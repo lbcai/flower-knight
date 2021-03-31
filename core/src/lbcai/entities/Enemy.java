@@ -39,6 +39,8 @@ public abstract class Enemy extends Entity {
 	//is enemy in the death state?
 	public boolean inactive;
 	long inactiveTimer;
+	//is this "enemy" an object and cannot give touch damage to the player? if so, mark false
+	public boolean touchDmg;
 
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
@@ -46,6 +48,7 @@ public abstract class Enemy extends Entity {
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
+		touchDmg = true;
 		inactive = false;
 		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
 		this.level = level;

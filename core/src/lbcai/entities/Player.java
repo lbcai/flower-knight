@@ -593,7 +593,7 @@ public class Player extends Entity {
 
 		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
 		for (Enemy enemy : level.getEnemies()) {
-			if (enemy.inactive == false) {
+			if (enemy.inactive == false && enemy.touchDmg == true) {
 				//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
 				if (hitBox.overlaps(enemy.hitBox)) {
 					if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
@@ -762,6 +762,7 @@ public class Player extends Entity {
 						}
 					}
 				}
+				
 			}
 			
 			//jump (apparently you can do this case thing with enums!) use isKeyJustPressed to avoid continuous input multi-jump
