@@ -86,10 +86,6 @@ public class Level {
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
 			enemy.update(delta);
-			if (enemy.health < 1 && enemy.inactive == false) {
-				//drop item check
-				dropItem(enemy);
-			}
 		}
 		enemies.end();
 		
@@ -229,8 +225,8 @@ public class Level {
 		player = new Player(new Vector2(100, 200), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		enemies.add(new EnemyDandelion(enemyPlatform, player));
-		enemies.add(new EnemyPBeetle(enemyPlatform));
+		enemies.add(new EnemyDandelion(enemyPlatform, this));
+		enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 
 
@@ -304,9 +300,10 @@ public class Level {
 		// 0 = base item: full heal
 		// 1 = 20% small heal item
 		if (Math.random() <= Constants.itemRollChance) {
-			if (enemy.rollDrop() == 0) {
+			int tableIndex = enemy.rollDrop();
+			if (tableIndex == 0) {
 				items.add(new Item(enemy.position, this));
-			} else if (enemy.rollDrop() == 1) {
+			} else if (tableIndex == 1) {
 				items.add(new ItemHealSmall(enemy.position, this));
 			}
 		}

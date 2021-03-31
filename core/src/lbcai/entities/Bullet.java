@@ -17,7 +17,6 @@ public class Bullet extends Entity {
 	private final Facing facing;
 	private long startTime;
 	private Boolean flipx;
-	private Level level;
 	//For deciding when the clean up the bullet object.
 	public Boolean active;
 	private Vector2 targetPath;
@@ -25,7 +24,7 @@ public class Bullet extends Entity {
 	
 	public Bullet(Level level, Vector2 position, Facing facing, int damage) {
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
-		this.position = position;
+		this.position = position.cpy();
 		this.facing = facing;
 		this.startTime = TimeUtils.nanoTime();
 		this.level = level;

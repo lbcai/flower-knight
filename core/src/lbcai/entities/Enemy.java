@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.ai.GdxAI;
+
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
@@ -43,9 +45,10 @@ public abstract class Enemy extends Entity {
 	
 	
 	//default enemy type will be a potato beetle
-	public Enemy(Platform platform) {
+	public Enemy(Platform platform, Level level) {
 		inactive = false;
 		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+		this.level = level;
 		this.platform = platform;
 		this.eyeHeight = Constants.pBeetleEyeHeight;
 		this.moveSpeed = Constants.enemyMoveSpeed;
@@ -100,14 +103,21 @@ public abstract class Enemy extends Entity {
 					2 * collisionRadius.y);
 			
 			if (health <= 0) {
+				level.dropItem(this);
 				inactive = true;
-				alpha = 0f/255f;
 				inactiveTimer = TimeUtils.nanoTime();
 			}
-			
+
 		} else {
+			if (Utils.secondsSince(inactiveTimer) < Constants.respawnTime) {
+				if (alpha > 0f/255f) {
+					alpha -= 5f/255f;
+				} else {
+					alpha = 0f/255f;
+				}
+			}
 			//respawn if time is up
-			if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
+			else if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
 				if (alpha == 0f/255f) {
 					position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
 				}
@@ -120,9 +130,6 @@ public abstract class Enemy extends Entity {
 				
 			}
 		}
-		
-		
-		
 	}
 	
 	public void render(SpriteBatch batch) {

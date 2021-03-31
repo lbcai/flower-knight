@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import lbcai.flowerknight.Level;
+
 /**
  * 
  * Entities that use a hitbox and are capable of interacting with each other.
@@ -27,6 +29,7 @@ public abstract class Entity {
 	int health;
 	int maxHealth;
 	float alpha = 255f/255f;
+	Level level;
 
 	public void debugRender(ShapeRenderer shape) {
 

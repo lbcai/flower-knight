@@ -46,7 +46,6 @@ public class Player extends Entity {
 	private long boostStartTime;
 	private long landStartTime;
 
-	Level level;
 	public int jumpCounter = 0;
 
 	long timeSinceHit;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
@@ -16,9 +17,10 @@ public class EnemyDandelion extends Enemy {
 	private long bulletShotLastTime;
 	
 
-	public EnemyDandelion(Platform platform, Player target) {
-		super(platform);
-		this.target = target;
+	public EnemyDandelion(Platform platform, Level level) {
+		super(platform, level);
+		this.target = level.getPlayer();
+		this.level = level;
 		this.eyeHeight = Constants.dandelionEyeHeight;
 		this.moveSpeed = Constants.dandelionMoveSpeed;
 		region = Assets.instance.dandelionAssets.idleLeftAnim.getKeyFrame(0);
@@ -41,6 +43,7 @@ public class EnemyDandelion extends Enemy {
 	 */
 	@Override
 	public void update(float delta) {
+		
 		if (inactive == false) {
 			
 			hitBox = new Rectangle(
@@ -70,19 +73,26 @@ public class EnemyDandelion extends Enemy {
 							position.y);
 				}
 				//target = player. get the level the player is in and spawn a bullet in the level.
-				target.level.spawnBullet(bulletPosition, facing, damage);
+				level.spawnBullet(bulletPosition, facing, damage);
 				bulletShotLastTime = TimeUtils.nanoTime();
 			}
 			
 			if (health <= 0) {
+				level.dropItem(this);
 				inactive = true;
-				alpha = 0f/255f;
 				inactiveTimer = TimeUtils.nanoTime();
 			}
 
 		} else {
+			if (Utils.secondsSince(inactiveTimer) < Constants.respawnTime) {
+				if (alpha > 0f/255f) {
+					alpha -= 5f/255f;
+				} else {
+					alpha = 0f/255f;
+				}
+			}
 			//respawn if time is up
-			if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
+			else if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
 				if (alpha == 0f/255f) {
 					position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
 				}
@@ -95,5 +105,6 @@ public class EnemyDandelion extends Enemy {
 
 			}
 		}
+
 	}
 }

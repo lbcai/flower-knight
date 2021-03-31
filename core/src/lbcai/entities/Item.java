@@ -28,16 +28,15 @@ public class Item {
 	protected float alpha = 255f/255f;
 	
 	Rectangle hitBox;
-	Vector2 position;
+	Vector2 position = new Vector2();
 	TextureRegion region;
 	
 	public Item(Vector2 position, Level level) {
 		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
-		this.position = position;
+		this.position = position.cpy();
 
 		//don't set lastPosition to the same value in memory as position or changing one changes the other
-		lastPosition.x = position.x;
-		lastPosition.y = position.y;
+		lastPosition = position.cpy();
 		
 		//start the item with upward velocity so it pops out of monsters/boxes/etc.
 		velocity = new Vector2(0, 500);
@@ -56,13 +55,11 @@ public class Item {
 	}
 	
 	public void update(float delta) {
-		
+
 		lastPosition.set(position);
 		
 		if (falling == true) {
-			if (rotation < 360) {
-				rotation += 15;
-			}
+			rotation += 15;
 			
 			velocity.y -= delta * Constants.worldGravity;
 			position.mulAdd(velocity, delta);
@@ -79,6 +76,7 @@ public class Item {
 				}
 			}
 		} else {
+			//code to make item float up and down over time while facing right side up
 			rotation = 0;
 			if (counterUp == 0) {
 				position.lerp(new Vector2(position.x, position.y + 25), 0.01f);
