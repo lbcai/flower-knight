@@ -989,14 +989,14 @@ Squatright
   index: 2
 bulletseed
   rotate: false
-  xy: 1808, 1340
+  xy: 2168, 1700
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 1910, 1442
+  xy: 2324, 1856
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -1010,91 +1010,91 @@ dandelion
   index: -1
 dmg
   rotate: false
-  xy: 3388, 2980
+  xy: 1034, 456
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 0
 dmg
   rotate: false
-  xy: 3664, 3238
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 1
-dmg
-  rotate: false
-  xy: 204, 142
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 2
-dmg
-  rotate: false
-  xy: 1034, 456
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 3
-dmg
-  rotate: false
   xy: 1236, 658
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 4
+  index: 1
 dmg
   rotate: false
   xy: 3972, 3910
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 5
+  index: 2
 dmg
   rotate: false
   xy: 1292, 814
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 6
+  index: 3
 dmg
   rotate: false
   xy: 1394, 916
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 7
+  index: 4
 dmg
   rotate: false
   xy: 1550, 1072
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 8
+  index: 5
 dmg
   rotate: false
   xy: 1652, 1174
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
+  index: 6
+dmg
+  rotate: false
+  xy: 1808, 1330
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 7
+dmg
+  rotate: false
+  xy: 1910, 1432
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 8
+dmg
+  rotate: false
+  xy: 2066, 1588
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
   index: 9
 dust
   rotate: false
-  xy: 2066, 1598
+  xy: 2426, 1958
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 heal
   rotate: false
-  xy: 2850, 2449
+  xy: 3664, 3223
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 1
 healsmall
   rotate: false
-  xy: 3112, 2707
+  xy: 204, 127
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
@@ -1120,23 +1120,44 @@ hit
   orig: 100, 100
   offset: 0, 0
   index: 3
-hitslash
+hitimpact1
   rotate: false
   xy: 2066, 1650
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: 1
-hitslash
+hitimpact1
   rotate: false
   xy: 2324, 1908
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: 2
-hitslash
+hitimpact1
   rotate: false
   xy: 2582, 2166
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 3
+hitslash
+  rotate: false
+  xy: 2850, 2424
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 1
+hitslash
+  rotate: false
+  xy: 3112, 2682
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+hitslash
+  rotate: false
+  xy: 3388, 2940
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

@@ -122,6 +122,7 @@ public class Bullet extends Entity {
 				(damage - range));
 		player.health -= damageInstance;
 		player.level.spawnDmgNum(player.position, damageInstance, facing);
+		player.level.spawnHitEffect(new Vector2(player.position.x, player.position.y - 50), facing, 2);
 		active = false;
 	}
 	

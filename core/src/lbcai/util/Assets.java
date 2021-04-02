@@ -515,6 +515,9 @@ public class Assets implements Disposable, AssetErrorListener {
 			public final Array<AtlasRegion> hitOne = new Array<AtlasRegion>();
 			public final Animation<TextureRegion> hitOneAnim;
 			
+			public final Array<AtlasRegion> hitImpactOne = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitImpactOneAnim;
+			
 			public final Array<AtlasRegion> hitSlashOne = new Array<AtlasRegion>();
 			public final Animation<TextureRegion> hitSlashOneAnim;
 			
@@ -523,6 +526,11 @@ public class Assets implements Disposable, AssetErrorListener {
 				hitOne.add(atlas.findRegion(Constants.hitOne, 2));
 				hitOne.add(atlas.findRegion(Constants.hitOne, 3));
 				hitOneAnim = new Animation(Constants.hitEffectCycleTime, hitOne, PlayMode.NORMAL);
+				
+				hitImpactOne.add(atlas.findRegion(Constants.hitImpactOne, 1));
+				hitImpactOne.add(atlas.findRegion(Constants.hitImpactOne, 2));
+				hitImpactOne.add(atlas.findRegion(Constants.hitImpactOne, 3));
+				hitImpactOneAnim = new Animation(Constants.hitEffectCycleTime, hitImpactOne, PlayMode.NORMAL);
 				
 				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 1));
 				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 2));

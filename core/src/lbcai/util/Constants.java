@@ -86,6 +86,7 @@ public class Constants {
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
 	public static final String hitOne = "hit";
+	public static final String hitImpactOne = "hitimpact1";
 	public static final String hitSlashOne = "hitslash";
 	public static final float hitEffectCycleTime = 0.1f;
 	public static final Vector2 hitEffectCenter = new Vector2(50, 50);

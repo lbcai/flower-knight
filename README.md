@@ -64,7 +64,7 @@ Here is an additional gif showcasing recent additions to the game with more plac
 - [ ] Create 2 basic enemy types and animations
 - [x] Allow projectiles to fly at angles
 - [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, item effects, etc.
-- [ ] Add enemy aggression, random motion, etc. (add gdx-ai framework)
+- [ ] Add enemy aggression, random motion, etc. 
 - [ ] Create basic player death, knockback animations
 - [ ] Create UI assets
 - [ ] Implement UI functionality
@@ -72,3 +72,4 @@ Here is an additional gif showcasing recent additions to the game with more plac
 - [ ] Allow player to reset keybinds through UI
 - [ ] Add "berserk mode"
 - [ ] Add fullscreen attack "ultimate"
+- [ ] Replace maps/portals with seamless loading

@@ -942,13 +942,13 @@ public class Player extends Entity {
 				velocity.x = -Constants.knockbackSpeed.x;
 				position.x -= 30;
 			}
-			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
+			
 		} else {
 			if (boostCounter != 1) {
 				velocity.x = Constants.knockbackSpeed.x;
 				position.x += 30;
 			}
-			level.spawnHitEffect(new Vector2(position.x, position.y - 50), facing, 0);
+		
 		}
 		hitState = HitState.IFRAME;
 		lockState = LockState.LOCK;

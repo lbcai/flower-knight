@@ -40,10 +40,13 @@ public class HitEffect extends Effect {
 		
 		if (type == 0) {
 			//impact
-			 region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(0);
+			 region = Assets.instance.hitAssets.hitImpactOneAnim.getKeyFrame(0);
 		} else if (type == 1) {
 			//slash
 			region = Assets.instance.hitAssets.hitSlashOneAnim.getKeyFrame(0);
+		} else if (type == 2) {
+			//shatter projectile
+			region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(0);
 		}
 		
 	}
@@ -53,10 +56,13 @@ public class HitEffect extends Effect {
 		float animTime = Utils.secondsSince(startTime);
 		if (type == 0) {
 			//impact
-			 region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(animTime);
+			 region = Assets.instance.hitAssets.hitImpactOneAnim.getKeyFrame(animTime);
 		} else if (type == 1) {
 			//slash
 			region = Assets.instance.hitAssets.hitSlashOneAnim.getKeyFrame(animTime);
+		} else if (type == 2) {
+			//shatter projectile
+			region = Assets.instance.hitAssets.hitOneAnim.getKeyFrame(animTime);
 		}
 		
 		
