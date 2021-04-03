@@ -989,14 +989,14 @@ Squatright
   index: 2
 bulletseed
   rotate: false
-  xy: 2168, 1700
+  xy: 2952, 2474
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 2324, 1856
+  xy: 3112, 2630
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -1010,91 +1010,91 @@ dandelion
   index: -1
 dmg
   rotate: false
-  xy: 1034, 456
+  xy: 1236, 658
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 0
 dmg
   rotate: false
-  xy: 1236, 658
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 1
-dmg
-  rotate: false
-  xy: 3972, 3910
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 2
-dmg
-  rotate: false
-  xy: 1292, 814
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 3
-dmg
-  rotate: false
-  xy: 1394, 916
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 4
-dmg
-  rotate: false
-  xy: 1550, 1072
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 5
-dmg
-  rotate: false
-  xy: 1652, 1174
-  size: 45, 60
-  orig: 45, 60
-  offset: 0, 0
-  index: 6
-dmg
-  rotate: false
   xy: 1808, 1330
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 7
+  index: 1
 dmg
   rotate: false
   xy: 1910, 1432
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
-  index: 8
+  index: 2
 dmg
   rotate: false
   xy: 2066, 1588
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
+  index: 3
+dmg
+  rotate: false
+  xy: 2168, 1690
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 4
+dmg
+  rotate: false
+  xy: 2324, 1846
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 5
+dmg
+  rotate: false
+  xy: 2426, 1948
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 6
+dmg
+  rotate: false
+  xy: 2582, 2104
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 7
+dmg
+  rotate: false
+  xy: 2684, 2206
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
+  index: 8
+dmg
+  rotate: false
+  xy: 2850, 2362
+  size: 45, 60
+  orig: 45, 60
+  offset: 0, 0
   index: 9
 dust
   rotate: false
-  xy: 2426, 1958
+  xy: 3214, 2732
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 heal
   rotate: false
-  xy: 3664, 3223
+  xy: 1550, 1057
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: 1
 healsmall
   rotate: false
-  xy: 204, 127
+  xy: 1652, 1159
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
@@ -1141,23 +1141,65 @@ hitimpact1
   orig: 100, 100
   offset: 0, 0
   index: 3
-hitslash
+hitimpact2
   rotate: false
   xy: 2850, 2424
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: 1
-hitslash
+hitimpact2
   rotate: false
   xy: 3112, 2682
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: 2
-hitslash
+hitimpact2
   rotate: false
   xy: 3388, 2940
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 3
+hitimpact3
+  rotate: false
+  xy: 3664, 3198
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 1
+hitimpact3
+  rotate: false
+  xy: 204, 102
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+hitimpact3
+  rotate: false
+  xy: 1034, 416
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 3
+hitslash
+  rotate: false
+  xy: 3972, 3870
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 1
+hitslash
+  rotate: false
+  xy: 1292, 774
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+hitslash
+  rotate: false
+  xy: 1394, 876
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
