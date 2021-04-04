@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
@@ -263,9 +264,11 @@ public class Level {
 		dustClouds.add(new DustCloud(position, facing, type));
 	}
 	
-	public void spawnHitEffect(Vector2 position, Facing facing, int type) {
+	public void spawnHitEffect(Rectangle rectangle, Facing facing, int type) {
 		// an equation to get random numbers in a range:
 		// Math.random() * (max - min + 1) + min
+		Vector2 position = new Vector2();
+		rectangle.getCenter(position);
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
 		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));

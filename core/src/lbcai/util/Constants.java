@@ -85,11 +85,16 @@ public class Constants {
 	//effect
 	public static final String runDust = "dust";
 	public static final Vector2 dustCenter = new Vector2(25, 25);
-	public static final String hitShatterOne = "hit";
+	public static final String hitPierceOne = "hitpierce1";
+	public static final String hitPierceTwo = "hitpierce2";
+	public static final String hitPierceThree = "hitpierce3";
 	public static final String hitImpactOne = "hitimpact1";
 	public static final String hitImpactTwo = "hitimpact2";
 	public static final String hitImpactThree = "hitimpact3";
-	public static final String hitSlashOne = "hitslash";
+	public static final String hitSlashOne = "hitslash1";
+	public static final String hitSlashTwo = "hitslash2";
+	public static final String hitSlashThree = "hitslash3";
+	//these cycle times are per frame.
 	public static final float hitEffectCycleTime = 0.15f;
 	public static final Vector2 hitEffectCenter = new Vector2(50, 50);
 	public static final Vector2 dmgNumSize = new Vector2(45, 60);

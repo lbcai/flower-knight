@@ -512,14 +512,14 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class HitAssets {
 			
-			public final Array<AtlasRegion> hitShatterOne = new Array<AtlasRegion>();
-			public final Animation<TextureRegion> hitShatterOneAnim;
+			public final Array<AtlasRegion> hitPierceOne = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitPierceOneAnim;
 			
-			public final Array<AtlasRegion> hitShatterTwo = new Array<AtlasRegion>();
-			public final Animation<TextureRegion> hitShatterTwoAnim;
+			public final Array<AtlasRegion> hitPierceTwo = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitPierceTwoAnim;
 			
-			public final Array<AtlasRegion> hitShatterThree = new Array<AtlasRegion>();
-			public final Animation<TextureRegion> hitShatterThreeAnim;
+			public final Array<AtlasRegion> hitPierceThree = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitPierceThreeAnim;
 			
 			public final Array<AtlasRegion> hitImpactOne = new Array<AtlasRegion>();
 			public final Animation<TextureRegion> hitImpactOneAnim;
@@ -533,21 +533,27 @@ public class Assets implements Disposable, AssetErrorListener {
 			public final Array<AtlasRegion> hitSlashOne = new Array<AtlasRegion>();
 			public final Animation<TextureRegion> hitSlashOneAnim;
 			
+			public final Array<AtlasRegion> hitSlashTwo = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitSlashTwoAnim;
+			
+			public final Array<AtlasRegion> hitSlashThree = new Array<AtlasRegion>();
+			public final Animation<TextureRegion> hitSlashThreeAnim;
+			
 			public HitAssets(TextureAtlas atlas) {
-				hitShatterOne.add(atlas.findRegion(Constants.hitShatterOne, 1));
-				hitShatterOne.add(atlas.findRegion(Constants.hitShatterOne, 2));
-				hitShatterOne.add(atlas.findRegion(Constants.hitShatterOne, 3));
-				hitShatterOneAnim = new Animation(Constants.hitEffectCycleTime, hitShatterOne, PlayMode.NORMAL);
+				hitPierceOne.add(atlas.findRegion(Constants.hitPierceOne, 1));
+				hitPierceOne.add(atlas.findRegion(Constants.hitPierceOne, 2));
+				hitPierceOne.add(atlas.findRegion(Constants.hitPierceOne, 3));
+				hitPierceOneAnim = new Animation(Constants.hitEffectCycleTime, hitPierceOne, PlayMode.NORMAL);
 				
-				hitShatterTwo.add(atlas.findRegion(Constants.hitShatterOne, 1));
-				hitShatterTwo.add(atlas.findRegion(Constants.hitShatterOne, 2));
-				hitShatterTwo.add(atlas.findRegion(Constants.hitShatterOne, 3));
-				hitShatterTwoAnim = new Animation(Constants.hitEffectCycleTime, hitShatterTwo, PlayMode.NORMAL);
+				hitPierceTwo.add(atlas.findRegion(Constants.hitPierceTwo, 1));
+				hitPierceTwo.add(atlas.findRegion(Constants.hitPierceTwo, 2));
+				hitPierceTwo.add(atlas.findRegion(Constants.hitPierceTwo, 3));
+				hitPierceTwoAnim = new Animation(Constants.hitEffectCycleTime, hitPierceTwo, PlayMode.NORMAL);
 				
-				hitShatterThree.add(atlas.findRegion(Constants.hitShatterOne, 1));
-				hitShatterThree.add(atlas.findRegion(Constants.hitShatterOne, 2));
-				hitShatterThree.add(atlas.findRegion(Constants.hitShatterOne, 3));
-				hitShatterThreeAnim = new Animation(Constants.hitEffectCycleTime, hitShatterThree, PlayMode.NORMAL);
+				hitPierceThree.add(atlas.findRegion(Constants.hitPierceThree, 1));
+				hitPierceThree.add(atlas.findRegion(Constants.hitPierceThree, 2));
+				hitPierceThree.add(atlas.findRegion(Constants.hitPierceThree, 3));
+				hitPierceThreeAnim = new Animation(Constants.hitEffectCycleTime, hitPierceThree, PlayMode.NORMAL);
 				
 				hitImpactOne.add(atlas.findRegion(Constants.hitImpactOne, 1));
 				hitImpactOne.add(atlas.findRegion(Constants.hitImpactOne, 2));
@@ -568,6 +574,16 @@ public class Assets implements Disposable, AssetErrorListener {
 				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 2));
 				hitSlashOne.add(atlas.findRegion(Constants.hitSlashOne, 3));
 				hitSlashOneAnim = new Animation(Constants.hitEffectCycleTime, hitSlashOne, PlayMode.NORMAL);
+				
+				hitSlashTwo.add(atlas.findRegion(Constants.hitSlashTwo, 1));
+				hitSlashTwo.add(atlas.findRegion(Constants.hitSlashTwo, 2));
+				hitSlashTwo.add(atlas.findRegion(Constants.hitSlashTwo, 3));
+				hitSlashTwoAnim = new Animation(Constants.hitEffectCycleTime, hitSlashTwo, PlayMode.NORMAL);
+				
+				hitSlashThree.add(atlas.findRegion(Constants.hitSlashThree, 1));
+				hitSlashThree.add(atlas.findRegion(Constants.hitSlashThree, 2));
+				hitSlashThree.add(atlas.findRegion(Constants.hitSlashThree, 3));
+				hitSlashThreeAnim = new Animation(Constants.hitEffectCycleTime, hitSlashThree, PlayMode.NORMAL);
 			}
 			
 		}

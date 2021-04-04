@@ -758,7 +758,7 @@ public class Player extends Entity {
 									(damage - range));
 							enemy.isDamaged(damageInstance); 
 							level.spawnDmgNum(enemy.position, damageInstance, facing);
-							level.spawnHitEffect(enemy.position, enemy.facing, 1);
+							level.spawnHitEffect(enemy.hitBox, facing, 1);
 						}
 					}
 				}
