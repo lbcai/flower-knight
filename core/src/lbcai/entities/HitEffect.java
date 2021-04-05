@@ -96,6 +96,7 @@ public class HitEffect extends Effect {
 			}
 			
 			if (randomPicker2 == 0) {
+				//add a cycle time to skip 1st frame
 				region2 = Assets.instance.hitAssets.hitImpactOneAnim.getKeyFrame(animTime + Constants.hitEffectCycleTime);
 			} else if (randomPicker2 == 1) {
 				region2 = Assets.instance.hitAssets.hitImpactTwoAnim.getKeyFrame(animTime + Constants.hitEffectCycleTime);
