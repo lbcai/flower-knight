@@ -20,6 +20,8 @@ public class EnemyPBeetle extends Enemy {
 	public void update(float delta) {
 		if (inactive == false) {
 			//if not dead, do your thing
+			
+			//current braindead patrol ai
 			switch (facing) {
 			case LEFT:
 				position.x -= moveSpeed * delta;
@@ -42,11 +44,32 @@ public class EnemyPBeetle extends Enemy {
 			final float floatMultiplier = 1 + MathUtils.sin(MathUtils.PI2 * (elapsedTime / Constants.floatpBeetlePeriod));
 			position.y = platform.top + Constants.pBeetleEyeHeight.y + (Constants.floatpBeetleAmplitude * floatMultiplier);
 			
+			//end braindead patrol ai
+			
+			if (aggroRange.overlaps(target.hitBox)) {
+				if (target.position.x > position.x) {
+					//move to the right
+				} else if (target.position.x < position.x) {
+					//move to the left
+				}
+				
+				if (target.position.y > position.y) {
+					//spam jump
+				}
+				//if target is below the monster do not do anything special.
+			}
+			
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,
 					position.y - collisionRadius.y,
 					2 * collisionRadius.x,
 					2 * collisionRadius.y);
+			
+			aggroRange = new Rectangle(
+					position.x - Constants.aggroRadius.x,
+					position.y - Constants.aggroRadius.y / 4,
+					2 * Constants.aggroRadius.x,
+					1.5f * Constants.aggroRadius.y);
 			
 			if (health <= 0) {
 				level.dropItem(this);

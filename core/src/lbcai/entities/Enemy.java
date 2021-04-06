@@ -1,6 +1,8 @@
 package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -31,12 +33,15 @@ public abstract class Enemy extends Entity {
 	RunState runState;
 	LockState lockState;
 	private long hitStartTime;
+	Player target;
 	
 	//is enemy in the death state?
 	public boolean inactive;
 	long inactiveTimer;
 	//is this "enemy" an object and cannot give touch damage to the player? if so, mark false
 	public boolean touchDmg;
+	//zone for enemy to see in (for player detection)
+	Rectangle aggroRange;
 
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
@@ -44,6 +49,7 @@ public abstract class Enemy extends Entity {
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
+		target = level.getPlayer();
 		touchDmg = true;
 		inactive = false;
 		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
@@ -69,6 +75,14 @@ public abstract class Enemy extends Entity {
 				position.y - collisionRadius.y,
 				2 * collisionRadius.x,
 				2 * collisionRadius.y);
+		
+		aggroRange = new Rectangle(
+				position.x - Constants.aggroRadius.x,
+				position.y - Constants.aggroRadius.y / 2,
+				2 * Constants.aggroRadius.x,
+				Constants.aggroRadius.y);
+
+
 		
 		//set drop table here so different enemy classes can have their own
 		dropTable = Arrays.asList(0, 1);
@@ -100,6 +114,15 @@ public abstract class Enemy extends Entity {
 					position.y - collisionRadius.y,
 					2 * collisionRadius.x,
 					2 * collisionRadius.y);
+			
+
+			aggroRange = new Rectangle(
+					position.x - Constants.aggroRadius.x,
+					position.y - Constants.aggroRadius.y / 4,
+					2 * Constants.aggroRadius.x,
+					1.5f * Constants.aggroRadius.y);
+
+
 			
 			if (health <= 0) {
 				level.dropItem(this);
@@ -221,4 +244,14 @@ public abstract class Enemy extends Entity {
 		int index = (int) (Math.random() * dropTable.size()); 
 		return dropTable.get(index);
 	}
+	
+	/**
+	 * Allow debug rendering of enemy's sight range.
+	 */
+	@Override
+	public void debugRender(ShapeRenderer shape) {
+		super.debugRender(shape);
+		shape.rect(aggroRange.x, aggroRange.y, aggroRange.width, aggroRange.height);
+	}
+	
 }

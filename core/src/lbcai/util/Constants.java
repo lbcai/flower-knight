@@ -129,6 +129,7 @@ public class Constants {
 	public static final Vector2 bulletCenter = new Vector2(25, 25);
 	public static final float enemyFlinchTime = 0.3f;
 	public static final int respawnTime = 20; //20
+	public static final Vector2 aggroRadius = new Vector2(500, 500);
 	
 	//item
 	public static final String life = "heal";

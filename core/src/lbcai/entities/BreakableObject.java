@@ -41,6 +41,11 @@ public class BreakableObject extends Enemy {
 				position.y - Constants.itemCenter.y,
 				Constants.itemCenter.x * 2,
 				Constants.itemCenter.y * 2);
+		aggroRange = new Rectangle(
+				position.x,
+				position.y,
+				Constants.itemCenter.x,
+				Constants.itemCenter.y);
 		
 	}
 	
