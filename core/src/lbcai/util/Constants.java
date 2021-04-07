@@ -66,7 +66,7 @@ public class Constants {
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
-	public static final float playerEyeHeight = 128.0f;
+
 	public static final float playerHeight = 164.0f;
 	//Distance between player's feet, used to detect when player lands on platforms and when player should fall.
 	public static final float playerStance = 60.0f;
@@ -111,7 +111,7 @@ public class Constants {
 	public static final int pBeetleDamage = 10;
 	public static final int pBeetleHP = 100;
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
-	public static final float enemyMoveSpeed = 250;
+	public static final float enemyMoveSpeed = 500;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final Vector2 pBeetleCollisionRadius = new Vector2(50, 50);

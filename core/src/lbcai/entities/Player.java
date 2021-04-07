@@ -82,6 +82,8 @@ public class Player extends Entity {
 		maxHealth = Constants.baseHealth;
 		damage = Constants.playerBaseDamage;
 		range = Constants.playerBaseRange;
+		eyeHeight = Constants.playerHead;
+		moveSpeed = Constants.moveSpeed;
 		init();
 		
 	}
@@ -444,13 +446,13 @@ public class Player extends Entity {
 			if (facing == Facing.RIGHT) {
 				hitBox = new Rectangle(
 						position.x - Constants.playerStance / 2,
-						position.y - Constants.playerEyeHeight, 
+						position.y - eyeHeight.y, 
 						Constants.playerStance + 50,
 						Constants.playerHeight - 70);
 			} else {
 				hitBox = new Rectangle(
 						position.x - Constants.playerStance - 20,
-						position.y - Constants.playerEyeHeight, 
+						position.y - eyeHeight.y, 
 						Constants.playerStance + 50,
 						Constants.playerHeight - 70);
 			}
@@ -458,20 +460,20 @@ public class Player extends Entity {
 		} else if (jumpState == JumpState.WALL) {
 			hitBox = new Rectangle(
 					position.x - Constants.playerStance / 2,
-					position.y - Constants.playerEyeHeight + 10, 
+					position.y - eyeHeight.y + 10, 
 					Constants.playerStance,
 					Constants.playerHeight);
 		} else {
 			if (facing == Facing.LEFT) {
 				hitBox = new Rectangle(
 						position.x - Constants.playerStance / 2,
-						position.y - Constants.playerEyeHeight, 
+						position.y - eyeHeight.y, 
 						Constants.playerStance,
 						Constants.playerHeight - 20);
 			} else {
 				hitBox = new Rectangle(
 						position.x - Constants.playerStance / 2 + 10,
-						position.y - Constants.playerEyeHeight, 
+						position.y - eyeHeight.y, 
 						Constants.playerStance,
 						Constants.playerHeight - 20);
 			}
@@ -504,7 +506,7 @@ public class Player extends Entity {
 					landStartTime = TimeUtils.nanoTime();
 				}
 				jumpState = JumpState.GROUNDED;
-				position.y = platform.top + Constants.playerEyeHeight;
+				position.y = platform.top + eyeHeight.y;
 				velocity.setZero();
 				if (jumpCounter >= 2) {
 					jumpCounter = 0;
@@ -640,9 +642,9 @@ public class Player extends Entity {
 		
 		
 		//Prevent player from falling through ground. Player will start falling and hit ground and stay there.
-		//if (position.y - Constants.playerEyeHeight < 0) {
+		//if (position.y - eyeHeight.y < 0) {
 		//	jumpState = JumpState.GROUNDED;
-		//	position.y = Constants.playerEyeHeight;
+		//	position.y = eyeHeight.y;
 		//	velocity.y = 0;
 		//}
 
@@ -713,14 +715,14 @@ public class Player extends Entity {
 						targetPosition = new Vector2(position.x - 25, position.y);
 						attackHitBox = new Rectangle(
 							position.x - (Constants.playerStance) - Constants.attackRange1.x,
-							position.y - Constants.playerEyeHeight,
+							position.y - eyeHeight.y,
 							Constants.attackRange1.x,
 							Constants.attackRange1.y);
 					} else {
 						targetPosition = new Vector2(position.x + 25, position.y);
 						attackHitBox = new Rectangle(
 							position.x + (Constants.playerStance) + 14,
-							position.y - Constants.playerEyeHeight,
+							position.y - eyeHeight.y,
 							Constants.attackRange1.x,
 							Constants.attackRange1.y);
 					}
@@ -799,7 +801,7 @@ public class Player extends Entity {
 			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
 				for (Platform platform : platforms) {
 					if (boostUpToPlatform(platform)) {
-						position.y = platform.top + Constants.playerEyeHeight;
+						position.y = platform.top + eyeHeight.y;
 						velocity.setZero();
 					}
 				}
@@ -861,7 +863,7 @@ public class Player extends Entity {
 		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
 			velocity.x -= delta * 2;
 		} else {
-			velocity.x = -delta * Constants.moveSpeed;
+			velocity.x = -delta * moveSpeed;
 		}
 		
 	}
@@ -879,7 +881,7 @@ public class Player extends Entity {
 		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
 			velocity.x += delta * 2;
 		} else {
-			velocity.x = delta * Constants.moveSpeed;
+			velocity.x = delta * moveSpeed;
 		}
 		
 	}
@@ -910,27 +912,7 @@ public class Player extends Entity {
 		}
 	}
 	
-	boolean landOnPlatform(Platform platform) {
-		boolean leftSideFootOnPlatform = false;
-		boolean rightSideFootOnPlatform = false;
-		boolean bothFootOnPlatform = false;
-		
-		if ((lastFramePosition.y - Constants.playerEyeHeight) >= platform.top && 
-				(position.y - Constants.playerEyeHeight) < platform.top) {
-			//since the player position is marked by the center of the head and this is basically in the center of the texture,
-			//the "origin" is 0,0 in the center of the texture. we need to subtract half the stance width to get the edge of each
-			//foot, then add on one side and subtract on the other.
-			float leftSideFoot = position.x - (Constants.playerStance / 2);
-			float rightSideFoot = position.x + (Constants.playerStance / 2);
-			
-			leftSideFootOnPlatform = (platform.left < leftSideFoot && platform.right > leftSideFoot);
-			rightSideFootOnPlatform = (platform.left < rightSideFoot && platform.right > rightSideFoot);
-			//technically the platform is so tiny it is smaller than the stance width.
-			bothFootOnPlatform = (platform.left > leftSideFoot && platform.right < rightSideFoot);
-		}
-		//return true if one is true, else return false
-		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
-	}
+	
 	
 	private void flinch(Facing facing) {
 		velocity.y = Constants.knockbackSpeed.y;
@@ -980,7 +962,7 @@ public class Player extends Entity {
 	boolean boostUpToPlatform(Platform platform) {
 		if (lockState == LockState.FREE) {
 			if (position.x < platform.right && position.x > platform.left) {
-				if (position.y - Constants.playerEyeHeight < platform.top && position.y > platform.top) {
+				if (position.y - eyeHeight.y < platform.top && position.y > platform.top) {
 					boostCounter = 1;
 					lockState = LockState.BOOSTLOCK;
 					boostStartTime = TimeUtils.nanoTime();

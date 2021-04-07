@@ -26,8 +26,6 @@ public abstract class Enemy extends Entity {
 	final Platform platform;
 	Facing facing;
 	final long startTime;
-	Vector2 eyeHeight;
-	float moveSpeed;
 	Vector2 collisionRadius;
 	public int health;
 	HitState hitState;

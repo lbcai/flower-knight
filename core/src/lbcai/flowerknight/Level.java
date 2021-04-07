@@ -69,10 +69,10 @@ public class Level {
 		
 		if (dustCloudCounter == 0) {
 			if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
-				spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing, 0);
+				spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
 				dustCloudCounter = 1;
 			} else if (player.jumpCounter == 2) {
-				spawnDustCloud(new Vector2(player.position.x, player.position.y - Constants.playerEyeHeight), player.facing, 1);
+				spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
 				dustCloudCounter = 1;
 			}
 			

@@ -104,38 +104,6 @@ public class EnemyPBeetle extends Enemy {
 			}
 		}
 	}
-
-	//later: add basic movement/collision/gravity things to entity class, player maybe can use as well
-	void move(float delta, Facing facing) {
-		if (facing == Facing.LEFT) {
-			//move left
-			position.x -= moveSpeed * delta;
-		} else {
-			//move right
-			position.x += moveSpeed * delta;
-		}
-	}
-	
-	void jump(Facing facing) {
-		
-	}
-
-	boolean landOnPlatform(Platform platform) {
-		boolean rightFootOnPlatform = false;
-		boolean leftFootOnPlatform = false;
-		boolean bothFeetOnPlatform = false;
-		
-		if ((lastFramePosition.y + eyeHeight.y >= platform.top + eyeHeight.y) && 
-				(position.y + eyeHeight.y < platform.top + eyeHeight.y)) {
-			float leftSideFoot = position.x - collisionRadius.x;
-			float rightSideFoot = position.x + collisionRadius.x;
-			rightFootOnPlatform = rightSideFoot > platform.left && rightSideFoot < platform.right;
-			leftFootOnPlatform = leftSideFoot > platform.left && leftSideFoot < platform.right;
-			bothFeetOnPlatform = leftSideFoot > platform.left && rightSideFoot > platform.right;
-			
-		}
-		return rightFootOnPlatform || leftFootOnPlatform || bothFeetOnPlatform;
-	}
 	
 	//placeholder
 	void simplePatrol(float delta) {
