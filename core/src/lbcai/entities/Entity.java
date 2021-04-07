@@ -23,6 +23,8 @@ import lbcai.flowerknight.Level;
 public abstract class Entity {
 	Rectangle hitBox;
 	public Vector2 position;
+	public Vector2 lastFramePosition;
+	public Vector2 velocity;
 	TextureRegion region;
 	int damage;
 	int range;

@@ -9,8 +9,11 @@ import lbcai.flowerknight.Level;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.JumpState;
 
 public class EnemyPBeetle extends Enemy {
+	
+	
 	
 	public EnemyPBeetle(Platform platform, Level level) {
 		super(platform, level);
@@ -20,39 +23,31 @@ public class EnemyPBeetle extends Enemy {
 	public void update(float delta) {
 		if (inactive == false) {
 			//if not dead, do your thing
+			lastFramePosition.set(position);
+			velocity.y -= delta * Constants.worldGravity;
+			position.mulAdd(velocity, delta);
 			
-			//current braindead patrol ai
-			switch (facing) {
-			case LEFT:
-				position.x -= moveSpeed * delta;
-				break;
-			case RIGHT:
-				position.x += moveSpeed * delta;
+			
+			
+			for (Platform platform : level.getPlatforms()) {
+				System.out.println(jumpState + " " + position + " " + lastFramePosition + " " + velocity + landOnPlatform(platform));
+				if (landOnPlatform(platform)) {
+					jumpState = JumpState.GROUNDED;
+					position.y = platform.top + eyeHeight.y;
+					velocity.setZero();
+				}
 			}
-			
-			if (position.x < platform.left) {
-				position.x = platform.left;
-				facing = Facing.RIGHT;
-			} else if (position.x > platform.right) {
-				position.x = platform.right;
-				facing = Facing.LEFT;
-			}
-			
-			//makes the floating bob up and down
-			final float elapsedTime = Utils.secondsSince(startTime);
-			//multiplier of amplitude = 1 + sin(2 PI elapsedTime / period)
-			final float floatMultiplier = 1 + MathUtils.sin(MathUtils.PI2 * (elapsedTime / Constants.floatpBeetlePeriod));
-			position.y = platform.top + Constants.pBeetleEyeHeight.y + (Constants.floatpBeetleAmplitude * floatMultiplier);
-			
-			//end braindead patrol ai
 			
 			if (aggroRange.overlaps(target.hitBox)) {
 				if (target.position.x > position.x) {
+					move(delta, Facing.RIGHT);
 					//move to the right
 				} else if (target.position.x < position.x) {
 					//move to the left
+					move(delta, Facing.LEFT);
 				}
 				
+				//separate from move check above so enemy can move and jump at once
 				if (target.position.y > position.y) {
 					//spam jump
 				}
@@ -70,6 +65,16 @@ public class EnemyPBeetle extends Enemy {
 					position.y - Constants.aggroRadius.y / 4,
 					2 * Constants.aggroRadius.x,
 					1.5f * Constants.aggroRadius.y);
+			
+			//if falling, set jumpstate to falling
+			if (velocity.y < 0) {
+				jumpState = JumpState.FALLING;
+			}
+			
+			//kill enemy if it somehow drops off the map, should respawn on its assigned platform
+			if (position.y < Constants.killPlane) {
+				health = 0;
+			}
 			
 			if (health <= 0) {
 				level.dropItem(this);
@@ -100,4 +105,63 @@ public class EnemyPBeetle extends Enemy {
 		}
 	}
 
+	//later: add basic movement/collision/gravity things to entity class, player maybe can use as well
+	void move(float delta, Facing facing) {
+		if (facing == Facing.LEFT) {
+			//move left
+			position.x -= moveSpeed * delta;
+		} else {
+			//move right
+			position.x += moveSpeed * delta;
+		}
+	}
+	
+	void jump(Facing facing) {
+		
+	}
+
+	boolean landOnPlatform(Platform platform) {
+		boolean rightFootOnPlatform = false;
+		boolean leftFootOnPlatform = false;
+		boolean bothFeetOnPlatform = false;
+		
+		if ((lastFramePosition.y + eyeHeight.y >= platform.top + eyeHeight.y) && 
+				(position.y + eyeHeight.y < platform.top + eyeHeight.y)) {
+			float leftSideFoot = position.x - collisionRadius.x;
+			float rightSideFoot = position.x + collisionRadius.x;
+			rightFootOnPlatform = rightSideFoot > platform.left && rightSideFoot < platform.right;
+			leftFootOnPlatform = leftSideFoot > platform.left && leftSideFoot < platform.right;
+			bothFeetOnPlatform = leftSideFoot > platform.left && rightSideFoot > platform.right;
+			
+		}
+		return rightFootOnPlatform || leftFootOnPlatform || bothFeetOnPlatform;
+	}
+	
+	//placeholder
+	void simplePatrol(float delta) {
+		//current braindead patrol ai
+		switch (facing) {
+		case LEFT:
+			position.x -= moveSpeed * delta;
+			break;
+		case RIGHT:
+			position.x += moveSpeed * delta;
+		}
+		
+		if (position.x < platform.left) {
+			position.x = platform.left;
+			facing = Facing.RIGHT;
+		} else if (position.x > platform.right) {
+			position.x = platform.right;
+			facing = Facing.LEFT;
+		}
+		
+		//makes the floating bob up and down
+		final float elapsedTime = Utils.secondsSince(startTime);
+		//multiplier of amplitude = 1 + sin(2 PI elapsedTime / period)
+		final float floatMultiplier = 1 + MathUtils.sin(MathUtils.PI2 * (elapsedTime / Constants.floatpBeetlePeriod));
+		position.y = platform.top + Constants.pBeetleEyeHeight.y + (Constants.floatpBeetleAmplitude * floatMultiplier);
+
+	}
+	
 }

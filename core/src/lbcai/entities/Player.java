@@ -27,9 +27,10 @@ public class Player extends Entity {
 	public final static String className = Player.class.getName();
 	
 	//use to compare against current position and check if player should land or fall off platforms.
-	Vector2 lastFramePosition;
+	//Vector2 lastFramePosition;
 	Vector2 spawnLocation;
-	Vector2 velocity;
+	//Vector2 velocity;
+	
 	//see enum below
 	public Facing facing;
 	public JumpState jumpState;
@@ -493,7 +494,7 @@ public class Player extends Entity {
 			items.end();
 		}
 		
-		//Detect if landed on a platform. Must have this after vertical velocity and jump state setting code above, or else
+		//Detect if landed on a platform. Must have this after vertical velocity code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
 		//Also collision detection with sides of platform.
 		for (Platform platform : platforms) {
@@ -504,8 +505,7 @@ public class Player extends Entity {
 				}
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + Constants.playerEyeHeight;
-				velocity.x = 0;
-				velocity.y = 0;
+				velocity.setZero();
 				if (jumpCounter >= 2) {
 					jumpCounter = 0;
 				}
@@ -534,8 +534,7 @@ public class Player extends Entity {
 
 							if ((Utils.secondsSince(wallStartTime)) < Constants.wallTime) {
 								position.x = platform.right + Constants.playerStance / 2;
-								velocity.x = 0;
-								velocity.y = 0;
+								velocity.setZero();
 							} 
 							
 							if (Gdx.input.isKeyPressed(Keys.LEFT) && (Gdx.input.isKeyPressed(jumpKey))) {
@@ -557,8 +556,7 @@ public class Player extends Entity {
 
 							if ((Utils.secondsSince(wallStartTime)) < Constants.wallTime) {
 								position.x = platform.left - Constants.playerStance / 2;
-								velocity.x = 0;
-								velocity.y = 0;
+								velocity.setZero();
 							} 
 							
 							if (Gdx.input.isKeyPressed(Keys.RIGHT) && (Gdx.input.isKeyPressed(jumpKey))) {
@@ -802,8 +800,7 @@ public class Player extends Entity {
 				for (Platform platform : platforms) {
 					if (boostUpToPlatform(platform)) {
 						position.y = platform.top + Constants.playerEyeHeight;
-						velocity.x = 0;
-						velocity.y = 0;
+						velocity.setZero();
 					}
 				}
 			}

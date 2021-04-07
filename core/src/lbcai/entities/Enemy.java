@@ -17,6 +17,7 @@ import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
+import lbcai.util.Enums.JumpState;
 import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
@@ -32,6 +33,7 @@ public abstract class Enemy extends Entity {
 	HitState hitState;
 	RunState runState;
 	LockState lockState;
+	JumpState jumpState;
 	private long hitStartTime;
 	Player target;
 	
@@ -65,8 +67,13 @@ public abstract class Enemy extends Entity {
 		hitState = HitState.NOHIT;
 		runState = RunState.IDLE;
 		lockState = LockState.FREE;
+		jumpState = JumpState.GROUNDED;
+		
 		//spawn on a random spot on the surface of this platform
 		position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+		lastFramePosition = position.cpy();
+		velocity = new Vector2();
+		velocity.setZero();
 		facing = Facing.RIGHT;
 		startTime = TimeUtils.nanoTime();
 		
