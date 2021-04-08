@@ -8,7 +8,9 @@ public class Constants {
 	
 	//world
 	public static final Color BackgroundColor = Color.SKY;
-	public static final int WorldSize = 512;
+	public static final int WorldSize = 800; //changes amount visible in window, seems to become pixelly above 820-840 (why?)
+	//i think that it has something to do with resolution. need to find appropriate worldSize value for each window size allowed
+	//used 512 for small window
 	public static final float worldGravity = 2000;
 	public static final float killPlane = -500;
 	public static final float cameraMoveSpeed = 512;

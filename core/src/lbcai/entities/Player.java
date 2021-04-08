@@ -31,23 +31,12 @@ public class Player extends Entity {
 	Vector2 spawnLocation;
 	//Vector2 velocity;
 	
-	//see enum below
-	public Facing facing;
-	public JumpState jumpState;
-	public RunState runState;
-	public HitState hitState;
-	LockState lockState;
 	//a long is like a 64-bit int. a BIG int.
-	private long jumpStartTime;
-	private long runStartTime;
-	private long idleStartTime;
 	private long wallStartTime;
 	private long dodgeStartTime;
 	private long squatStartTime;
 	private long boostStartTime;
 	private long landStartTime;
-
-	public int jumpCounter = 0;
 
 	long timeSinceHit;
 	private int idleTransitionCounter = 0;
@@ -848,7 +837,8 @@ public class Player extends Entity {
 	 * 
 	 * @param delta time in seconds, avoids framerate issues
 	 */
-	private void moveLeft(float delta) {
+	@Override
+	void moveLeft(float delta) {
 		//At the beginning of movement, if we are running, save the time as the run start time.
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
@@ -868,7 +858,8 @@ public class Player extends Entity {
 		
 	}
 	
-	private void moveRight(float delta) {
+	@Override
+	void moveRight(float delta) {
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
 			runStartTime = TimeUtils.nanoTime();
 		}
@@ -886,34 +877,19 @@ public class Player extends Entity {
 		
 	}
 	
-	private void startJump() {
+	@Override
+	void startJump() {
 		jumpState = JumpState.JUMPING;
 		//Get current time (of starting jump).
 		jumpStartTime = TimeUtils.nanoTime();
 		jumpCounter += 1;
-		continueJump();
+		if (jumpState == JumpState.JUMPING) {
+			velocity.y = Constants.jumpSpeed;	
+		}
 		
 	}
 	
-	//This is added to allow player to doublejump under certain conditions (falling, and not exceeding 2 jumps before touching
-	//ground again).
-	private void continueJump() {
-		if (jumpState == JumpState.JUMPING) {
-			//If we are still allowed to be jumping up because max jump hasn't been reached, we continue to go up by giving a
-			//boost to the player's velocity. If we aren't allowed, we just go to falling by ending the jump. The velocity will
-			//be affected by gravity in the update method and cause player to fall.
-			velocity.y = Constants.jumpSpeed;	
-		}
-	}
-	
-	private void endJump() {
-		if (jumpState == JumpState.JUMPING) {
-			jumpState = JumpState.FALLING;
-		}
-	}
-	
-	
-	
+
 	private void flinch(Facing facing) {
 		velocity.y = Constants.knockbackSpeed.y;
 		if (facing == Facing.LEFT) {

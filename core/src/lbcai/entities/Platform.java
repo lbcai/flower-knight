@@ -16,6 +16,7 @@ public class Platform {
 	float right;
 	float top;
 	float bottom;
+	float centerX;
 
 	//used to link enemies to platforms
 	String id;
@@ -33,6 +34,7 @@ public class Platform {
 		this.bottom = top - height;
 		this.left = left;
 		this.right = left + width;
+		centerX = left + (width / 2);
 
 	}
 	
@@ -57,6 +59,10 @@ public class Platform {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public float getCenterX() {
+		return centerX;
 	}
 	
 }

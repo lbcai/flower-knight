@@ -30,30 +30,60 @@ public class EnemyPBeetle extends Enemy {
 			
 			
 			for (Platform platform : level.getPlatforms()) {
-				System.out.println(jumpState + " " + position + " " + lastFramePosition + " " + velocity + landOnPlatform(platform));
 				if (landOnPlatform(platform)) {
 					jumpState = JumpState.GROUNDED;
+					jumpCounter = 0;
 					position.y = platform.top + eyeHeight.y;
 					velocity.setZero();
 				}
 			}
 			
 			if (aggroRange.overlaps(target.hitBox)) {
-				if (target.position.x > position.x) {
-					move(delta, Facing.RIGHT);
-					//move to the right
-				} else if (target.position.x < position.x) {
-					//move to the left
-					move(delta, Facing.LEFT);
+				if (!(target.position.x + (target.hitBox.width / 2) > position.x && 
+						target.position.x - (target.hitBox.width / 2) < position.x)) {
+					if (target.position.x > position.x) {
+						//move to the right if player is to enemy's right, but if enemy position is in player's hitbox x value, 
+						//don't. this prevents enemy from vibrating back and forth on top of player's position
+						moveRight(delta);
+					} else if (target.position.x < position.x) {
+						//same as above, but left
+						moveLeft(delta);
+					}
 				}
 				
+				
 				//separate from move check above so enemy can move and jump at once
-				if (target.position.y > position.y) {
+				if (target.hitBox.y > position.y) {
 					//spam jump
+					startJump();
+					
 				}
 				//if target is below the monster do not do anything special.
+			} else {
+				//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
+				//idle/wander ai. avoid having holes in the map with this method
+				if (!(platform.left < position.x && position.x < platform.right)) {
+					float homePlatformCenter = platform.getCenterX();
+					if (position.x > homePlatformCenter) {
+						moveLeft(delta);
+					} else if (position.x < homePlatformCenter) {
+						moveRight(delta);
+					}
+				} else if (position.y != platform.top + eyeHeight.y) {
+					if (platform.top < position.y) {
+						//downjump back to home platform. placeholder
+						position.lerp(new Vector2(position.x, platform.top + eyeHeight.y + 1), 0.8f);
+					} else if (platform.top > position.y) {
+						//special launch jump to return to platform and ignore any other platforms.
+						//use a parabola to calculate arc
+						position.lerp(new Vector2(position.x, platform.top + eyeHeight.y + 1), 0.8f);
+					}
+				} else {
+					//wander
+				}
+					
 			}
-			
+
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,
 					position.y - collisionRadius.y,

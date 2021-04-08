@@ -24,14 +24,10 @@ import lbcai.util.Enums.RunState;
 public abstract class Enemy extends Entity {
 	//extend later when adding more enemy types
 	final Platform platform;
-	Facing facing;
+	
 	final long startTime;
 	Vector2 collisionRadius;
 	public int health;
-	HitState hitState;
-	RunState runState;
-	LockState lockState;
-	JumpState jumpState;
 	private long hitStartTime;
 	Player target;
 	

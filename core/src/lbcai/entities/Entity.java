@@ -8,10 +8,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.flowerknight.Level;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
+import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.LockState;
+import lbcai.util.Enums.RunState;
 
 /**
  * 
@@ -35,8 +40,23 @@ public abstract class Entity {
 	float alpha = 255f/255f;
 	float moveSpeed;
 	Level level;
+	
 	//public so level can determine where to draw effects in some cases
 	public Vector2 eyeHeight;
+	public Facing facing;
+	public HitState hitState;
+	public RunState runState;
+	public int jumpCounter = 0;
+	
+	LockState lockState;
+	JumpState jumpState;
+	
+	long jumpStartTime;
+	long runStartTime;
+	long idleStartTime;
+	
+	
+	
 
 	public void debugRender(ShapeRenderer shape) {
 
@@ -44,17 +64,49 @@ public abstract class Entity {
 
 	}
 	
-	void move(float delta, Facing facing) {
-		if (facing == Facing.LEFT) {
-			//move left
-			position.x -= moveSpeed * delta;
+	void moveLeft(float delta) {
+		//At the beginning of movement, if we are running, save the time as the run start time.
+		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
+			runStartTime = TimeUtils.nanoTime();
+		}
+
+		facing = Facing.LEFT;
+		
+		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
+			position.x -= delta * 2;
 		} else {
-			//move right
-			position.x += moveSpeed * delta;
+			runState = RunState.RUN;
+			position.x -= delta * moveSpeed;
+		}
+		
+	}
+	
+	void moveRight(float delta) {
+		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
+			runStartTime = TimeUtils.nanoTime();
+		}
+
+		facing = Facing.RIGHT;
+		
+		if (hitState == HitState.IFRAME && jumpState != JumpState.GROUNDED) {
+			position.x += delta * 2;
+		} else {
+			runState = RunState.RUN;
+			position.x += delta * moveSpeed;
 		}
 	}
 	
-	void jump(Facing facing) {
+	void startJump() {
+		//if not already jumping or in the air, allow the jump.
+		if (jumpState == JumpState.GROUNDED) {
+			jumpState = JumpState.JUMPING;
+			jumpStartTime = TimeUtils.nanoTime();
+		}
+		
+		if (jumpState == JumpState.JUMPING && jumpCounter == 0) {
+			velocity.y = Constants.jumpSpeed;
+			jumpCounter += 1;
+		}
 		
 	}
 	
