@@ -113,7 +113,8 @@ public class Constants {
 	public static final int pBeetleDamage = 10;
 	public static final int pBeetleHP = 100;
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
-	public static final float enemyMoveSpeed = 500;
+	public static final float enemyMoveSpeed = 166f;
+	public static final float enemyMoveSpeedAggro = 500f;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final Vector2 pBeetleCollisionRadius = new Vector2(50, 50);

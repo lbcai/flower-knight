@@ -54,6 +54,7 @@ public abstract class Entity {
 	long jumpStartTime;
 	long runStartTime;
 	long idleStartTime;
+	long timeSinceHit;
 	
 	
 	
@@ -108,6 +109,13 @@ public abstract class Entity {
 			jumpCounter += 1;
 		}
 		
+	}
+	
+	
+	void downJump() {
+		if (jumpState == JumpState.GROUNDED) {
+			position.y -= 10;
+		}
 	}
 	
 	boolean landOnPlatform(Platform platform) {

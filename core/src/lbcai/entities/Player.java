@@ -38,7 +38,6 @@ public class Player extends Entity {
 	private long boostStartTime;
 	private long landStartTime;
 
-	long timeSinceHit;
 	private int idleTransitionCounter = 0;
 	private int flashCounter = 0;
 	private long idleTransStartTime;

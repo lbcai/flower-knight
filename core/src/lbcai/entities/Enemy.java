@@ -28,7 +28,6 @@ public abstract class Enemy extends Entity {
 	final long startTime;
 	Vector2 collisionRadius;
 	public int health;
-	private long hitStartTime;
 	Player target;
 	
 	//is enemy in the death state?
@@ -41,10 +40,18 @@ public abstract class Enemy extends Entity {
 
 	//placeholder drop list for basic enemy type: 
 	List<Integer> dropTable;
+	List<Integer> wanderStateRandomizer;
+	int wanderState;
+	long wanderTime;
 	
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
+		
+		//start enemy in idle position (0)
+		wanderState = 0;
+		wanderTime = 0;
+		
 		target = level.getPlayer();
 		touchDmg = true;
 		inactive = false;
@@ -87,6 +94,9 @@ public abstract class Enemy extends Entity {
 		
 		//set drop table here so different enemy classes can have their own
 		dropTable = Arrays.asList(0, 1);
+		
+		//make a list of possible states for enemy to cycle between when not chasing player
+		wanderStateRandomizer = Arrays.asList(0, 1, 2);
 		
 	}
 
@@ -170,7 +180,7 @@ public abstract class Enemy extends Entity {
 				
 				if (hitState == HitState.IFRAME) {
 					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-					if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+					if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
 						hitState = HitState.NOHIT;
 					}
 				}
@@ -190,7 +200,7 @@ public abstract class Enemy extends Entity {
 				
 				if (hitState == HitState.IFRAME) {
 					//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-					if (Utils.secondsSince(hitStartTime) > Constants.enemyFlinchTime) {
+					if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
 						hitState = HitState.NOHIT;
 					}
 				}
@@ -228,7 +238,7 @@ public abstract class Enemy extends Entity {
 		health -= damage;
 		// using iframe to denote flinch animation but no actual iframe for mobs
 		hitState = HitState.IFRAME;
-		hitStartTime = TimeUtils.nanoTime();
+		timeSinceHit = TimeUtils.nanoTime();
 	}
 	
 	public void doesDamage(Player player, Facing facing) {

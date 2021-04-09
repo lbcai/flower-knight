@@ -58,7 +58,7 @@ Here is an additional gif showcasing recent additions to the game with more plac
 - [ ] Create platform tileset & background images
 - [ ] Create custom platform class for nicer looking platforms
 - [ ] Add slanted ground/platforms
-- [ ] Add breakable background objects
+- [x] Add breakable background objects
 - [ ] Create basic player attack animations
 - [ ] Implement player attack combos
 - [ ] Create 2 basic enemy types and animations
@@ -69,7 +69,6 @@ Here is an additional gif showcasing recent additions to the game with more plac
 - [ ] Create UI assets
 - [ ] Implement UI functionality
 - [x] Add debug rendering
-- [ ] Allow player to reset keybinds through UI
+- [ ] Allow player to reset keybinds & resize window through UI
 - [ ] Add "berserk mode"
 - [ ] Add fullscreen attack "ultimate"
-- [ ] Replace maps/portals with seamless loading
