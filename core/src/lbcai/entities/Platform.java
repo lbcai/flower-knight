@@ -17,6 +17,8 @@ public class Platform {
 	float top;
 	float bottom;
 	float centerX;
+	float width;
+	float height;
 
 	//used to link enemies to platforms
 	String id;
@@ -35,6 +37,8 @@ public class Platform {
 		this.left = left;
 		this.right = left + width;
 		centerX = left + (width / 2);
+		this.width = width;
+		this.height = height;
 
 	}
 	
@@ -44,8 +48,6 @@ public class Platform {
 	 * @param batch is a disposable object that renders textures on quads, need for nine patch.
 	 */
 	public void render(SpriteBatch batch) {
-		float width = right - left;
-		float height = top - bottom;
 		//position x, position y, width, height
 		//no documentation. seems to slide platform 1 pixel to left and 1 down, add 2 to width and height
 		//this is on top of what was defined for the platform when it was created, seems like these values affect
@@ -60,9 +62,7 @@ public class Platform {
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	
-	public float getCenterX() {
-		return centerX;
-	}
 	
 }

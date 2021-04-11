@@ -22,7 +22,10 @@ import lbcai.util.Enums.Facing;
 
 public class BreakableObject extends Enemy {
 	
-	public BreakableObject(Platform platform, Level level, Facing facing) {
+	//takes position value that is a % of current platform: so new Vector2(0.5, 0) spawns in the middle of the platform & on
+	//the surface (not floating above)
+	public BreakableObject(Platform platform, Level level, Facing facing, Vector2 position) {
+
 		super(platform, level);
 		touchDmg = false;
 		this.facing = facing;
@@ -33,19 +36,18 @@ public class BreakableObject extends Enemy {
 		maxHealth = Constants.breakableObjHealth;
 		health = maxHealth;
 		eyeHeight = Constants.itemCenter;
-		//spawn randomly on surface of platform
-		position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+		
+		//spawn on platform using the proportional arguments 
+		this.position.y = platform.top + position.y + eyeHeight.y;
+		this.position.x = platform.left + (position.x * platform.width);
+		
 		//placeholder using item sprite
 		hitBox =  new Rectangle(
-				position.x - Constants.itemCenter.x,
-				position.y - Constants.itemCenter.y,
+				this.position.x - Constants.itemCenter.x,
+				this.position.y - Constants.itemCenter.y,
 				Constants.itemCenter.x * 2,
 				Constants.itemCenter.y * 2);
-		aggroRange = new Rectangle(
-				position.x,
-				position.y,
-				Constants.itemCenter.x,
-				Constants.itemCenter.y);
+		aggroRange = new Rectangle();
 		
 	}
 	
@@ -70,9 +72,6 @@ public class BreakableObject extends Enemy {
 			}
 			//respawn if time is up
 			else if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
-				if (alpha == 0f/255f) {
-					position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
-				}
 				alpha += 15f/255f;
 				if (alpha >= 255f/255f) {
 					health = maxHealth;
@@ -111,10 +110,6 @@ public class BreakableObject extends Enemy {
 				false);
 		batch.setColor(1, 1, 1, 1);
 	}
-	
-	public boolean isExpired() {
-		//do i want objects to respawn?
-		return false;
-	}
+
 	
 }

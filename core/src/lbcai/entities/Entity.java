@@ -73,9 +73,7 @@ public abstract class Entity {
 
 		facing = Facing.LEFT;
 		
-		if (jumpState != JumpState.GROUNDED) {
-			position.x -= delta * (moveSpeed / 2);
-		} else {
+		if (jumpState == JumpState.GROUNDED) {
 			runState = RunState.RUN;
 			position.x -= delta * moveSpeed;
 		}
@@ -89,9 +87,7 @@ public abstract class Entity {
 
 		facing = Facing.RIGHT;
 		
-		if (jumpState != JumpState.GROUNDED) {
-			position.x += delta * (moveSpeed / 2);
-		} else {
+		if (jumpState == JumpState.GROUNDED) {
 			runState = RunState.RUN;
 			position.x += delta * moveSpeed;
 		}
@@ -106,6 +102,13 @@ public abstract class Entity {
 		
 		if (jumpState == JumpState.JUMPING && jumpCounter == 0) {
 			velocity.y = Constants.jumpSpeed;
+			
+			if (facing == Facing.RIGHT) {
+				velocity.x = moveSpeed / 2;
+			} else {
+				velocity.x = -moveSpeed / 2;
+			}
+			
 			jumpCounter += 1;
 		}
 		

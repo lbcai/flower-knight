@@ -97,7 +97,7 @@ public class EnemyPBeetle extends Enemy {
 				//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
 				//idle/wander ai. avoid having holes in the map with this method
 				if (!(platform.left < position.x && position.x < platform.right)) {
-					float homePlatformCenter = platform.getCenterX();
+					float homePlatformCenter = platform.centerX;
 					if (position.x > homePlatformCenter) {
 						moveLeft(delta);
 					} else if (position.x < homePlatformCenter) {
@@ -125,7 +125,7 @@ public class EnemyPBeetle extends Enemy {
 					//wander on home platform
 					
 					//1% chance every update for enemy to change behavior
-					if (MathUtils.random() < 0.01) {
+					if (MathUtils.random() < 0.02) {
 						wanderState = (int) (MathUtils.random() * wanderStateRandomizer.size());
 					}
 					

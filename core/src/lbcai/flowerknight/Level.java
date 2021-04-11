@@ -202,8 +202,8 @@ public class Level {
 		platforms.add(new Platform(800, 0, 800, 50));
 		Platform longPlatform = new Platform(0, -100, 10000, 50);
 		platforms.add(longPlatform);
-		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT));
-		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT));
+		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
+		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
 		
 		
 		//Add player to the level. Add a start position for the level as input.
