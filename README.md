@@ -31,6 +31,29 @@ Here is an additional gif showcasing recent additions to the game with more plac
   <img src="GithubImages/03_23_21_battle.gif?raw=true" alt="Graphical effects during combat include flying numbers.">
 </p>
 
+## 04/10/21 Graphical Plan Update
+Here is a draft of the visual design goal for this project meant to help keep the project on track during development. It is a work in progress and will be updated with UI elements. Other unique areas in the game will have different design goals.
+<br>
+<p align="center" width="100%">
+  <img src="GithubImages/04_10_21_mockup.png?raw=true" alt="Visual design goal for the project.">
+</p>
+
+Here is an animation showcasing the element layering required to achieve the above effect:
+* 1st layer: Actual grass/dirt platform 
+* 2nd layer: Waving grass/bushes that will move when player moves over them and produce flying particles
+* 3rd layer: Player, enemies, interactables (will require shaders)
+* 4th layer: Background grass that the player actually stands on
+* 5th layer: Background interactables such as portals to other maps (represented here by a gate)
+* 6th layer: Background grass/bushes that will not move when player moves near them 
+* 7th layer: Background image for the zone that tracks with camera movement (may be created in layers for mild parallax effect)
+
+Elements associated with a platform lower in y value should be rendered above higher y value platform elements, if possible.
+<br>
+<p align="center" width="100%">
+  <img src="GithubImages/04_10_21_layering.gif?raw=true" alt="Visual representation of element layering required to achieve design goal.">
+</p>
+
+
 ## TODO
 ### Tutorial Progress
 - [x] Implement player standing, running, and jumping
