@@ -48,6 +48,11 @@ public class GameplayScreen extends ScreenAdapter {
 	private ChaseCam chaseCam;
 	
 	/**
+	 * Add a HUD.
+	 */
+	private UI ui;
+	
+	/**
 	 * show() is called when this screen becomes the current screen for a game. Basically the initialize method.
 	 */
 	@Override
@@ -62,6 +67,7 @@ public class GameplayScreen extends ScreenAdapter {
 		shape = new ShapeRenderer();
 		
 		chaseCam = new ChaseCam(viewport.getCamera(), level.player);
+		ui = new UI(level);
 		
 		
 	}
@@ -97,6 +103,8 @@ public class GameplayScreen extends ScreenAdapter {
 		batch.begin();
 		//Render the level! Renders everything in the level.
 		level.render(batch);
+		//Render the UI
+		ui.render(batch);
 		batch.end();
 		
 		//debug renderer for rendering hitboxes
@@ -112,6 +120,7 @@ public class GameplayScreen extends ScreenAdapter {
 			shape.setProjectionMatrix(viewport.getCamera().combined);
 			shape.begin(ShapeType.Line);
 			level.debugRender(shape);
+			ui.debugRender(shape, batch);
 			shape.end();
 		}
 		
@@ -123,6 +132,7 @@ public class GameplayScreen extends ScreenAdapter {
 		 * Use ExtendViewport to adjust the things we see if the window is resized. Center camera set to true.
 		 */
 		viewport.update(width, height, true);
+		ui.viewport.update(width, height, true);
 	}
 	
 	@Override

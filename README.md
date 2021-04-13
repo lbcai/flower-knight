@@ -38,8 +38,9 @@ Here is a draft of the visual design goal for this project meant to help keep th
   <img src="GithubImages/04_10_21_mockup.png?raw=true" alt="Visual design goal for the project.">
 </p>
 
-Here is an animation showcasing the element layering required to achieve the above effect:
-* 1st layer: Actual grass/dirt platform 
+Here is an animation showcasing the element layering required to achieve the above effect (0th layer not included in animation):
+* 0th layer: Foreground decorations (only for the "ground" layer, or the lowest y value platforms in the map)
+* 1st layer: Actual grass/dirt platform (tiled)
 * 2nd layer: Waving grass/bushes that will move when player moves over them and produce flying particles
 * 3rd layer: Player, enemies, interactables (will require shaders)
 * 4th layer: Background grass that the player actually stands on
@@ -71,6 +72,8 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [x] Add lootable "powerup" items
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
+- [ ] Add UI/HUD
+
 ### Custom Features
 - [ ] Create a graphics mockup for maintaining cohesive design
 - [x] Create basic player idle, run, and jump animations
@@ -89,8 +92,7 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, item effects, etc.
 - [ ] Add enemy aggression, random motion, etc. 
 - [ ] Create basic player death, knockback animations
-- [ ] Create UI assets
-- [ ] Implement UI functionality
+- [ ] Create UI/HUD assets and customize UI functionality
 - [x] Add debug rendering
 - [ ] Allow player to reset keybinds & resize window through UI
 - [ ] Add "berserk mode"

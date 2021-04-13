@@ -17,6 +17,9 @@ public class Constants {
 	//fix later
 	public static final String textureAtlas = "playerSpritesheet.atlas";
 	
+	//ui elements
+	public static final Vector2 hpOrbDimensions = new Vector2(100, 100);
+	
 	
 	//player
 	public static final String idleRight = "Idleright";

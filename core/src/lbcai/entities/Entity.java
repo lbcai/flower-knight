@@ -35,7 +35,8 @@ public abstract class Entity {
 	TextureRegion region;
 	int damage;
 	int range;
-	int health;
+	//public so ui elements can display health values
+	public int health;
 	int maxHealth;
 	float alpha = 255f/255f;
 	float moveSpeed;
