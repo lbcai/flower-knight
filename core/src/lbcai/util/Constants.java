@@ -19,6 +19,8 @@ public class Constants {
 	
 	//ui elements
 	public static final Vector2 hpOrbDimensions = new Vector2(100, 100);
+	public static final String healthOrb = "testorb";
+	public static final int margin = 40;
 	
 	
 	//player

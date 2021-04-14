@@ -45,6 +45,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public BulletAssets bulletAssets;
 	public HitAssets hitAssets;
 	public DmgNumAssets dmgNumAssets;
+	public UIAssets UIassets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -80,6 +81,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		bulletAssets = new BulletAssets(atlas);
 		hitAssets = new HitAssets(atlas);
 		dmgNumAssets = new DmgNumAssets(atlas);
+		UIassets = new UIAssets(atlas);
 	}
 	
 	/**
@@ -612,6 +614,16 @@ public class Assets implements Disposable, AssetErrorListener {
 			dmg7 = atlas.findRegion(Constants.dmg, 7);
 			dmg8 = atlas.findRegion(Constants.dmg, 8);
 			dmg9 = atlas.findRegion(Constants.dmg, 9);
+		}
+		
+	}
+	
+	public class UIAssets {
+		
+		public final AtlasRegion orb;
+		
+		public UIAssets(TextureAtlas atlas) {
+			orb = atlas.findRegion(Constants.healthOrb);
 		}
 		
 	}
