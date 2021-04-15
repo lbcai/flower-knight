@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import lbcai.entities.Player;
 import lbcai.util.Assets;
@@ -23,6 +24,7 @@ public class UI {
 	public final Viewport viewport;
 	final BitmapFont font;
 	private Player player;
+	private Vector3 mousePosition;
 	
 	//graphics
 	private TextureRegion orb = Assets.instance.UIassets.orb;
@@ -31,14 +33,21 @@ public class UI {
 	private Rectangle healthToggle;
 	private Vector2 healthToggleCenter;
 	private GlyphLayout healthToggleLayout; //for holding the text to be displayed and easy centering
+	private int healthToggleState;
 	
 	public UI(Level level) {
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
+		
+		//health orb
 		font = new BitmapFont();
-		player = level.player;
+		font.getData().setScale(2f);
 		healthToggle = new Rectangle();
 		healthToggleCenter = new Vector2();
 		healthToggleLayout = new GlyphLayout();
+		healthToggleState = 0;
+		mousePosition = new Vector3();
+		
+		player = level.player;
 		
 	}
 	
@@ -79,11 +88,40 @@ public class UI {
 				false, 
 				false);
 		
+		//unproject to make the click coordinates "click on the ui panel" and not on something in world
+		//the Vector3 is only used to allow us to use unproject, the Z value doesn't matter
+		mousePosition = viewport.getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+
 		//draw hp in orb if applicable
-		font.draw(batch, 
-				healthToggleLayout, 
-				healthToggle.x, 
-				healthToggleCenter.y + (healthToggleLayout.height / 2));
+		if (healthToggleState == 0) {
+			if (healthToggle.contains(mousePosition.x, mousePosition.y)) {
+				//if hovering orb, draw hp in orb
+				font.draw(batch, 
+						healthToggleLayout, 
+						healthToggle.x, 
+						healthToggleCenter.y + (healthToggleLayout.height / 2));
+			}
+			//default: do not draw hp in orb
+		} else if (healthToggleState == 1) {
+			//leave health displayed on orb (happens after you click the orb)
+			font.draw(batch, 
+					healthToggleLayout, 
+					healthToggle.x, 
+					healthToggleCenter.y + (healthToggleLayout.height / 2));
+		}
+
+		
+		if (Gdx.input.justTouched()) {
+			//if clicked on the health orb, then change the display setting:
+			if (healthToggle.contains(mousePosition.x, mousePosition.y)) {
+				if (healthToggleState == 0) {
+					healthToggleState = 1;
+				} else if (healthToggleState == 1) {
+					healthToggleState = 0;
+				}
+			}
+		}
+		
 		
 	}
 	
