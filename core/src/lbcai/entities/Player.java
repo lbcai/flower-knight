@@ -31,6 +31,9 @@ public class Player extends Entity {
 	Vector2 spawnLocation;
 	//Vector2 velocity;
 	
+	//public so UI can view and display appropriate number of lives
+	public int lives;
+	
 	//a long is like a 64-bit int. a BIG int.
 	private long wallStartTime;
 	private long dodgeStartTime;
@@ -49,6 +52,7 @@ public class Player extends Entity {
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
 	
+
 	//for allowing player to rebind controls
 	private int attackKey = Keys.X;
 	private int jumpKey = Keys.ALT_LEFT;
@@ -90,6 +94,7 @@ public class Player extends Entity {
 		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
 		health = Constants.baseHealth;
+		lives = 3;
 		
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);

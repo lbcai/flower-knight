@@ -3,6 +3,10 @@ package lbcai.flowerknight;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,13 +31,16 @@ public class UI {
 	private Vector3 mousePosition;
 	
 	//graphics
-	private TextureRegion orb = Assets.instance.UIassets.orb;
+	private List<AtlasRegion> UIAssetList;
+	private List<AtlasRegion> petalList;
 	
 	//the rectangle where the player can click if they would like to see their health number (or they can just hover to glimpse)
 	private Rectangle healthToggle;
 	private Vector2 healthToggleCenter;
 	private GlyphLayout healthToggleLayout; //for holding the text to be displayed and easy centering
 	private int healthToggleState;
+	private int livesCounter;
+	
 	
 	public UI(Level level) {
 		viewport = new ExtendViewport(Constants.WorldSize, Constants.WorldSize);
@@ -48,6 +55,15 @@ public class UI {
 		mousePosition = new Vector3();
 		
 		player = level.player;
+		livesCounter = player.lives;
+		
+		UIAssetList = Arrays.asList(Assets.instance.UIassets.orb, 
+				Assets.instance.UIassets.livesFlower1, 
+				Assets.instance.UIassets.livesFlower2,
+				Assets.instance.UIassets.livesFlower3,
+				Assets.instance.UIassets.livesFlower4,
+				Assets.instance.UIassets.livesFlower5,
+				Assets.instance.UIassets.livesFlowerCover);
 		
 	}
 	
@@ -71,22 +87,26 @@ public class UI {
 		
 		
 		//test placeholder orb graphic
-		batch.draw(orb.getTexture(), 
-				healthToggleCenter.x - 75, 
-				healthToggleCenter.y - 192, 
-				0, 
-				0, 
-				orb.getRegionWidth(), 
-				orb.getRegionHeight(), 
-				1, 
-				1, 
-				0, 
-				orb.getRegionX(), 
-				orb.getRegionY(), 
-				orb.getRegionWidth(), 
-				orb.getRegionHeight(), 
-				false, 
-				false);
+		for (AtlasRegion item : UIAssetList) {
+
+			batch.draw(item.getTexture(), 
+					healthToggleCenter.x - 75, 
+					healthToggleCenter.y - 192, 
+					0, 
+					0, 
+					item.getRegionWidth(), 
+					item.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					item.getRegionX(), 
+					item.getRegionY(), 
+					item.getRegionWidth(), 
+					item.getRegionHeight(), 
+					false, 
+					false);
+		}
+
 		
 		//unproject to make the click coordinates "click on the ui panel" and not on something in world
 		//the Vector3 is only used to allow us to use unproject, the Z value doesn't matter

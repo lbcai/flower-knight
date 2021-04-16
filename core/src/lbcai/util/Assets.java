@@ -621,9 +621,21 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class UIAssets {
 		
 		public final AtlasRegion orb;
+		public final AtlasRegion livesFlowerCover;
+		public final AtlasRegion livesFlower1;
+		public final AtlasRegion livesFlower2;
+		public final AtlasRegion livesFlower3;
+		public final AtlasRegion livesFlower4;
+		public final AtlasRegion livesFlower5;
 		
 		public UIAssets(TextureAtlas atlas) {
 			orb = atlas.findRegion(Constants.healthOrb);
+			livesFlowerCover = atlas.findRegion(Constants.livesFlowerCover);
+			livesFlower1 = atlas.findRegion(Constants.livesFlowerPetal, 1);
+			livesFlower2 = atlas.findRegion(Constants.livesFlowerPetal, 2);
+			livesFlower3 = atlas.findRegion(Constants.livesFlowerPetal, 3);
+			livesFlower4 = atlas.findRegion(Constants.livesFlowerPetal, 4);
+			livesFlower5 = atlas.findRegion(Constants.livesFlowerPetal, 5);
 		}
 		
 	}
