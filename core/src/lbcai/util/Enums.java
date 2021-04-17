@@ -25,16 +25,19 @@ public class Enums {
 		public enum HitState {
 			NOHIT,
 			IFRAME,
-			DODGE
+			DODGE,
+			DEATH
 		}
 		
 		public enum LockState {
 			FREE,
+			//for being hit normally
 			LOCK,
 			DODGE,
 			ATTACK1LOCK,
 			BOOSTLOCK,
-			ATTACKJUMP
+			ATTACKJUMP,
+			DEATH
 		}
 		
 

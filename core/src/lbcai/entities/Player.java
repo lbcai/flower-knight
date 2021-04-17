@@ -40,6 +40,7 @@ public class Player extends Entity {
 	private long squatStartTime;
 	private long boostStartTime;
 	private long landStartTime;
+	private long deathStartTime;
 
 	private int idleTransitionCounter = 0;
 	private int flashCounter = 0;
@@ -70,12 +71,15 @@ public class Player extends Entity {
 		position = new Vector2();
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();
+		hitBox = new Rectangle();
+		targetPosition = new Vector2();
 		//set max health here so if player dies and respawns they can keep max health buffs, same with damage buffs
 		maxHealth = Constants.baseHealth;
 		damage = Constants.playerBaseDamage;
 		range = Constants.playerBaseRange;
 		eyeHeight = Constants.playerHead;
 		moveSpeed = Constants.moveSpeed;
+		lives = 3;
 		init();
 		
 	}
@@ -94,7 +98,6 @@ public class Player extends Entity {
 		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
 		health = Constants.baseHealth;
-		lives = 3;
 		
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
@@ -251,6 +254,15 @@ public class Player extends Entity {
 				}
 			}
 			
+			if (lockState == LockState.DEATH) {
+				float deathTime = Utils.secondsSince(deathStartTime);
+				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(deathTime);
+				if (Assets.instance.playerAssets.boostToPlatRightAnim.isAnimationFinished(deathTime)) {
+					init();
+					lives -= 1;
+				}
+			}
+			
 		} else if (facing == Facing.LEFT) {
 			if (jumpState == JumpState.GROUNDED) {
 				if (runState == RunState.IDLE) {
@@ -386,6 +398,15 @@ public class Player extends Entity {
 				}
 			}
 			
+			if (lockState == LockState.DEATH) {
+				float deathTime = Utils.secondsSince(deathStartTime);
+				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(deathTime);
+				if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(deathTime)) {
+					init();
+					lives -= 1;
+				}
+			}
+			
 		}
 
 		//Actually draw the sprites.
@@ -437,13 +458,13 @@ public class Player extends Entity {
 		if ((runState == RunState.SQUAT || boostCounter == 1) && jumpState != JumpState.FALLING) {
 
 			if (facing == Facing.RIGHT) {
-				hitBox = new Rectangle(
+				hitBox.set(
 						position.x - Constants.playerStance / 2,
 						position.y - eyeHeight.y, 
 						Constants.playerStance + 50,
 						Constants.playerHeight - 70);
 			} else {
-				hitBox = new Rectangle(
+				hitBox.set(
 						position.x - Constants.playerStance - 20,
 						position.y - eyeHeight.y, 
 						Constants.playerStance + 50,
@@ -451,20 +472,20 @@ public class Player extends Entity {
 			}
 
 		} else if (jumpState == JumpState.WALL) {
-			hitBox = new Rectangle(
+			hitBox.set(
 					position.x - Constants.playerStance / 2,
 					position.y - eyeHeight.y + 10, 
 					Constants.playerStance,
 					Constants.playerHeight);
 		} else {
 			if (facing == Facing.LEFT) {
-				hitBox = new Rectangle(
+				hitBox.set(
 						position.x - Constants.playerStance / 2,
 						position.y - eyeHeight.y, 
 						Constants.playerStance,
 						Constants.playerHeight - 20);
 			} else {
-				hitBox = new Rectangle(
+				hitBox.set(
 						position.x - Constants.playerStance / 2 + 10,
 						position.y - eyeHeight.y, 
 						Constants.playerStance,
@@ -705,15 +726,15 @@ public class Player extends Entity {
 					}
 		
 					if (facing == Facing.LEFT) {
-						targetPosition = new Vector2(position.x - 25, position.y);
-						attackHitBox = new Rectangle(
+						targetPosition.set(position.x - 25, position.y);
+						attackHitBox.set(
 							position.x - (Constants.playerStance) - Constants.attackRange1.x,
 							position.y - eyeHeight.y,
 							Constants.attackRange1.x,
 							Constants.attackRange1.y);
 					} else {
-						targetPosition = new Vector2(position.x + 25, position.y);
-						attackHitBox = new Rectangle(
+						targetPosition.set(position.x + 25, position.y);
+						attackHitBox.set(
 							position.x + (Constants.playerStance) + 14,
 							position.y - eyeHeight.y,
 							Constants.attackRange1.x,
@@ -727,13 +748,13 @@ public class Player extends Entity {
 					}
 					
 					if (facing == Facing.LEFT) {
-						attackHitBox = new Rectangle(
+						attackHitBox.set(
 							position.x - (Constants.playerStance / 2) - Constants.attackRange1.x,
 							position.y - 30,
 							Constants.attackRange1.x,
 							Constants.attackRange1.y + 20);
 					} else {
-						attackHitBox = new Rectangle(
+						attackHitBox.set(
 							position.x + (Constants.playerStance / 2) + 14,
 							position.y - 30,
 							Constants.attackRange1.x,
@@ -808,9 +829,9 @@ public class Player extends Entity {
 						hitState = HitState.DODGE;
 						dodgeStartTime = TimeUtils.nanoTime();
 						if (facing == Facing.LEFT) {
-							targetPosition = new Vector2(position.x - 400, position.y);
+							targetPosition.set(position.x - 400, position.y);
 						} else {
-							targetPosition = new Vector2(position.x + 400, position.y);
+							targetPosition.set(position.x + 400, position.y);
 						}
 					}
 				}
@@ -827,6 +848,15 @@ public class Player extends Entity {
 			jumpState = JumpState.FALLING;
 			idleTransitionCounter = 4;
 		}
+		
+		if (health < 0) {
+			if (lockState != LockState.DEATH) {
+				lockState = LockState.DEATH;
+				hitState = HitState.DEATH;
+				deathStartTime = TimeUtils.nanoTime();
+			}
+		}
+		
 
 	}
 	

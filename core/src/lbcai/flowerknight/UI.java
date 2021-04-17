@@ -31,15 +31,13 @@ public class UI {
 	private Vector3 mousePosition;
 	
 	//graphics
-	private List<AtlasRegion> UIAssetList;
-	private List<AtlasRegion> petalList;
+	private List<AtlasRegion> livesDisplay;
 	
 	//the rectangle where the player can click if they would like to see their health number (or they can just hover to glimpse)
 	private Rectangle healthToggle;
 	private Vector2 healthToggleCenter;
 	private GlyphLayout healthToggleLayout; //for holding the text to be displayed and easy centering
 	private int healthToggleState;
-	private int livesCounter;
 	
 	
 	public UI(Level level) {
@@ -55,15 +53,18 @@ public class UI {
 		mousePosition = new Vector3();
 		
 		player = level.player;
-		livesCounter = player.lives;
 		
-		UIAssetList = Arrays.asList(Assets.instance.UIassets.orb, 
+		livesDisplay = Arrays.asList(
 				Assets.instance.UIassets.livesFlower1, 
 				Assets.instance.UIassets.livesFlower2,
 				Assets.instance.UIassets.livesFlower3,
 				Assets.instance.UIassets.livesFlower4,
-				Assets.instance.UIassets.livesFlower5,
-				Assets.instance.UIassets.livesFlowerCover);
+				Assets.instance.UIassets.livesFlower5
+				);
+		
+	}
+	
+	public void update(float delta) {
 		
 	}
 	
@@ -85,27 +86,61 @@ public class UI {
 		healthToggle.getCenter(healthToggleCenter);
 		healthToggleLayout.setText(font, Integer.toString(player.health), Color.RED, healthToggle.getWidth(), Align.center, false);
 		
+		//draw base health orb graphic
+		batch.draw(Assets.instance.UIassets.orb.getTexture(), 
+				healthToggleCenter.x - 75, 
+				healthToggleCenter.y - 192, 
+				0, 
+				0, 
+				Assets.instance.UIassets.orb.getRegionWidth(), 
+				Assets.instance.UIassets.orb.getRegionHeight(), 
+				1, 
+				1, 
+				0, 
+				Assets.instance.UIassets.orb.getRegionX(), 
+				Assets.instance.UIassets.orb.getRegionY(), 
+				Assets.instance.UIassets.orb.getRegionWidth(), 
+				Assets.instance.UIassets.orb.getRegionHeight(), 
+				false, 
+				false);
 		
-		//test placeholder orb graphic
-		for (AtlasRegion item : UIAssetList) {
-
-			batch.draw(item.getTexture(), 
+		//draw the appropriate number of lives petals depending on player's current lives
+		for (int i = 0; i < player.lives; i++) {
+			batch.draw(livesDisplay.get(i).getTexture(), 
 					healthToggleCenter.x - 75, 
 					healthToggleCenter.y - 192, 
 					0, 
 					0, 
-					item.getRegionWidth(), 
-					item.getRegionHeight(), 
+					livesDisplay.get(i).getRegionWidth(), 
+					livesDisplay.get(i).getRegionHeight(), 
 					1, 
 					1, 
 					0, 
-					item.getRegionX(), 
-					item.getRegionY(), 
-					item.getRegionWidth(), 
-					item.getRegionHeight(), 
+					livesDisplay.get(i).getRegionX(), 
+					livesDisplay.get(i).getRegionY(), 
+					livesDisplay.get(i).getRegionWidth(), 
+					livesDisplay.get(i).getRegionHeight(), 
 					false, 
 					false);
 		}
+		
+		//draw flower cover center for lives petals on top of petals
+		batch.draw(Assets.instance.UIassets.livesFlowerCover.getTexture(), 
+				healthToggleCenter.x - 75, 
+				healthToggleCenter.y - 192, 
+				0, 
+				0, 
+				Assets.instance.UIassets.livesFlowerCover.getRegionWidth(), 
+				Assets.instance.UIassets.livesFlowerCover.getRegionHeight(), 
+				1, 
+				1, 
+				0, 
+				Assets.instance.UIassets.livesFlowerCover.getRegionX(), 
+				Assets.instance.UIassets.livesFlowerCover.getRegionY(), 
+				Assets.instance.UIassets.livesFlowerCover.getRegionWidth(), 
+				Assets.instance.UIassets.livesFlowerCover.getRegionHeight(), 
+				false, 
+				false);
 
 		
 		//unproject to make the click coordinates "click on the ui panel" and not on something in world
