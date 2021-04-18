@@ -120,6 +120,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> landRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> landLeftCombat = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> landRightCombat = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> knockdownLeft = new Array<AtlasRegion>();
 		
 		public final Animation<TextureRegion> idleRightAnim;
 		public final Animation<TextureRegion> idleLeftAnim;
@@ -152,6 +153,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> landRightAnim;
 		public final Animation<TextureRegion> landLeftCombatAnim;
 		public final Animation<TextureRegion> landRightCombatAnim;
+		public final Animation<TextureRegion> knockdownLeftAnim;
 		
 		/**
 		 * Finds the correct atlas region for playing the animation. Adds the region of each frame of each animation to an array,
@@ -421,6 +423,32 @@ public class Assets implements Disposable, AssetErrorListener {
 			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 5));
 			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 6));
 			landRightCombatAnim = new Animation(Constants.landCycleTime, landRightCombat, PlayMode.NORMAL);
+			
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 1));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 7));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 13));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 14));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 16));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 17));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 18));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 19));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 21));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 22));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 23));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 24));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 25));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 26));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 27));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 28));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
+			knockdownLeftAnim = new Animation(Constants.landCycleTime, knockdownLeft, PlayMode.NORMAL);
 			
 		}
 	}

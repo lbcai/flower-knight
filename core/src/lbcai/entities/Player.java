@@ -400,8 +400,8 @@ public class Player extends Entity {
 			
 			if (lockState == LockState.DEATH) {
 				float deathTime = Utils.secondsSince(deathStartTime);
-				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(deathTime);
-				if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(deathTime)) {
+				region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
+				if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(deathTime)) {
 					init();
 					lives -= 1;
 				}

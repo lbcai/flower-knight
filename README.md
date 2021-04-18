@@ -72,7 +72,7 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [x] Add lootable "powerup" items
 - [ ] Add portals to other maps
 - [ ] Add level loading with a level editor
-- [ ] Add UI/HUD
+- [x] Add UI/HUD
 
 ### Custom Features
 - [ ] Create a graphics mockup for maintaining cohesive design
