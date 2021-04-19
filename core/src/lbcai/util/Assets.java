@@ -426,7 +426,20 @@ public class Assets implements Disposable, AssetErrorListener {
 			
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 1));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 4));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 5));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 6));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 7));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 8));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 9));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 10));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 11));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 12));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 13));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 14));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15));
@@ -435,20 +448,14 @@ public class Assets implements Disposable, AssetErrorListener {
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 18));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 19));
 			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 21));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 22));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 23));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 24));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 25));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 26));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 27));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 28));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 29));
-			knockdownLeftAnim = new Animation(Constants.landCycleTime, knockdownLeft, PlayMode.NORMAL);
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20));
+			knockdownLeftAnim = new Animation(Constants.knockdownCycleTime, knockdownLeft, PlayMode.NORMAL);
 			
 		}
 	}

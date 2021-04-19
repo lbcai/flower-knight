@@ -73,6 +73,7 @@ public class Constants {
 	public static final float dodgeCDTime = 0.5f;
 	public static final float squatCycleTime = 0.01f; //0.01
 	public static final float landCycleTime = 0.06f; //0.05
+	public static final float knockdownCycleTime = 0.05f; //standard cycle time seems to be 0.05, should reduce variables
 	//vector (height, width) where the player's head is centered in the sprite
 	public static final Vector2 playerHead = new Vector2(128, 128);
 	//f is for filtering. You cannot have a pixel at 0.5 but you can have a sprite drawn at float values with filtering.
@@ -90,7 +91,7 @@ public class Constants {
 	public static final int playerBaseDamage = 20;
 	public static final int playerBaseRange = playerBaseDamage/2;
 	public static final Vector2 attackRange1 = new Vector2(150, 170);
-	public static final int baseHealth = 100;
+	public static final int baseHealth = 1; //100
 	
 	//effect
 	public static final String runDust = "dust";

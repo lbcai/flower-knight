@@ -28,7 +28,8 @@ public class TexturePackerHelper {
 	        BufferedWriter buffWriter = new BufferedWriter(fileWriter);
 	        
 	        //use lists to associate animation names with frames, and frames with appropriate x and y offset values
-	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", "Squatleft", "Jumpattack1left", "Jumpattack1right", "Landcombatleft", "Landcombatright"};
+	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", 
+	        		"Squatleft", "Jumpattack1left", "Jumpattack1right", "Landcombatleft", "Landcombatright", "Knockdownleft"};
 	        String[][] animFrames0 = {{"0", "0"}, {"0", "0"}, {"-10", "0"}, {"-55", "0"}, {"-55", "0"}, {"-55", "0"}, {"-20", "0"}, {"-4", "0"}, {"20", "0"}};
 	        String[][] animFrames1 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"70", "0"}, {"70", "0"}, {"70", "0"}, {"-17", "0"}, {"-17", "0"}, {"-17", "0"}};
 	        String[][] animFrames2 = {{"0", "-62"}, {"-15", "-70"}, {"-15", "-70"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}};
@@ -39,6 +40,9 @@ public class TexturePackerHelper {
 	        String[][] animFrames7 = {{"-40", "0"}, {"-40", "0"}, {"-40", "0"}, {"75", "-30"}, {"75", "-30"}, {"75", "-30"}, {"55", "7"}};
 	        String[][] animFrames8 = {{"0", "0"}, {"0", "0"}, {"10", "0"}, {"13", "0"}, {"13", "0"}, {"13", "0"}};
 	        String[][] animFrames9 = {{"0", "0"}, {"0", "0"}, {"10", "0"}, {"1", "0"}, {"1", "0"}, {"1", "0"}};
+	        String[][] animFrames10 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"30", "-10"}, {"30", "-10"}, 
+	        		{"30", "-10"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, 
+	        		{"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}};
 	        
 	        //pair the information properly in a map
 	        Map<String, String[][]> map = new HashMap<>();
@@ -52,6 +56,7 @@ public class TexturePackerHelper {
 	        map.put(animNames[7], animFrames7);
 	        map.put(animNames[8], animFrames8);
 	        map.put(animNames[9], animFrames9);
+	        map.put(animNames[10], animFrames10);
 	        
 	        //fix the offset values in the appropriate place before putting the line into the new atlas
 	        //for all the lines in the file that aren't null, 

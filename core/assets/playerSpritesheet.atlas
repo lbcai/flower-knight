@@ -688,142 +688,122 @@ Knockdownleft
   rotate: false
   xy: 2607, 2548
   size: 256, 256
-  orig: 256, 256
   offset: 0, 0
   index: 1
 Knockdownleft
   rotate: false
   xy: 2865, 2548
   size: 256, 256
-  orig: 256, 256
   offset: 0, 0
   index: 2
 Knockdownleft
   rotate: false
   xy: 3123, 2548
   size: 256, 256
-  orig: 256, 256
   offset: 0, 0
-  index: 7
+  index: 3
 Knockdownleft
   rotate: false
   xy: 3381, 2548
   size: 256, 256
-  orig: 256, 256
   offset: 0, 0
-  index: 13
+  index: 4
 Knockdownleft
   rotate: false
   xy: 3639, 2548
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 14
+  offset: 30, -10
+  index: 5
 Knockdownleft
   rotate: false
   xy: 790, 2290
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 15
+  offset: 30, -10
+  index: 6
 Knockdownleft
   rotate: false
   xy: 790, 2032
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 16
+  offset: 30, -10
+  index: 7
 Knockdownleft
   rotate: false
   xy: 1048, 2290
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 17
+  offset: 30, -15
+  index: 8
 Knockdownleft
   rotate: false
   xy: 790, 1774
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 18
+  offset: 30, -15
+  index: 9
 Knockdownleft
   rotate: false
   xy: 1048, 2032
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 19
+  offset: 30, -15
+  index: 10
 Knockdownleft
   rotate: false
   xy: 1306, 2290
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 20
+  offset: 30, -15
+  index: 11
 Knockdownleft
   rotate: false
   xy: 790, 1516
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 21
+  offset: 30, -15
+  index: 12
 Knockdownleft
   rotate: false
   xy: 1048, 1774
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 22
+  offset: 30, -15
+  index: 13
 Knockdownleft
   rotate: false
   xy: 1306, 2032
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 23
+  offset: 30, -15
+  index: 14
 Knockdownleft
   rotate: false
   xy: 1564, 2290
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 24
+  offset: 30, -15
+  index: 15
 Knockdownleft
   rotate: false
   xy: 790, 1258
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 25
+  offset: 30, -15
+  index: 16
 Knockdownleft
   rotate: false
   xy: 1048, 1516
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 26
+  offset: 30, -15
+  index: 17
 Knockdownleft
   rotate: false
   xy: 1306, 1774
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 27
+  offset: 30, -15
+  index: 18
 Knockdownleft
   rotate: false
   xy: 1564, 2032
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 28
+  offset: 30, -15
+  index: 19
 Knockdownleft
   rotate: false
   xy: 1822, 2290
   size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 29
+  offset: 30, -15
+  index: 20
 Landcombatleft
   rotate: false
   xy: 1048, 1258

@@ -53,6 +53,9 @@ public class Player extends Entity {
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
 	
+	//determining the direction of the last source of damage, for launching from large hits or death
+	private Facing lastFacing;
+	
 
 	//for allowing player to rebind controls
 	private int attackKey = Keys.X;
@@ -854,7 +857,18 @@ public class Player extends Entity {
 				lockState = LockState.DEATH;
 				hitState = HitState.DEATH;
 				deathStartTime = TimeUtils.nanoTime();
+				
+				if (lastFacing == Facing.LEFT) {
+					targetPosition.set(position.x - 500, position.y);
+					
+				} else {
+					targetPosition.set(position.x + 500, position.y);
+				}
+				
 			}
+
+			Utils.lerpX(position, targetPosition, 0.04f);
+
 		}
 		
 
@@ -925,6 +939,7 @@ public class Player extends Entity {
 	
 
 	private void flinch(Facing facing) {
+		lastFacing = facing;
 		velocity.y = Constants.knockbackSpeed.y;
 		if (facing == Facing.LEFT) {
 			if (boostCounter != 1) {
