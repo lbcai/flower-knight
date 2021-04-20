@@ -56,6 +56,7 @@ public class Constants {
 	public static final String landLeftCombat = "Landcombatleft";
 	public static final String landRightCombat = "Landcombatright";
 	public static final String knockdownLeft = "Knockdownleft";
+	public static final String knockdownRight = "Knockdownright";
 	
 	public static final float skidCycleTime = 0.025f;
 	public static final float runCycleTime = 0.04f;
@@ -92,6 +93,7 @@ public class Constants {
 	public static final int playerBaseRange = playerBaseDamage/2;
 	public static final Vector2 attackRange1 = new Vector2(150, 170);
 	public static final int baseHealth = 1; //100
+	public static final float deathWaitTime = 1.5f;
 	
 	//effect
 	public static final String runDust = "dust";

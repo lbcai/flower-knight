@@ -29,7 +29,8 @@ public class TexturePackerHelper {
 	        
 	        //use lists to associate animation names with frames, and frames with appropriate x and y offset values
 	        String[] animNames = {"Attack1left", "Attack1right", "Boosttoplatleft", "Boosttoplatright", "Squatright", 
-	        		"Squatleft", "Jumpattack1left", "Jumpattack1right", "Landcombatleft", "Landcombatright", "Knockdownleft"};
+	        		"Squatleft", "Jumpattack1left", "Jumpattack1right", "Landcombatleft", "Landcombatright", "Knockdownleft", 
+	        		"Knockdownright"};
 	        String[][] animFrames0 = {{"0", "0"}, {"0", "0"}, {"-10", "0"}, {"-55", "0"}, {"-55", "0"}, {"-55", "0"}, {"-20", "0"}, {"-4", "0"}, {"20", "0"}};
 	        String[][] animFrames1 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"70", "0"}, {"70", "0"}, {"70", "0"}, {"-17", "0"}, {"-17", "0"}, {"-17", "0"}};
 	        String[][] animFrames2 = {{"0", "-62"}, {"-15", "-70"}, {"-15", "-70"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}, {"-11", "0"}};
@@ -43,6 +44,9 @@ public class TexturePackerHelper {
 	        String[][] animFrames10 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"30", "-10"}, {"30", "-10"}, 
 	        		{"30", "-10"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, 
 	        		{"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}, {"30", "-15"}};
+	        String[][] animFrames11 = {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "-10"}, 
+	        		{"0", "-10"}, {"0", "-10"}, {"0", "-10"}, {"0", "-10"}, {"0", "-10"}, {"0", "-25"}, {"0", "-25"}, 
+	        		{"0", "-25"}, {"0", "-25"}, {"0", "-25"}, {"0", "-25"}, {"0", "-25"}, {"0", "-25"}, {"0", "-25"}};
 	        
 	        //pair the information properly in a map
 	        Map<String, String[][]> map = new HashMap<>();
@@ -57,6 +61,7 @@ public class TexturePackerHelper {
 	        map.put(animNames[8], animFrames8);
 	        map.put(animNames[9], animFrames9);
 	        map.put(animNames[10], animFrames10);
+	        map.put(animNames[11], animFrames11);
 	        
 	        //fix the offset values in the appropriate place before putting the line into the new atlas
 	        //for all the lines in the file that aren't null, 

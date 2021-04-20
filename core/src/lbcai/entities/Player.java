@@ -41,6 +41,7 @@ public class Player extends Entity {
 	private long boostStartTime;
 	private long landStartTime;
 	private long deathStartTime;
+	private long deathWaitTime;
 
 	private int idleTransitionCounter = 0;
 	private int flashCounter = 0;
@@ -52,9 +53,11 @@ public class Player extends Entity {
 	private int attackComboCounter = 0;
 	private Vector2 targetPosition;
 	private int boostCounter = 0;
+	private int deathFlash = 0;
+	
 	
 	//determining the direction of the last source of damage, for launching from large hits or death
-	private Facing lastFacing;
+	private Facing flinchDirection;
 	
 
 	//for allowing player to rebind controls
@@ -101,6 +104,7 @@ public class Player extends Entity {
 		lockState = LockState.FREE;
 		idleStartTime = TimeUtils.nanoTime();
 		health = Constants.baseHealth;
+		deathFlash = 0;
 		
 		//Initialize the region to display.
 		region = Assets.instance.playerAssets.idleRightAnim.getKeyFrame(0);
@@ -259,10 +263,31 @@ public class Player extends Entity {
 			
 			if (lockState == LockState.DEATH) {
 				float deathTime = Utils.secondsSince(deathStartTime);
-				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(deathTime);
-				if (Assets.instance.playerAssets.boostToPlatRightAnim.isAnimationFinished(deathTime)) {
-					init();
-					lives -= 1;
+				if (jumpState == JumpState.FALLING) {
+					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
+				} else {
+					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
+				}
+
+				if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(deathTime)) {
+					if (deathFlash == 0) {
+						deathWaitTime = TimeUtils.nanoTime();
+						deathFlash = 1;
+					} else if (deathFlash == 1) {
+						float deathFlashTime = Utils.secondsSince(deathWaitTime);
+						if (deathFlashTime < Constants.deathWaitTime) {
+							if (flashCounter == 0 || flashCounter % 5 != 0) {
+								flashCounter += 1;
+								alpha -= 5f/255f;
+							} else if (flashCounter % 5 == 0) {
+								batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
+								flashCounter = 0;
+							}
+						} else {
+							init();
+							lives -= 1;
+						}
+					}
 				}
 			}
 			
@@ -403,10 +428,31 @@ public class Player extends Entity {
 			
 			if (lockState == LockState.DEATH) {
 				float deathTime = Utils.secondsSince(deathStartTime);
-				region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
+				if (jumpState == JumpState.FALLING) {
+					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
+				} else {
+					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
+				}
+				
 				if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(deathTime)) {
-					init();
-					lives -= 1;
+					if (deathFlash == 0) {
+						deathWaitTime = TimeUtils.nanoTime();
+						deathFlash = 1;
+					} else if (deathFlash == 1) {
+						float deathFlashTime = Utils.secondsSince(deathWaitTime);
+						if (deathFlashTime < Constants.deathWaitTime) {
+							if (flashCounter == 0 || flashCounter % 5 != 0) {
+								flashCounter += 1;
+								alpha -= 5f/255f;
+							} else if (flashCounter % 5 == 0) {
+								batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
+								flashCounter = 0;
+							}
+						} else {
+							init();
+							lives -= 1;
+						}
+					}
 				}
 			}
 			
@@ -858,11 +904,16 @@ public class Player extends Entity {
 				hitState = HitState.DEATH;
 				deathStartTime = TimeUtils.nanoTime();
 				
-				if (lastFacing == Facing.LEFT) {
+				if (flinchDirection == Facing.LEFT) {
+					//if flinchDirection = left, then damage is coming from the right and player must flinch left
 					targetPosition.set(position.x - 500, position.y);
+					//if flinchDirection = left, then damage is coming from the right and player must face right to be knocked
+					//to the right (since knockdownRight animation moves to the right) and play the correct animation
+					facing = Facing.RIGHT;
 					
-				} else {
+				} else if (flinchDirection == Facing.RIGHT) {
 					targetPosition.set(position.x + 500, position.y);
+					facing = Facing.LEFT;
 				}
 				
 			}
@@ -939,7 +990,9 @@ public class Player extends Entity {
 	
 
 	private void flinch(Facing facing) {
-		lastFacing = facing;
+		//the facing indicates direction player must flinch (damage is coming from the opposite facing)
+		//if facing is left, damage is coming from right side and player must flinch left
+		flinchDirection = facing;
 		velocity.y = Constants.knockbackSpeed.y;
 		if (facing == Facing.LEFT) {
 			if (boostCounter != 1) {
