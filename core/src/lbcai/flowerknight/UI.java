@@ -1,9 +1,11 @@
 package lbcai.flowerknight;
 
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,13 +33,53 @@ public class UI {
 	private Vector3 mousePosition;
 	
 	//graphics
-	private List<AtlasRegion> livesDisplay;
+	private List<AtlasRegion> livesRegions;
+	private int lastLives;
+	private ArrayList<livesPetal> livesPetals;
 	
 	//the rectangle where the player can click if they would like to see their health number (or they can just hover to glimpse)
 	private Rectangle healthToggle;
 	private Vector2 healthToggleCenter;
 	private GlyphLayout healthToggleLayout; //for holding the text to be displayed and easy centering
 	private int healthToggleState;
+	
+	final float worldHeight;
+	final float cameraY;
+	
+	private class livesPetal {
+		Vector2 position;
+		TextureRegion region;
+		
+		
+		
+		livesPetal(int i) {
+			//take the index to know which life is being displayed
+			region = livesRegions.get(i);
+			position = new Vector2(healthToggleCenter.x - 75, 
+					healthToggleCenter.y - 192);
+		}
+		
+		void render(SpriteBatch batch) {
+			batch.draw(region.getTexture(), 
+					position.x, 
+					position.y, 
+					0, 
+					0, 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					region.getRegionX(), 
+					region.getRegionY(), 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					false, 
+					false);
+		}
+		
+		
+	}
 	
 	
 	public UI(Level level) {
@@ -53,19 +95,43 @@ public class UI {
 		mousePosition = new Vector3();
 		
 		player = level.player;
+		lastLives = 0;
 		
-		livesDisplay = Arrays.asList(
+		livesRegions = Arrays.asList(
 				Assets.instance.UIassets.livesFlower1, 
 				Assets.instance.UIassets.livesFlower2,
 				Assets.instance.UIassets.livesFlower3,
 				Assets.instance.UIassets.livesFlower4,
 				Assets.instance.UIassets.livesFlower5
 				);
+
+		livesPetals = new ArrayList<livesPetal>();
+		worldHeight = viewport.getWorldHeight();
+		cameraY = viewport.getCamera().position.y;
 		
 	}
 	
 	public void update(float delta) {
-		
+
+		//if the player's number of lives has changed:
+		if (player.lives != lastLives) {
+			if (player.lives > lastLives) {
+				livesPetals.add(new livesPetal(livesPetals.size()));
+				lastLives += 1;
+			} else if (player.lives < lastLives) {
+				
+				//path that the petal will take to fly off the screen when player loses a life
+				livesPetals.get(livesPetals.size() - 1).position.y -= 10;
+				
+				//once the petal flies off the screen, remove it and update the lives value
+				if (livesPetals.get(livesPetals.size() - 1).position.y < cameraY - worldHeight) {
+					livesPetals.remove(livesPetals.size() - 1);
+					lastLives -= 1;
+				}
+				
+			}
+			
+		}
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -105,23 +171,8 @@ public class UI {
 				false);
 		
 		//draw the appropriate number of lives petals depending on player's current lives
-		for (int i = 0; i < player.lives; i++) {
-			batch.draw(livesDisplay.get(i).getTexture(), 
-					healthToggleCenter.x - 75, 
-					healthToggleCenter.y - 192, 
-					0, 
-					0, 
-					livesDisplay.get(i).getRegionWidth(), 
-					livesDisplay.get(i).getRegionHeight(), 
-					1, 
-					1, 
-					0, 
-					livesDisplay.get(i).getRegionX(), 
-					livesDisplay.get(i).getRegionY(), 
-					livesDisplay.get(i).getRegionWidth(), 
-					livesDisplay.get(i).getRegionHeight(), 
-					false, 
-					false);
+		for (livesPetal petal : livesPetals) {
+			petal.render(batch);
 		}
 		
 		//draw flower cover center for lives petals on top of petals
@@ -179,6 +230,7 @@ public class UI {
 		
 		
 	}
+	
 	
 	public void debugRender(ShapeRenderer shape, SpriteBatch batch) {
 		//keep in mind that from this point on in the shaperenderer, it is using the batch projection matrix. if you add something

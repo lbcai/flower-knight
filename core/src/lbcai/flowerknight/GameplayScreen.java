@@ -78,8 +78,9 @@ public class GameplayScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void render(float delta) {
-		//Update the camera.
+		//Update the camera and UI.
 		chaseCam.update(delta);
+		
 		//Check what happened; update the level so we can re-render it below and provide illusion of movement.
 		level.update(delta);
 		//Actually applies the view to our camera.
@@ -106,6 +107,8 @@ public class GameplayScreen extends ScreenAdapter {
 		//Render the UI
 		ui.render(batch);
 		batch.end();
+		
+		ui.update(delta);
 		
 		//debug renderer for rendering hitboxes
 		if (Gdx.input.isKeyJustPressed(Keys.F2)) {

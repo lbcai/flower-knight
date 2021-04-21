@@ -285,7 +285,6 @@ public class Player extends Entity {
 							}
 						} else {
 							init();
-							lives -= 1;
 						}
 					}
 				}
@@ -450,7 +449,6 @@ public class Player extends Entity {
 							}
 						} else {
 							init();
-							lives -= 1;
 						}
 					}
 				}
@@ -898,8 +896,9 @@ public class Player extends Entity {
 			idleTransitionCounter = 4;
 		}
 		
-		if (health < 0) {
+		if (health <= 0) {
 			if (lockState != LockState.DEATH) {
+				lives -= 1;
 				lockState = LockState.DEATH;
 				hitState = HitState.DEATH;
 				deathStartTime = TimeUtils.nanoTime();

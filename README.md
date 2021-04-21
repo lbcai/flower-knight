@@ -90,8 +90,8 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [ ] Create 2 basic enemy types and animations
 - [x] Allow projectiles to fly at angles
 - [ ] Add special effects: impact & doublejump sparkles, attack wooshes, dust clouds, damage numbers, item effects, etc.
-- [ ] Add enemy aggression, random motion, etc. 
-- [ ] Create basic player death, knockback animations
+- [x] Add enemy aggression, random motion, etc. 
+- [x] Create basic player death, knockback animations
 - [ ] Create UI/HUD assets and customize UI functionality
 - [x] Add debug rendering
 - [ ] Allow player to reset keybinds & resize window through UI
