@@ -47,35 +47,54 @@ public class UI {
 	final float cameraY;
 	
 	private class livesPetal {
+		
 		Vector2 position;
+		Vector2 startPosition;
 		TextureRegion region;
-		
-		
+		float rotation;
+		float originX;
+		float originY;
 		
 		livesPetal(int i) {
 			//take the index to know which life is being displayed
 			region = livesRegions.get(i);
 			position = new Vector2(healthToggleCenter.x - 75, 
 					healthToggleCenter.y - 192);
+			startPosition = new Vector2(healthToggleCenter.x - 75, 
+					healthToggleCenter.y - 192);
+			rotation = 0;
+			originX = 0;
+			originY = 0;
 		}
 		
 		void render(SpriteBatch batch) {
 			batch.draw(region.getTexture(), 
 					position.x, 
 					position.y, 
-					0, 
-					0, 
+					originX, 
+					originY, 
 					region.getRegionWidth(), 
 					region.getRegionHeight(), 
 					1, 
 					1, 
-					0, 
+					rotation, 
 					region.getRegionX(), 
 					region.getRegionY(), 
 					region.getRegionWidth(), 
 					region.getRegionHeight(), 
 					false, 
 					false);
+		}
+		
+		void fall() {
+			//sets the origin of rotation to the "flower cover" point of the petal. as the petal falls, it will spin around
+			originX = 164;
+			originY = 243;
+			rotation += 20;
+			
+			//causes the life count petal to fly off the flower in a parabola shape
+			position.x += 15;
+			position.y -= (0.0003) * Math.pow(position.x - startPosition.x, 2);
 		}
 		
 		
@@ -121,8 +140,8 @@ public class UI {
 			} else if (player.lives < lastLives) {
 				
 				//path that the petal will take to fly off the screen when player loses a life
-				livesPetals.get(livesPetals.size() - 1).position.y -= 10;
-				
+				//livesPetals.get(livesPetals.size() - 1).position.y -= 10;
+				livesPetals.get(livesPetals.size() - 1).fall();
 				//once the petal flies off the screen, remove it and update the lives value
 				if (livesPetals.get(livesPetals.size() - 1).position.y < cameraY - worldHeight) {
 					livesPetals.remove(livesPetals.size() - 1);
