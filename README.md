@@ -32,10 +32,14 @@ Here is an additional gif showcasing recent additions to the game with more plac
 </p>
 
 ## 04/10/21 Graphical Plan Update
-Here is a draft of the visual design goal for this project meant to help keep the project on track during development. It is a work in progress and will be updated with UI elements. Other unique areas in the game will have different design goals.
+Here is a draft of the visual design goal for this project meant to help keep the project on track during development. Other unique areas in the game will have different design goals.
 <br>
 <p align="center" width="100%">
   <img src="GithubImages/04_10_21_mockup.png?raw=true" alt="Visual design goal for the project.">
+</p>
+<br>
+<p align="center" width="100%">
+  <img src="GithubImages/04_22_21_mockup.png?raw=true" alt="Visual design goal for the project with UI elements and extra flashy effects.">
 </p>
 
 Here is an animation showcasing the element layering required to achieve the above effect (0th layer not included in animation):
