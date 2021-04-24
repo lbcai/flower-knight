@@ -1285,7 +1285,7 @@ dmg
   index: 4
 dmg
   rotate: false
-  xy: 2444, 659
+  xy: 2444, 582
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
@@ -1306,7 +1306,7 @@ dmg
   index: 7
 dmg
   rotate: false
-  xy: 2444, 597
+  xy: 2444, 520
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
@@ -1528,6 +1528,13 @@ hitslash3
   orig: 100, 100
   offset: 0, 0
   index: 3
+life
+  rotate: false
+  xy: 2444, 644
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: 1
 pbeetle
   rotate: false
   xy: 2342, 798

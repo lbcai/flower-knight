@@ -32,7 +32,7 @@ public class Item {
 	TextureRegion region;
 	
 	public Item(Vector2 position, Level level) {
-		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(0);
+		region = Assets.instance.lifeAssets.healLargeAnim.getKeyFrame(0);
 		this.position = position.cpy();
 
 		//don't set lastPosition to the same value in memory as position or changing one changes the other
@@ -111,9 +111,9 @@ public class Item {
 	
 	public void render(SpriteBatch batch) {
 		float animTime = Utils.secondsSince(startTime);
-		region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
+		region = Assets.instance.lifeAssets.healLargeAnim.getKeyFrame(animTime);
 		if (expire != 0) {
-			region = Assets.instance.lifeAssets.lifeAnim.getKeyFrame(animTime);
+			region = Assets.instance.lifeAssets.healLargeAnim.getKeyFrame(animTime);
 			alpha -= 15f/255f;
 			if (alpha <= 0f/255f) {
 				expire = 3;
@@ -142,8 +142,11 @@ public class Item {
 	
 	public void use() {
 		//this is a full heal
-		player.health = player.maxHealth;
-		expire = 1;
+		//check expire int to make sure player cannot use the item more than one time
+		if (expire != 1) {
+			expire = 1;
+			player.health = player.maxHealth;
+		}
 	}
 	
 	void setExpireBoolean() {

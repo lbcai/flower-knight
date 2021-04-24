@@ -1,5 +1,7 @@
 package lbcai.entities;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -48,6 +50,8 @@ public class BreakableObject extends Enemy {
 				Constants.itemCenter.x * 2,
 				Constants.itemCenter.y * 2);
 		aggroRange = new Rectangle();
+		
+		dropTable = Arrays.asList(2);
 		
 	}
 	

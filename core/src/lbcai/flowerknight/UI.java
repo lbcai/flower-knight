@@ -2,6 +2,7 @@ package lbcai.flowerknight;
 
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -24,6 +25,7 @@ import com.badlogic.gdx.math.Vector3;
 import lbcai.entities.Player;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 
 public class UI {
 
@@ -54,6 +56,9 @@ public class UI {
 		float rotation;
 		float originX;
 		float originY;
+		float scaleX;
+		float scaleY;
+		int spawnAnim;
 		
 		livesPetal(int i) {
 			//take the index to know which life is being displayed
@@ -65,9 +70,17 @@ public class UI {
 			rotation = 0;
 			originX = 0;
 			originY = 0;
+			scaleX = 0;
+			scaleY = 0;
+			spawnAnim = 0;
 		}
 		
 		void render(SpriteBatch batch) {
+			
+			if (spawnAnim == 0) {
+				spawn();
+			}
+			
 			batch.draw(region.getTexture(), 
 					position.x, 
 					position.y, 
@@ -75,8 +88,8 @@ public class UI {
 					originY, 
 					region.getRegionWidth(), 
 					region.getRegionHeight(), 
-					1, 
-					1, 
+					scaleX, 
+					scaleY, 
 					rotation, 
 					region.getRegionX(), 
 					region.getRegionY(), 
@@ -88,6 +101,8 @@ public class UI {
 		
 		void fall() {
 			//sets the origin of rotation to the "flower cover" point of the petal. as the petal falls, it will spin around
+			//and be scaled around this point, otherwise it will use the bottom left corner and align itself with the
+			//orb graphic.
 			originX = 164;
 			originY = 243;
 			rotation += 20;
@@ -95,9 +110,30 @@ public class UI {
 			//causes the life count petal to fly off the flower in a parabola shape
 			position.x += 15;
 			position.y -= (0.0003) * Math.pow(position.x - startPosition.x, 2);
+			
+			//make the petal look 2D when it flies off 
+			scaleY = (float) Math.cos(position.x / 100);
+			
 		}
 		
-		
+		void spawn() {
+			//makes the petal do a little growing animation when a life is added :)
+			if (scaleX < 1) {
+				originX = 164;
+				originY = 243;
+				scaleX += 0.08;
+				scaleY += 0.08;
+			} else if (scaleX > 1) {
+				scaleX -= 0.01;
+				scaleY -= 0.01;
+			} else if (scaleX == 1) {
+				originX = 0;
+				originY = 0;
+				spawnAnim = 1;
+			}
+			
+		}
+
 	}
 	
 	
@@ -137,6 +173,7 @@ public class UI {
 			if (player.lives > lastLives) {
 				livesPetals.add(new livesPetal(livesPetals.size()));
 				lastLives += 1;
+				
 			} else if (player.lives < lastLives) {
 				
 				//path that the petal will take to fly off the screen when player loses a life

@@ -197,6 +197,7 @@ public class EnemyPBeetle extends Enemy {
 			else if (Utils.secondsSince(inactiveTimer) >= Constants.respawnTime) {
 				if (alpha == 0f/255f) {
 					position = new Vector2((MathUtils.random() * (platform.right - platform.left + 1) + platform.left), platform.top + eyeHeight.y);
+					positionYsine = position.y;
 				}
 				alpha += 15f/255f;
 				if (alpha >= 255f/255f) {

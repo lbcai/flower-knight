@@ -85,7 +85,7 @@ public class Player extends Entity {
 		range = Constants.playerBaseRange;
 		eyeHeight = Constants.playerHead;
 		moveSpeed = Constants.moveSpeed;
-		lives = 3;
+		lives = Constants.baseLives;
 		init();
 		
 	}

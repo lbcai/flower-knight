@@ -18,11 +18,13 @@ public class ItemHealSmall extends Item {
 	@Override
 	public void use() {
 		//this is a 20% of max heal
-		player.health += player.maxHealth * 0.2;
-		if (player.health > player.maxHealth) {
-			player.health = player.maxHealth;
+		if (expire != 1) {
+			expire = 1;
+			player.health += player.maxHealth * 0.2;
+			if (player.health > player.maxHealth) {
+				player.health = player.maxHealth;
+			}
 		}
-		expire = 1;
 	}
 	
 	@Override

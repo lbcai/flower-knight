@@ -556,6 +556,9 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> healSmall = new Array<AtlasRegion>();
 		public final Animation<TextureRegion> healSmallAnim;
 		
+		public final Array<AtlasRegion> healLarge = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> healLargeAnim;
+		
 		public LifeAssets(TextureAtlas atlas) {
 			life.add(atlas.findRegion(Constants.life, 1));
 			life.add(atlas.findRegion(Constants.life, 1));
@@ -563,6 +566,9 @@ public class Assets implements Disposable, AssetErrorListener {
 			
 			healSmall.add(atlas.findRegion(Constants.healSmall, 1));
 			healSmallAnim = new Animation(Constants.itemCycleTime, healSmall, PlayMode.LOOP);
+			
+			healLarge.add(atlas.findRegion(Constants.healLarge, 1));
+			healLargeAnim = new Animation(Constants.itemCycleTime, healLarge, PlayMode.LOOP);
 			
 
 		}

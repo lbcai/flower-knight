@@ -92,7 +92,8 @@ public class Constants {
 	public static final int playerBaseDamage = 20;
 	public static final int playerBaseRange = playerBaseDamage/2;
 	public static final Vector2 attackRange1 = new Vector2(150, 170);
-	public static final int baseHealth = 1; //100
+	public static final int baseHealth = 100; //100
+	public static final int baseLives = 3;
 	public static final float deathWaitTime = 1.5f;
 	
 	//effect
@@ -142,11 +143,12 @@ public class Constants {
 	public static final float bulletCooldown = 1.5f;
 	public static final Vector2 bulletCenter = new Vector2(25, 25);
 	public static final float enemyFlinchTime = 0.3f;
-	public static final int respawnTime = 20; //20
+	public static final int respawnTime = 10; //20
 	public static final Vector2 aggroRadius = new Vector2(500, 500);
 	
 	//item
-	public static final String life = "heal";
+	public static final String life = "life";
+	public static final String healLarge = "heal";
 	public static final String healSmall = "healsmall";
 	public static final Vector2 itemCenter = new Vector2(37.5f, 37.5f);
 	public static final float itemExpireTime = 300f;

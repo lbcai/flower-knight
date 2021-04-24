@@ -21,6 +21,7 @@ import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
 import lbcai.entities.ItemHealSmall;
+import lbcai.entities.ItemLife;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.util.Constants;
@@ -288,6 +289,8 @@ public class Level {
 				items.add(new Item(enemy.position, this));
 			} else if (tableIndex == 1) {
 				items.add(new ItemHealSmall(enemy.position, this));
+			} else if (tableIndex == 2) {
+				items.add(new ItemLife(enemy.position, this));
 			}
 		}
 	}
