@@ -104,6 +104,7 @@ public abstract class Enemy extends Entity {
 		
 		if (inactive == false) {
 			//if not dead, do your thing
+
 			switch (facing) {
 			case LEFT:
 				position.x -= moveSpeed * delta;
@@ -239,6 +240,18 @@ public abstract class Enemy extends Entity {
 		// using iframe to denote flinch animation but no actual iframe for mobs
 		hitState = HitState.IFRAME;
 		timeSinceHit = TimeUtils.nanoTime();
+		
+		velocity.y = Constants.knockbackSpeed.y;
+		if (target.position.x < position.x) {
+			//being hit from the left
+			velocity.x = Constants.knockbackSpeed.x;
+			position.x += 20;
+		} else {
+			//being hit from the right
+			velocity.x = -Constants.knockbackSpeed.x;
+			position.x -= 20;
+		}
+		
 	}
 	
 	public void doesDamage(Player player, Facing facing) {

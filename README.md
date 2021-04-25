@@ -43,7 +43,7 @@ Here is a draft of the visual design goal for this project meant to help keep th
 </p>
 
 Here is an animation showcasing the element layering required to achieve the above effect (0th layer not included in animation):
-* 0th layer: Foreground decorations (only for the "ground" layer, or the lowest y value platforms in the map)
+* 0th layer: Foreground decorations (only for the "ground" layer, or the lowest y value platforms in the map, tracks with camera and only shows at certain y values)
 * 1st layer: Actual grass/dirt platform (tiled)
 * 2nd layer: Waving grass/bushes that will move when player moves over them and produce flying particles
 * 3rd layer: Player, enemies, interactables (will require shaders)
@@ -79,7 +79,7 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [x] Add UI/HUD
 
 ### Custom Features
-- [ ] Create a graphics mockup for maintaining cohesive design
+- [x] Create a graphics mockup for maintaining cohesive design
 - [x] Create basic player idle, run, and jump animations
 - [x] Animate idle loop and jump
 - [x] Inbetween animations: sliding to a stop after running, boosting up when just missed a platform, exit combat idle transition animation

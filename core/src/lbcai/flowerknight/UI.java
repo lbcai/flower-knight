@@ -63,10 +63,10 @@ public class UI {
 		livesPetal(int i) {
 			//take the index to know which life is being displayed
 			region = livesRegions.get(i);
-			position = new Vector2(healthToggleCenter.x - 75, 
-					healthToggleCenter.y - 192);
-			startPosition = new Vector2(healthToggleCenter.x - 75, 
-					healthToggleCenter.y - 192);
+			position = new Vector2(healthToggleCenter.x - Constants.hpOrbCenter.x, 
+					healthToggleCenter.y - Constants.hpOrbCenter.y);
+			startPosition = new Vector2(healthToggleCenter.x - Constants.hpOrbCenter.x, 
+					healthToggleCenter.y - Constants.hpOrbCenter.y);
 			rotation = 0;
 			originX = 0;
 			originY = 0;
@@ -103,8 +103,8 @@ public class UI {
 			//sets the origin of rotation to the "flower cover" point of the petal. as the petal falls, it will spin around
 			//and be scaled around this point, otherwise it will use the bottom left corner and align itself with the
 			//orb graphic.
-			originX = 164;
-			originY = 243;
+			originX = Constants.livesFlowerCenter.x;
+			originY = Constants.livesFlowerCenter.y;
 			rotation += 20;
 			
 			//causes the life count petal to fly off the flower in a parabola shape
@@ -119,8 +119,8 @@ public class UI {
 		void spawn() {
 			//makes the petal do a little growing animation when a life is added :)
 			if (scaleX < 1) {
-				originX = 164;
-				originY = 243;
+				originX = Constants.livesFlowerCenter.x;
+				originY = Constants.livesFlowerCenter.y;
 				scaleX += 0.08;
 				scaleY += 0.08;
 			} else if (scaleX > 1) {
@@ -210,8 +210,8 @@ public class UI {
 		
 		//draw base health orb graphic
 		batch.draw(Assets.instance.UIassets.orb.getTexture(), 
-				healthToggleCenter.x - 75, 
-				healthToggleCenter.y - 192, 
+				healthToggleCenter.x - Constants.hpOrbCenter.x, 
+				healthToggleCenter.y - Constants.hpOrbCenter.y, 
 				0, 
 				0, 
 				Assets.instance.UIassets.orb.getRegionWidth(), 
@@ -233,8 +233,8 @@ public class UI {
 		
 		//draw flower cover center for lives petals on top of petals
 		batch.draw(Assets.instance.UIassets.livesFlowerCover.getTexture(), 
-				healthToggleCenter.x - 75, 
-				healthToggleCenter.y - 192, 
+				healthToggleCenter.x - Constants.hpOrbCenter.x, 
+				healthToggleCenter.y - Constants.hpOrbCenter.y, 
 				0, 
 				0, 
 				Assets.instance.UIassets.livesFlowerCover.getRegionWidth(), 

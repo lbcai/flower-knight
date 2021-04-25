@@ -44,115 +44,126 @@ public class EnemyPBeetle extends Enemy {
 				}
 			}
 			
-			if (aggroRange.overlaps(target.hitBox)) {
+			//if not stunned from being hit, do the AI things
+			if (hitState != HitState.IFRAME) {
 				
-				if (moveSpeed != Constants.enemyMoveSpeedAggro) {
-					//increase speed when chasing
-					moveSpeed = Constants.enemyMoveSpeedAggro;
-				}
-				
-				//if enemy position IS NOT close enough to player:
-				if (!(target.position.x + (target.hitBox.width) > position.x && 
-						target.position.x - (target.hitBox.width) < position.x)) {
+				if (aggroRange.overlaps(target.hitBox)) {
 					
-					//just approach player
-					if (target.position.x > position.x) {
-						//move to the right if player is to enemy's right, but if enemy position is in player's hitbox x value, 
-						//don't. this prevents enemy from vibrating back and forth on top of player's position
-						moveRight(delta);
-					} else if (target.position.x < position.x) {
-						//same as above, but left
-						moveLeft(delta);
+					if (moveSpeed != Constants.enemyMoveSpeedAggro) {
+						//increase speed when chasing
+						moveSpeed = Constants.enemyMoveSpeedAggro;
 					}
 					
+					//if enemy position IS NOT close enough to player:
+					if (!(target.position.x + (target.hitBox.width) > position.x && 
+							target.position.x - (target.hitBox.width) < position.x)) {
+						
+						//just approach player
+						if (target.position.x > position.x) {
+							//move to the right if player is to enemy's right, but if enemy position is in player's hitbox x value, 
+							//don't. this prevents enemy from vibrating back and forth on top of player's position
+							moveRight(delta);
+						} else if (target.position.x < position.x) {
+							//same as above, but left
+							moveLeft(delta);
+						}
+						
 
-				} else {
-					//if enemy position IS close enough to player, continue moving in direction already moving in
-					if (facing == Facing.RIGHT) {
-						moveRight(delta);
 					} else {
-						moveLeft(delta);
+						//if enemy position IS close enough to player, continue moving in direction already moving in
+						if (facing == Facing.RIGHT) {
+							moveRight(delta);
+						} else {
+							moveLeft(delta);
+						}
 					}
-				}
-				
-				
-				//separate from move check above so enemy can move and jump at once
-				//if player's foot is above the enemy, jump
-				if (target.hitBox.y > position.y) {
-					//spam jump
-					startJump();
 					
-				} else if (target.position.y < position.y) {
-					//downjump if player is below enemy
-					downJump();
+					
+					//separate from move check above so enemy can move and jump at once
+					//if player's foot is above the enemy, jump
+					if (target.hitBox.y > position.y) {
+						//spam jump
+						startJump();
+						
+					} else if (target.position.y < position.y) {
+						//downjump if player is below enemy
+						downJump();
+					}
+					
+				} else {
+					
+					if (moveSpeed != Constants.enemyMoveSpeed) {
+						//calm down
+						moveSpeed = Constants.enemyMoveSpeed;
+					}
+					
+					//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
+					//idle/wander ai. avoid having holes in the map with this method
+					if (!(platform.left < position.x && position.x < platform.right)) {
+						float homePlatformCenter = platform.centerX;
+						if (position.x > homePlatformCenter) {
+							moveLeft(delta);
+						} else if (position.x < homePlatformCenter) {
+							moveRight(delta);
+						}
+					} else if (position.y != platform.top + eyeHeight.y) {
+						if (platform.top < position.y) {
+							//downjump back to home platform. 
+							if (jumpState == JumpState.GROUNDED) {
+								//if enemy just ended up above its home platform, it can downjump until it reaches home.
+								downJump();
+							} else if (jumpState == JumpState.JUMPING) {
+								//see launch jump code below. once the enemy arrives on the platform, add extra velocity by
+								//having the enemy perform a jump onto the actual surface of the platform. it now appears
+								//that the enemy performed a very high superjump to arrive at its destination
+								startJump();
+							}
+						} else if (platform.top > position.y) {
+							//special launch jump to return to platform and ignore any other platforms if enemy ended up below
+							//its home platform.
+							velocity.y += Constants.jumpSpeed;
+							jumpState = JumpState.JUMPING;
+						}
+					} else {
+						//wander on home platform
+						
+						//1% chance every update for enemy to change behavior
+						if (MathUtils.random() < 0.02) {
+							wanderState = (int) (MathUtils.random() * wanderStateRandomizer.size());
+						}
+						
+						if (wanderState == 0) {
+							runState = RunState.IDLE;
+							
+						} else if (wanderState == 1) {
+							//stop the enemy near the edge of the platform to avoid weird vibrating shenanigans
+							if (position.x > platform.left + 10) {
+								moveLeft(delta);
+							} else {
+								wanderState = 0;
+							}
+
+						} else if (wanderState == 2) {
+							if (position.x < platform.right - 10) {
+								moveRight(delta);
+							} else {
+								wanderState = 0;
+							}
+
+							
+						}
+						
+					}
+						
 				}
 				
 			} else {
-				
-				if (moveSpeed != Constants.enemyMoveSpeed) {
-					//calm down
-					moveSpeed = Constants.enemyMoveSpeed;
+				if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
+					hitState = HitState.NOHIT;
 				}
-				
-				//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
-				//idle/wander ai. avoid having holes in the map with this method
-				if (!(platform.left < position.x && position.x < platform.right)) {
-					float homePlatformCenter = platform.centerX;
-					if (position.x > homePlatformCenter) {
-						moveLeft(delta);
-					} else if (position.x < homePlatformCenter) {
-						moveRight(delta);
-					}
-				} else if (position.y != platform.top + eyeHeight.y) {
-					if (platform.top < position.y) {
-						//downjump back to home platform. 
-						if (jumpState == JumpState.GROUNDED) {
-							//if enemy just ended up above its home platform, it can downjump until it reaches home.
-							downJump();
-						} else if (jumpState == JumpState.JUMPING) {
-							//see launch jump code below. once the enemy arrives on the platform, add extra velocity by
-							//having the enemy perform a jump onto the actual surface of the platform. it now appears
-							//that the enemy performed a very high superjump to arrive at its destination
-							startJump();
-						}
-					} else if (platform.top > position.y) {
-						//special launch jump to return to platform and ignore any other platforms if enemy ended up below
-						//its home platform.
-						velocity.y += Constants.jumpSpeed;
-						jumpState = JumpState.JUMPING;
-					}
-				} else {
-					//wander on home platform
-					
-					//1% chance every update for enemy to change behavior
-					if (MathUtils.random() < 0.02) {
-						wanderState = (int) (MathUtils.random() * wanderStateRandomizer.size());
-					}
-					
-					if (wanderState == 0) {
-						runState = RunState.IDLE;
-						
-					} else if (wanderState == 1) {
-						//stop the enemy near the edge of the platform to avoid weird vibrating shenanigans
-						if (position.x > platform.left + 10) {
-							moveLeft(delta);
-						} else {
-							wanderState = 0;
-						}
-
-					} else if (wanderState == 2) {
-						if (position.x < platform.right - 10) {
-							moveRight(delta);
-						} else {
-							wanderState = 0;
-						}
-
-						
-					}
-					
-				}
-					
 			}
+			
+			
 
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,

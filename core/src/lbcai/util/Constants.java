@@ -19,6 +19,8 @@ public class Constants {
 	
 	//ui elements
 	public static final Vector2 hpOrbDimensions = new Vector2(100, 100);
+	public static final Vector2 hpOrbCenter = new Vector2(75, 192);
+	public static final Vector2 livesFlowerCenter = new Vector2(164, 243);
 	public static final String healthOrb = "testorb";
 	public static final String livesFlowerCover = "testorb_cover";
 	public static final String livesFlowerPetal = "petal";

@@ -13,6 +13,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
 
 /**
  * 
@@ -115,5 +116,12 @@ public class BreakableObject extends Enemy {
 		batch.setColor(1, 1, 1, 1);
 	}
 
+	@Override
+	public void isDamaged(int damage) {
+		health -= damage;
+		// using iframe to denote flinch animation but no actual iframe for mobs
+		hitState = HitState.IFRAME;
+		timeSinceHit = TimeUtils.nanoTime();		
+	}
 	
 }
