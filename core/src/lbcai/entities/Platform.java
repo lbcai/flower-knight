@@ -32,14 +32,49 @@ public class Platform {
 	 * @param height  difference between top and bottom edges of platform
 	 */
 	public Platform(float left, float top, float width, float height) {
+		
+		//for tiled platforms, dimensions are as follows:
+		//corner pieces: 30x36px
+		//long side pieces: 90x36px for horizontal, 30x60px for vertical
+		//middle pieces: 90x60px
+		//so a platform must be 90x + 60 long and 60x + 72 tall. below we make sure input is correct
+		
+		if (width < 60) {
+			this.width = 60;
+		} else {
+			if ((width - 60) % 90 == 0) {
+				this.width = width;
+			} else {
+				if ((width - 60) % 90 >= 45) {
+					this.width = width + (90 - ((width - 60) % 90));
+				} else if (width % 90 < 45) {
+					this.width = width - ((width - 60) % 90);
+				}
+			}
+		}
+		
+		
+		if (height < 72) {
+			this.height = 72;
+		} else {
+			if ((height - 72) % 60 == 0) {
+				this.height = height;
+			} else {
+				if ((height - 72) % 60 >= 30) {
+					this.height = height + (60 - ((height - 72) % 60));
+				} else if ((height - 72) % 60 < 350) {
+					this.height = height - ((height - 72) % 60);
+				}
+			}
+		}
+		
+		
 		this.top = top;
-		this.bottom = top - height;
+		this.bottom = top - this.height;
 		this.left = left;
-		this.right = left + width;
-		centerX = left + (width / 2);
-		this.width = width;
-		this.height = height;
-
+		this.right = left + this.width;
+		centerX = left + (this.width / 2);
+		
 	}
 	
 	/**
