@@ -1,10 +1,7 @@
 package lbcai.entities;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lbcai.util.Assets;
 
 public class Platform {
@@ -34,10 +31,12 @@ public class Platform {
 	public Platform(float left, float top, float width, float height) {
 		
 		//for tiled platforms, dimensions are as follows:
-		//corner pieces: 30x36px
-		//long side pieces: 90x36px for horizontal, 30x60px for vertical
+		//corner pieces: 55x60px
+		//long side pieces: 90x60px for horizontal, 55x60px for vertical
 		//middle pieces: 90x60px
-		//so a platform must be 90x + 60 long and 60x + 72 tall. below we make sure input is correct
+		//a platform must be 90x + 60 long and 60x + 72 tall. below we make sure input is correct
+		//we draw the left edge pieces 25 pixels before the left edge of the platform to account for transparent parts of image
+		//and the bottom edge pieces 24 pixels before the bottom edge of the platform for the same reason
 		
 		if (width < 60) {
 			this.width = 60;
@@ -75,6 +74,23 @@ public class Platform {
 		this.right = left + this.width;
 		centerX = left + (this.width / 2);
 		
+		//start at the bottom left corner, place tile 7 25px to the left and 24px below the actual corner of the platform
+		//this means only 36px vertically and 30px horizontally of the tile is actually overlapping the platform space
+		//for a platform of the min height (36+36=72), draw tile 1 above tile 7. so go up 60px from the drawn corner or
+		//36px from the platform's actual corner. this is where you will place tile 1
+		//if the platform is greater in height than 72, subtract 72 off the height and divide this by 60 to find the number of
+		//vertical tiles (tile 4) required to fill in the space, then draw these tiles keeping in mind 25px is transparent
+		//buffer space on the left side and the tile is 60px tall
+		//once finished, draw tile 1 on top of this
+		
+		//repeat process for tiles 2, 5, 7 but divide the width - 60 by 90 and get the number of middle tiles required
+		//to fill the middle of the platform
+		
+		//finally, cap the platform with tiles 3, 6, 9 following same process as above
+		
+		//do the calculations in the constructor and simply input the position values in the render method.
+		
+		
 	}
 	
 	/**
@@ -88,6 +104,11 @@ public class Platform {
 		//this is on top of what was defined for the platform when it was created, seems like these values affect
 		//how far away from the actual texture entities will stand on the platform/count as touching platform, adjust as needed
 		Assets.instance.platformAssets.platformNinepatch.draw(batch, left - 1, bottom - 1, width + 2, height + 5);
+		
+
+		
+		
+		
 	}
 	
 	public String getId() {

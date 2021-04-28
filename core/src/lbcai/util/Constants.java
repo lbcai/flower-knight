@@ -120,6 +120,7 @@ public class Constants {
 	public static final String platformSprite = "Platform";
 	//size of stretchable edges in nine patch (placement of cut lines from edge of image)
 	public static final int platformStretchEdge = 33;
+	public static final String tileSet1 = "platform";
 	
 	
 	//enemies
