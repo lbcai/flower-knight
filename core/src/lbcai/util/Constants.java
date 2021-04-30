@@ -121,6 +121,8 @@ public class Constants {
 	//size of stretchable edges in nine patch (placement of cut lines from edge of image)
 	public static final int platformStretchEdge = 33;
 	public static final String tileSet1 = "platform";
+	public static final Vector2 cornerTileDim = new Vector2(30, 36);
+	public static final Vector2 cornerTileDimTrans = new Vector2(25, 24);
 	
 	
 	//enemies
