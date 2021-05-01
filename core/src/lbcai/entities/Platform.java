@@ -71,9 +71,9 @@ public class Platform {
 			
 			// statusCounter key:
 			// 1 2 2 2 3
-			// 4 0 0 0 6
-			// 4 0 0 0 6
-			// 4 0 0 0 6
+			// 4 5 5 5 6
+			// 4 5 5 5 6
+			// 4 5 5 5 6
 			// 7 8 8 8 9
 			
 			if (tilesSize % tilesDimensionHeight == 0) {
@@ -124,14 +124,76 @@ public class Platform {
 			//
 			//requires knowing the position of previous tiles. first determine: am i the first tile in the list?
 			//if the tilesSize is 0, i am the first tile in the list and i am a 1 tile. i will use the platform.top and 
-			//platform.left plus my own dimensions (55x60px) to determine where my bottom left corner should be and where i 
+			//platform.left plus my own dimensions (30x36px) to determine where my bottom left corner should be and where i 
 			//should position myself.
 			
-			if (tilesSize == 0) {
-				position = new Vector2(platform.left, platform.top - Constants.cornerTileDim.y);
-			} else {
-				//placeholder
-				position = new Vector2(0, 0);
+			if (statusCounter == 5) {
+				//non edge piece (probably a bit complicated) placed first because most pieces will not be edge pieces
+				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
+						Constants.midTileDim.x), (platform.top - Constants.cornerTileDim.y) - 
+						(((tilesSize) % tilesDimensionHeight) * Constants.midTileDim.y));
+			} else if (statusCounter == 2) {
+				//middle top row
+				//this means y position is always going to be platform.top - Constants.cornerTileDim.y
+				//determine the x position:
+				//cannot be platform.left because 2 tiles never go on the left column
+				//(platform.left + 30) + ((X) * Constants.midUpTileDim.x)
+				//find X by determining which column we are on using tilesSize, remember that tilesSize = current tile despite
+				//the fact that we are pulling the size of the array before adding the current tile. this is because of the 0-index
+				//so it works in our favor to give us the index of the current tile even though we are pulling the size of the array
+				//X is the column number and cannot be the first column or the last column.
+				//subtract 1 from column number to get to the bottom left corner of that column
+				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
+						Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y);
+			} else if (statusCounter == 6) {
+				//middle right column
+				//x is always going to be (platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x)
+				//y must be determined based on row we are in
+				//(platform.top - Constants.cornerTileDim.y) - (X * Constants.midSideTileDim.y)
+				// - (Constants.cornerTileDim.y)
+				//X is the row. % tilesDimensionHeight cannot = 0 because this is row 1. also cannot equal height - 1 because this
+				//is the final row.
+				position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
+						(platform.top - Constants.cornerTileDim.y) - (((tilesSize) % tilesDimensionHeight) * 
+								Constants.midSideTileDim.y));
+			} else if (statusCounter == 4) {
+				//middle left column
+				//x is always going to be platform.left - Constants.cornerTileDimTrans.x
+				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, (platform.top - Constants.cornerTileDim.y) - 
+						(((tilesSize) % tilesDimensionHeight) * Constants.midSideTileDim.y));
+			} else if (statusCounter == 8) {
+				//middle bottom row
+				//compare to middle top row (tile 2) x positions.
+				//from top of platform, subtract height of first row to get top of middle tiles. subtract height of 
+				//a middle tile to get bottom corner since we are rendering from bottom corner.
+				//subtract # of middle tiles * height of mid tiles to make us end up on bottom row
+				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * Constants.midUpTileDim.x), 
+						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+						 - (Constants.midSideTileDim.y));
+			} else if (statusCounter == 1) {
+				//upper left corner
+				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, platform.top - Constants.cornerTileDim.y);
+			} else if (statusCounter == 3) {
+				//upper right corner
+				//this means y position is always going to be platform.top - Constants.cornerTileDim.y
+				//determine the x position:
+				//always will start with platform.left + 30 because the 1 tile is 30px horizontally
+				//subtract 2 from tilesDimensionWidth to get the number of tiles in the middle (non corner pieces)
+				//multiply the non corner pieces by the width of non corner pieces in px
+				//this x value puts you at the end of the top platform row of tiles just before the final corner piece.
+				position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
+						platform.top - Constants.cornerTileDim.y);
+			} else if (statusCounter == 7) {
+				//bottom left corner
+				//this means x position is always platform.left - Constants.cornerTileDimTrans.x
+				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, 
+						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+						 - (Constants.midSideTileDim.y));
+			} else if (statusCounter == 9) {
+				//bottom right corner
+				position = new Vector2(platform.right - Constants.cornerTileDim.x, 
+						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+						 - (Constants.midSideTileDim.y));
 			}
 			
 			
@@ -165,8 +227,9 @@ public class Platform {
 			} else {
 				if ((width - 60) % 90 >= 45) {
 					this.width = width + (90 - ((width - 60) % 90));
-				} else if (width % 90 < 45) {
+				} else if ((width - 60) % 90 < 45) {
 					this.width = width - ((width - 60) % 90);
+					
 				}
 			}
 		}
@@ -209,24 +272,7 @@ public class Platform {
 			// 0-indexing!
 			tiles.add(new Tile(tiles.size(), this));
 		}
-		
-		//start at the bottom left corner, place tile 7 25px to the left and 24px below the actual corner of the platform
-		//this means only 36px vertically and 30px horizontally of the tile is actually overlapping the platform space
-		//for a platform of the min height (36+36=72), draw tile 1 above tile 7. so go up 60px from the drawn corner or
-		//36px from the platform's actual corner. this is where you will place tile 1
-		//if the platform is greater in height than 72, subtract 72 off the height and divide this by 60 to find the number of
-		//vertical tiles (tile 4) required to fill in the space, then draw these tiles keeping in mind 25px is transparent
-		//buffer space on the left side and the tile is 60px tall
-		//once finished, draw tile 1 on top of this
-		
-		//repeat process for tiles 2, 5, 7 but divide the width - 60 by 90 and get the number of middle tiles required
-		//to fill the middle of the platform
-		
-		//finally, cap the platform with tiles 3, 6, 9 following same process as above
-		
-		//do the calculations in the constructor and simply input the position values in the render method.
-		
-		
+
 	}
 	
 	/**
@@ -235,11 +281,6 @@ public class Platform {
 	 * @param batch is a disposable object that renders textures on quads, need for nine patch.
 	 */
 	public void render(SpriteBatch batch) {
-		//position x, position y, width, height
-		//no documentation. seems to slide platform 1 pixel to left and 1 down, add 2 to width and height
-		//this is on top of what was defined for the platform when it was created, seems like these values affect
-		//how far away from the actual texture entities will stand on the platform/count as touching platform, adjust as needed
-		//Assets.instance.platformAssets.platformNinepatch.draw(batch, left - 1, bottom - 1, width + 2, height + 5);
 		
 		for (Tile tile : tiles) {
 			batch.draw(tile.region.getTexture(), 

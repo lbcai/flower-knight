@@ -123,6 +123,9 @@ public class Constants {
 	public static final String tileSet1 = "platform";
 	public static final Vector2 cornerTileDim = new Vector2(30, 36);
 	public static final Vector2 cornerTileDimTrans = new Vector2(25, 24);
+	public static final Vector2 midUpTileDim = new Vector2(90, 36);
+	public static final Vector2 midSideTileDim = new Vector2(36, 60);
+	public static final Vector2 midTileDim = new Vector2(90, 60);
 	
 	
 	//enemies

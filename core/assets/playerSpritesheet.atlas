@@ -1229,14 +1229,14 @@ Squatright
   index: 2
 bulletseed
   rotate: false
-  xy: 2739, 1002
+  xy: 3845, 3842
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
 bulletseed
   rotate: false
-  xy: 2791, 1002
+  xy: 3141, 1002
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -1271,56 +1271,56 @@ dmg
   index: 2
 dmg
   rotate: false
-  xy: 3824, 1196
+  xy: 2544, 938
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 3
 dmg
   rotate: false
-  xy: 2444, 582
+  xy: 3047, 992
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 4
 dmg
   rotate: false
-  xy: 2544, 938
+  xy: 4047, 3972
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 5
 dmg
   rotate: false
-  xy: 2692, 992
+  xy: 2544, 876
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 6
 dmg
   rotate: false
-  xy: 4047, 3972
+  xy: 3094, 992
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 7
 dmg
   rotate: false
-  xy: 2444, 520
+  xy: 4047, 3910
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 8
 dmg
   rotate: false
-  xy: 2544, 876
+  xy: 2544, 814
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: 9
 dust
   rotate: false
-  xy: 2843, 1002
+  xy: 3897, 3842
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -1583,61 +1583,61 @@ platform
   size: 90, 60
   orig: 90, 60
   offset: 0, 0
-  index: 5
-platform
-  rotate: false
-  xy: 260, 138
-  size: 90, 36
-  orig: 90, 36
-  offset: 0, 0
   index: 2
 platform
   rotate: false
-  xy: 3845, 3856
-  size: 90, 36
-  orig: 90, 36
+  xy: 2692, 992
+  size: 90, 60
+  orig: 90, 60
+  offset: 0, 0
+  index: 5
+platform
+  rotate: false
+  xy: 2784, 992
+  size: 90, 60
+  orig: 90, 60
   offset: 0, 0
   index: 8
 platform
   rotate: false
-  xy: 4047, 3910
-  size: 30, 60
-  orig: 30, 60
-  offset: 0, 0
-  index: 4
-platform
-  rotate: false
-  xy: 2544, 814
-  size: 30, 60
-  orig: 30, 60
-  offset: 0, 0
-  index: 6
-platform
-  rotate: false
-  xy: 352, 138
-  size: 30, 36
-  orig: 30, 36
+  xy: 3824, 1196
+  size: 55, 60
+  orig: 55, 60
   offset: 0, 0
   index: 1
 platform
   rotate: false
-  xy: 3937, 3856
-  size: 30, 36
-  orig: 30, 36
+  xy: 2444, 582
+  size: 55, 60
+  orig: 55, 60
   offset: 0, 0
   index: 3
 platform
   rotate: false
-  xy: 3824, 1158
-  size: 30, 36
-  orig: 30, 36
+  xy: 2876, 992
+  size: 55, 60
+  orig: 55, 60
+  offset: 0, 0
+  index: 4
+platform
+  rotate: false
+  xy: 2444, 520
+  size: 55, 60
+  orig: 55, 60
+  offset: 0, 0
+  index: 6
+platform
+  rotate: false
+  xy: 2933, 992
+  size: 55, 60
+  orig: 55, 60
   offset: 0, 0
   index: 7
 platform
   rotate: false
-  xy: 2895, 1016
-  size: 30, 36
-  orig: 30, 36
+  xy: 2990, 992
+  size: 55, 60
+  orig: 55, 60
   offset: 0, 0
   index: 9
 testorb
