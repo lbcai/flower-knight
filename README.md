@@ -86,7 +86,7 @@ Elements associated with a platform lower in y value should be rendered above hi
 - [x] Add extra movement options: downjump, doublejump, wall climbing, boosting up onto a platform
 - [x] Create wall hanging animations
 - [ ] Create platform tileset & background images
-- [ ] Create custom platform class for nicer looking platforms
+- [x] Create custom platform class for nicer looking platforms
 - [ ] Add slanted ground/platforms
 - [x] Add breakable background objects
 - [ ] Create basic player attack animations

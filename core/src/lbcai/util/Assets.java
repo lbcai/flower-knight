@@ -496,9 +496,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	public class PlatformAssets {
-		
-		//A nine patch is an object that will make our platforms from 9 different sprites so we can modularly display them.
-		public final NinePatch platformNinepatch;
+
 		public final AtlasRegion tileSet1_1; 
 		public final AtlasRegion tileSet1_2; 
 		public final AtlasRegion tileSet1_3; 
@@ -510,13 +508,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final AtlasRegion tileSet1_9; 
 		
 		public PlatformAssets(TextureAtlas atlas) {
-			AtlasRegion region = atlas.findRegion(Constants.platformSprite);
-			int edge = Constants.platformStretchEdge;
-			//Order of edge arguments: left, right, top, bottom. Each of these means "pixels from left/right/top/bottom" and places
-			//a line on the image that will "cut" the image into the tileable pieces.
-			platformNinepatch = new NinePatch(region, edge, edge, edge, edge);
-			
-			
+
 			tileSet1_1 = atlas.findRegion(Constants.tileSet1, 1);
 			tileSet1_2 = atlas.findRegion(Constants.tileSet1, 2);
 			tileSet1_3 = atlas.findRegion(Constants.tileSet1, 3);

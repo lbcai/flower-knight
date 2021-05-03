@@ -117,9 +117,6 @@ public class Constants {
 	public static final String dmg = "dmg";
 	
 	//tileset
-	public static final String platformSprite = "Platform";
-	//size of stretchable edges in nine patch (placement of cut lines from edge of image)
-	public static final int platformStretchEdge = 33;
 	public static final String tileSet1 = "platform";
 	public static final Vector2 cornerTileDim = new Vector2(30, 36);
 	public static final Vector2 cornerTileDimTrans = new Vector2(25, 24);
