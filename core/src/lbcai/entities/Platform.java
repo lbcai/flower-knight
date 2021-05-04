@@ -26,6 +26,7 @@ public class Platform {
 	int tilesDimensionHeight;
 	
 	ArrayList<Tile> tiles = new ArrayList<Tile>();
+	ArrayList<Tile> tilesBack = new ArrayList<Tile>();
 	
 	//used to link enemies to platforms
 	String id;
@@ -37,166 +38,196 @@ public class Platform {
 		int statusCounter = 5;
 		
 		//constructor
-		Tile(int tilesSize, Platform platform) {
+		Tile(int tilesSize, Platform platform, int type) {
 			
-			//FIRST: figure out which tile to display
-			//
-			//0-indexing in java. to find the edge tiles:
-			//assuming we have a 6x5 platform,
-			// 0 5 10 15 20 25
-			// 1 6 11 16 21 26
-			// 2 7 12 17 22 27
-			// 3 8 13 18 23 28
-			// 4 9 14 19 24 29
-			// (width * height) - 1 = the largest index in the platform array
-			// 0 = always will be a corner
-			// (height - 1) = all the indices in the first row
-			// x % height == 0 are all the indices in the top row
-			// (x + 1) % height == 0 are all the indices in the bottom row
-			// (width * height) - height up until the largest index in the platform array = all the indices in the last row
+			if (type == 0) {
+				//if tile is for foreground:
+				
+				//FIRST: figure out which tile to display
+				//
+				//0-indexing in java. to find the edge tiles:
+				//assuming we have a 6x5 platform,
+				// 0 5 10 15 20 25
+				// 1 6 11 16 21 26
+				// 2 7 12 17 22 27
+				// 3 8 13 18 23 28
+				// 4 9 14 19 24 29
+				// (width * height) - 1 = the largest index in the platform array
+				// 0 = always will be a corner
+				// (height - 1) = all the indices in the first row
+				// x % height == 0 are all the indices in the top row
+				// (x + 1) % height == 0 are all the indices in the bottom row
+				// (width * height) - height up until the largest index in the platform array = all the indices in the last row
 
-			if (tilesSize <= tilesDimensionHeight - 1) {
-				//we are in the first edge column
-				statusCounter = 4;
-				region = Assets.instance.platformAssets.tileSet1_4;
-				origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
-			}
-			
-			if (tilesSize >= ((tilesDimensionWidth * tilesDimensionHeight) - tilesDimensionHeight)) {
-				//we are in the last edge column
-				statusCounter = 6;
-				region = Assets.instance.platformAssets.tileSet1_6;
-				origin = new Vector2(0, 0);
-			}
-			
-			// statusCounter key:
-			// 1 2 2 2 3
-			// 4 5 5 5 6
-			// 4 5 5 5 6
-			// 4 5 5 5 6
-			// 7 8 8 8 9
-			
-			if (tilesSize % tilesDimensionHeight == 0) {
-				//we are in the top edge row
-				if (statusCounter == 5) {
-					statusCounter = 2;
-					region = Assets.instance.platformAssets.tileSet1_2;
+				if (tilesSize <= tilesDimensionHeight - 1) {
+					//we are in the first edge column
+					statusCounter = 4;
+					region = Assets.instance.platformAssets.tileSet1_4;
+					origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
+				}
+				
+				if (tilesSize >= ((tilesDimensionWidth * tilesDimensionHeight) - tilesDimensionHeight)) {
+					//we are in the last edge column
+					statusCounter = 6;
+					region = Assets.instance.platformAssets.tileSet1_6;
 					origin = new Vector2(0, 0);
+				}
+				
+				// statusCounter key:
+				// 1 2 2 2 3
+				// 4 5 5 5 6
+				// 4 5 5 5 6
+				// 4 5 5 5 6
+				// 7 8 8 8 9
+				
+				if (tilesSize % tilesDimensionHeight == 0) {
+					//we are in the top edge row
+					if (statusCounter == 5) {
+						statusCounter = 2;
+						region = Assets.instance.platformAssets.tileSet1_2;
+						origin = new Vector2(0, 0);
+					} else if (statusCounter == 4) {
+						//we are top left corner
+						statusCounter = 1;
+						region = Assets.instance.platformAssets.tileSet1_1;
+						origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
+					} else if (statusCounter == 6) {
+						//we are top right corner
+						statusCounter = 3;
+						region = Assets.instance.platformAssets.tileSet1_3;
+						origin = new Vector2(0, 0);
+					}
+
+				}
+				
+				if ((tilesSize + 1) % tilesDimensionHeight == 0) {
+					//we are in the bottom edge row
+					if (statusCounter == 5) {
+						statusCounter = 8;
+						region = Assets.instance.platformAssets.tileSet1_8;
+						origin = new Vector2(0, Constants.cornerTileDimTrans.y);
+					} else if (statusCounter == 4) {
+						//we are bottom left corner
+						statusCounter = 7;
+						region = Assets.instance.platformAssets.tileSet1_7;
+						origin = Constants.cornerTileDimTrans;
+					} else if (statusCounter == 6) {
+						//we are bottom right corner
+						statusCounter = 9;
+						region = Assets.instance.platformAssets.tileSet1_9;
+						origin = new Vector2(0, Constants.cornerTileDimTrans.y);
+					}
+				}
+				
+				if (statusCounter == 5) {
+					region = Assets.instance.platformAssets.tileSet1_5;
+					origin = new Vector2(0, 0);
+				}
+				
+				//SECOND: figure out where the tile must go
+				//
+				//requires knowing the position of previous tiles. first determine: am i the first tile in the list?
+				//if the tilesSize is 0, i am the first tile in the list and i am a 1 tile. i will use the platform.top and 
+				//platform.left plus my own dimensions (30x36px) to determine where my bottom left corner should be and where i 
+				//should position myself.
+				
+				if (statusCounter == 5) {
+					//non edge piece (probably a bit complicated) placed first because most pieces will not be edge pieces
+					position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
+							Constants.midTileDim.x), (platform.top - Constants.cornerTileDim.y) - 
+							(((tilesSize) % tilesDimensionHeight) * Constants.midTileDim.y));
+				} else if (statusCounter == 2) {
+					//middle top row
+					//this means y position is always going to be platform.top - Constants.cornerTileDim.y
+					//determine the x position:
+					//cannot be platform.left because 2 tiles never go on the left column
+					//(platform.left + 30) + ((X) * Constants.midUpTileDim.x)
+					//find X by determining which column we are on using tilesSize, remember that tilesSize = current tile despite
+					//the fact that we are pulling the size of the array before adding the current tile. this is because of the 0-index
+					//so it works in our favor to give us the index of the current tile even though we are pulling the size of the array
+					//X is the column number and cannot be the first column or the last column.
+					//subtract 1 from column number to get to the bottom left corner of that column
+					position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
+							Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y);
+				} else if (statusCounter == 6) {
+					//middle right column
+					//x is always going to be (platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x)
+					//y must be determined based on row we are in
+					//(platform.top - Constants.cornerTileDim.y) - (X * Constants.midSideTileDim.y)
+					// - (Constants.cornerTileDim.y)
+					//X is the row. % tilesDimensionHeight cannot = 0 because this is row 1. also cannot equal height - 1 because this
+					//is the final row.
+					position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
+							(platform.top - Constants.cornerTileDim.y) - (((tilesSize) % tilesDimensionHeight) * 
+									Constants.midSideTileDim.y));
 				} else if (statusCounter == 4) {
-					//we are top left corner
-					statusCounter = 1;
+					//middle left column
+					//x is always going to be platform.left - Constants.cornerTileDimTrans.x
+					position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, (platform.top - Constants.cornerTileDim.y) - 
+							(((tilesSize) % tilesDimensionHeight) * Constants.midSideTileDim.y));
+				} else if (statusCounter == 8) {
+					//middle bottom row
+					//compare to middle top row (tile 2) x positions.
+					//from top of platform, subtract height of first row to get top of middle tiles. subtract height of 
+					//a middle tile to get bottom corner since we are rendering from bottom corner.
+					//subtract # of middle tiles * height of mid tiles to make us end up on bottom row
+					position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * Constants.midUpTileDim.x), 
+							(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+							 - (Constants.midSideTileDim.y));
+				} else if (statusCounter == 1) {
+					//upper left corner
+					position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, platform.top - Constants.cornerTileDim.y);
+				} else if (statusCounter == 3) {
+					//upper right corner
+					//this means y position is always going to be platform.top - Constants.cornerTileDim.y
+					//determine the x position:
+					//always will start with platform.left + 30 because the 1 tile is 30px horizontally
+					//subtract 2 from tilesDimensionWidth to get the number of tiles in the middle (non corner pieces)
+					//multiply the non corner pieces by the width of non corner pieces in px
+					//this x value puts you at the end of the top platform row of tiles just before the final corner piece.
+					position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
+							platform.top - Constants.cornerTileDim.y);
+				} else if (statusCounter == 7) {
+					//bottom left corner
+					//this means x position is always platform.left - Constants.cornerTileDimTrans.x
+					position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, 
+							(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+							 - (Constants.midSideTileDim.y));
+				} else if (statusCounter == 9) {
+					//bottom right corner
+					position = new Vector2(platform.right - Constants.cornerTileDim.x, 
+							(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
+							 - (Constants.midSideTileDim.y));
+				}
+				
+			} else if (type == 1) {
+				//PLACEHOLDER! these should not use the same tiles as the above, these are background tiles.
+				
+				//if tile is for background grass, only do the first uppermost row of tiles
+				if (tilesSize == 0) {
+					//if there is nothing in the array, we are on the first tile of the row
 					region = Assets.instance.platformAssets.tileSet1_1;
 					origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
-				} else if (statusCounter == 6) {
-					//we are top right corner
-					statusCounter = 3;
-					region = Assets.instance.platformAssets.tileSet1_3;
-					origin = new Vector2(0, 0);
-				}
-
-			}
-			
-			if ((tilesSize + 1) % tilesDimensionHeight == 0) {
-				//we are in the bottom edge row
-				if (statusCounter == 5) {
-					statusCounter = 8;
-					region = Assets.instance.platformAssets.tileSet1_8;
-					origin = new Vector2(0, Constants.cornerTileDimTrans.y);
-				} else if (statusCounter == 4) {
-					//we are bottom left corner
-					statusCounter = 7;
-					region = Assets.instance.platformAssets.tileSet1_7;
-					origin = Constants.cornerTileDimTrans;
-				} else if (statusCounter == 6) {
-					//we are bottom right corner
-					statusCounter = 9;
+					position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, platform.top - Constants.cornerTileDim.y + 10);
+				
+				} else if (tilesSize == (tilesDimensionWidth - 1)) {
+					//if the size of the array is the total width - 1, we are on the last tile of the row
 					region = Assets.instance.platformAssets.tileSet1_9;
 					origin = new Vector2(0, Constants.cornerTileDimTrans.y);
+					position = new Vector2(platform.right - Constants.cornerTileDim.x, 
+							platform.top - Constants.cornerTileDim.y - Constants.cornerTileDimTrans.y + 10);
+				
+				} else {
+					//we are in the middle of the row
+					region = Assets.instance.platformAssets.tileSet1_2;
+					origin = new Vector2(0, 0);
+					position = new Vector2((platform.left + 30) + ((tilesSize - 1) * 
+							Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y + 10);
 				}
+				
+				
 			}
-			
-			if (statusCounter == 5) {
-				region = Assets.instance.platformAssets.tileSet1_5;
-				origin = new Vector2(0, 0);
-			}
-			
-			//SECOND: figure out where the tile must go
-			//
-			//requires knowing the position of previous tiles. first determine: am i the first tile in the list?
-			//if the tilesSize is 0, i am the first tile in the list and i am a 1 tile. i will use the platform.top and 
-			//platform.left plus my own dimensions (30x36px) to determine where my bottom left corner should be and where i 
-			//should position myself.
-			
-			if (statusCounter == 5) {
-				//non edge piece (probably a bit complicated) placed first because most pieces will not be edge pieces
-				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
-						Constants.midTileDim.x), (platform.top - Constants.cornerTileDim.y) - 
-						(((tilesSize) % tilesDimensionHeight) * Constants.midTileDim.y));
-			} else if (statusCounter == 2) {
-				//middle top row
-				//this means y position is always going to be platform.top - Constants.cornerTileDim.y
-				//determine the x position:
-				//cannot be platform.left because 2 tiles never go on the left column
-				//(platform.left + 30) + ((X) * Constants.midUpTileDim.x)
-				//find X by determining which column we are on using tilesSize, remember that tilesSize = current tile despite
-				//the fact that we are pulling the size of the array before adding the current tile. this is because of the 0-index
-				//so it works in our favor to give us the index of the current tile even though we are pulling the size of the array
-				//X is the column number and cannot be the first column or the last column.
-				//subtract 1 from column number to get to the bottom left corner of that column
-				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * 
-						Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y);
-			} else if (statusCounter == 6) {
-				//middle right column
-				//x is always going to be (platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x)
-				//y must be determined based on row we are in
-				//(platform.top - Constants.cornerTileDim.y) - (X * Constants.midSideTileDim.y)
-				// - (Constants.cornerTileDim.y)
-				//X is the row. % tilesDimensionHeight cannot = 0 because this is row 1. also cannot equal height - 1 because this
-				//is the final row.
-				position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
-						(platform.top - Constants.cornerTileDim.y) - (((tilesSize) % tilesDimensionHeight) * 
-								Constants.midSideTileDim.y));
-			} else if (statusCounter == 4) {
-				//middle left column
-				//x is always going to be platform.left - Constants.cornerTileDimTrans.x
-				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, (platform.top - Constants.cornerTileDim.y) - 
-						(((tilesSize) % tilesDimensionHeight) * Constants.midSideTileDim.y));
-			} else if (statusCounter == 8) {
-				//middle bottom row
-				//compare to middle top row (tile 2) x positions.
-				//from top of platform, subtract height of first row to get top of middle tiles. subtract height of 
-				//a middle tile to get bottom corner since we are rendering from bottom corner.
-				//subtract # of middle tiles * height of mid tiles to make us end up on bottom row
-				position = new Vector2((platform.left + 30) + ((((tilesSize) / tilesDimensionHeight) - 1) * Constants.midUpTileDim.x), 
-						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
-						 - (Constants.midSideTileDim.y));
-			} else if (statusCounter == 1) {
-				//upper left corner
-				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, platform.top - Constants.cornerTileDim.y);
-			} else if (statusCounter == 3) {
-				//upper right corner
-				//this means y position is always going to be platform.top - Constants.cornerTileDim.y
-				//determine the x position:
-				//always will start with platform.left + 30 because the 1 tile is 30px horizontally
-				//subtract 2 from tilesDimensionWidth to get the number of tiles in the middle (non corner pieces)
-				//multiply the non corner pieces by the width of non corner pieces in px
-				//this x value puts you at the end of the top platform row of tiles just before the final corner piece.
-				position = new Vector2((platform.left + 30) + ((tilesDimensionWidth - 2) * Constants.midUpTileDim.x), 
-						platform.top - Constants.cornerTileDim.y);
-			} else if (statusCounter == 7) {
-				//bottom left corner
-				//this means x position is always platform.left - Constants.cornerTileDimTrans.x
-				position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, 
-						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
-						 - (Constants.midSideTileDim.y));
-			} else if (statusCounter == 9) {
-				//bottom right corner
-				position = new Vector2(platform.right - Constants.cornerTileDim.x, 
-						(platform.top - Constants.cornerTileDim.y) - ((tilesDimensionHeight - 2) * Constants.midSideTileDim.y)
-						 - (Constants.midSideTileDim.y));
-			}
-			
-			
+
 		}
 		
 	}
@@ -270,7 +301,15 @@ public class Platform {
 			// this means that the tile being made gets the size of the arraylist BEFORE it is made...
 			// you do not have to add 1 to the tile size for the new tile being added to get its own index because of java's
 			// 0-indexing!
-			tiles.add(new Tile(tiles.size(), this));
+			tiles.add(new Tile(tiles.size(), this, 0));
+		}
+		
+		//adjusting the top of platform so player stands above the foreground platform covering
+		this.top = top + 5;
+		
+		for (int j = 0; j < tilesDimensionWidth; j++) {
+			// for the background grass tiles
+			tilesBack.add(new Tile(tilesBack.size(), this, 1));
 		}
 
 	}
@@ -282,6 +321,27 @@ public class Platform {
 	 */
 	public void render(SpriteBatch batch) {
 		
+		//render background tiles first
+		for (Tile tile : tilesBack) {
+			batch.draw(tile.region.getTexture(), 
+					tile.position.x, 
+					tile.position.y, 
+					tile.origin.x, 
+					tile.origin.y, 
+					tile.region.getRegionWidth(), 
+					tile.region.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					tile.region.getRegionX(), 
+					tile.region.getRegionY(), 
+					tile.region.getRegionWidth(), 
+					tile.region.getRegionHeight(), 
+					false, 
+					false);
+		}
+		
+		//render foreground covering tiles last
 		for (Tile tile : tiles) {
 			batch.draw(tile.region.getTexture(), 
 					tile.position.x, 
