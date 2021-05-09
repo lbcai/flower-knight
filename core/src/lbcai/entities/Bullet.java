@@ -77,7 +77,7 @@ public class Bullet extends Entity {
 			active = false;
 		}
 		
-		hitBox = new Rectangle(
+		hitBox.set(
 				position.x - Constants.bulletCenter.x,
 				position.y - Constants.bulletCenter.y,
 				1.5f * Constants.bulletCenter.x,

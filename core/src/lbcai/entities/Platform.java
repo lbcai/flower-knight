@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import lbcai.util.Assets;
@@ -33,7 +34,6 @@ public class Platform {
 	
 	class Tile {
 		Vector2 position;
-		Vector2 origin;
 		TextureRegion region;
 		int statusCounter = 5;
 		
@@ -63,14 +63,12 @@ public class Platform {
 					//we are in the first edge column
 					statusCounter = 4;
 					region = Assets.instance.platformAssets.tileSet1_4;
-					origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
 				}
 				
 				if (tilesSize >= ((tilesDimensionWidth * tilesDimensionHeight) - tilesDimensionHeight)) {
 					//we are in the last edge column
 					statusCounter = 6;
 					region = Assets.instance.platformAssets.tileSet1_6;
-					origin = new Vector2(0, 0);
 				}
 				
 				// statusCounter key:
@@ -85,17 +83,14 @@ public class Platform {
 					if (statusCounter == 5) {
 						statusCounter = 2;
 						region = Assets.instance.platformAssets.tileSet1_2;
-						origin = new Vector2(0, 0);
 					} else if (statusCounter == 4) {
 						//we are top left corner
 						statusCounter = 1;
 						region = Assets.instance.platformAssets.tileSet1_1;
-						origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
 					} else if (statusCounter == 6) {
 						//we are top right corner
 						statusCounter = 3;
 						region = Assets.instance.platformAssets.tileSet1_3;
-						origin = new Vector2(0, 0);
 					}
 
 				}
@@ -105,23 +100,19 @@ public class Platform {
 					if (statusCounter == 5) {
 						statusCounter = 8;
 						region = Assets.instance.platformAssets.tileSet1_8;
-						origin = new Vector2(0, Constants.cornerTileDimTrans.y);
 					} else if (statusCounter == 4) {
 						//we are bottom left corner
 						statusCounter = 7;
 						region = Assets.instance.platformAssets.tileSet1_7;
-						origin = Constants.cornerTileDimTrans;
 					} else if (statusCounter == 6) {
 						//we are bottom right corner
 						statusCounter = 9;
 						region = Assets.instance.platformAssets.tileSet1_9;
-						origin = new Vector2(0, Constants.cornerTileDimTrans.y);
 					}
 				}
 				
 				if (statusCounter == 5) {
 					region = Assets.instance.platformAssets.tileSet1_5;
-					origin = new Vector2(0, 0);
 				}
 				
 				//SECOND: figure out where the tile must go
@@ -207,20 +198,17 @@ public class Platform {
 				if (tilesSize == 0) {
 					//if there is nothing in the array, we are on the first tile of the row
 					region = Assets.instance.platformAssets.tileSet1_1;
-					origin = new Vector2(Constants.cornerTileDimTrans.x, 0);
 					position = new Vector2(platform.left - Constants.cornerTileDimTrans.x, platform.top - Constants.cornerTileDim.y + 10);
 				
 				} else if (tilesSize == (tilesDimensionWidth - 1)) {
 					//if the size of the array is the total width - 1, we are on the last tile of the row
 					region = Assets.instance.platformAssets.tileSet1_9;
-					origin = new Vector2(0, Constants.cornerTileDimTrans.y);
 					position = new Vector2(platform.right - Constants.cornerTileDim.x, 
 							platform.top - Constants.cornerTileDim.y - Constants.cornerTileDimTrans.y + 10);
 				
 				} else {
 					//we are in the middle of the row
 					region = Assets.instance.platformAssets.tileSet1_2;
-					origin = new Vector2(0, 0);
 					position = new Vector2((platform.left + 30) + ((tilesSize - 1) * 
 							Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y + 10);
 				}
@@ -311,7 +299,8 @@ public class Platform {
 			// for the background grass tiles
 			tilesBack.add(new Tile(tilesBack.size(), this, 1));
 		}
-
+		
+		
 	}
 	
 	/**
@@ -326,8 +315,8 @@ public class Platform {
 			batch.draw(tile.region.getTexture(), 
 					tile.position.x, 
 					tile.position.y, 
-					tile.origin.x, 
-					tile.origin.y, 
+					0, 
+					0, 
 					tile.region.getRegionWidth(), 
 					tile.region.getRegionHeight(), 
 					1, 
@@ -346,8 +335,8 @@ public class Platform {
 			batch.draw(tile.region.getTexture(), 
 					tile.position.x, 
 					tile.position.y, 
-					tile.origin.x, 
-					tile.origin.y, 
+					0, 
+					0, 
 					tile.region.getRegionWidth(), 
 					tile.region.getRegionHeight(), 
 					1, 
@@ -373,6 +362,16 @@ public class Platform {
 		this.id = id;
 	}
 
+	public float getTop() {
+		if (this.bottom < 0) {
+			System.out.println((this.bottom + this.height + 5) + " " + this.top);
+		}
+
+		return this.bottom + this.height + 5;
+	}
 	
+	public void debugRender(ShapeRenderer shape) {
+		shape.rect(this.left, this.bottom, this.width, this.height + 5);
+	}
 	
 }

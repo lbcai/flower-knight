@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
+import lbcai.entities.Platform;
 import lbcai.util.Assets;
 import lbcai.util.ChaseCam;
 import lbcai.util.Constants;
@@ -123,7 +125,11 @@ public class GameplayScreen extends ScreenAdapter {
 			shape.setProjectionMatrix(viewport.getCamera().combined);
 			shape.begin(ShapeType.Line);
 			level.debugRender(shape);
+			for (Platform platform : level.platforms) {
+				platform.debugRender(shape);
+			}
 			ui.debugRender(shape, batch);
+
 			shape.end();
 		}
 		

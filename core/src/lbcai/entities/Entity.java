@@ -66,6 +66,20 @@ public abstract class Entity {
 
 	}
 	
+	void stayInLevel() {
+		if (position.x > level.levelBound.x + level.levelBound.width) {
+			position.x = level.levelBound.x + level.levelBound.width;
+		} else if (position.x < level.levelBound.x) {
+			position.x = level.levelBound.x;
+		}
+		
+		if (position.y > level.levelBound.y + level.levelBound.height) {
+			position.y = level.levelBound.y + level.levelBound.height;
+		}
+		//no condition for dropping out the bottom of level because going to prevent downjumping through lowest platform on map
+		
+	}
+	
 	void moveLeft(float delta) {
 		//At the beginning of movement, if we are running, save the time as the run start time.
 		if (jumpState == JumpState.GROUNDED && runState != RunState.RUN) {
@@ -117,8 +131,12 @@ public abstract class Entity {
 	
 	
 	void downJump() {
-		if (jumpState == JumpState.GROUNDED) {
-			position.y -= 10;
+		//prevent downjumping if on the lowest platform of map
+		if (((position.y - eyeHeight.y) > level.lowestTop + 10)) {
+			if (jumpState == JumpState.GROUNDED) {
+				jumpState = JumpState.FALLING;
+				position.y -= 10;
+			}
 		}
 	}
 	

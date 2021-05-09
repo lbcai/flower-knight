@@ -501,6 +501,9 @@ public class Player extends Entity {
 			init();
 		}
 		
+		//Keep player in level boundary
+		stayInLevel();
+		
 		//Use for collision detection of player.
 		if ((runState == RunState.SQUAT || boostCounter == 1) && jumpState != JumpState.FALLING) {
 
@@ -854,8 +857,7 @@ public class Player extends Entity {
 				//downjump
 				//isKeyJustPressed prevent player from being able to doublejump straight onto the platform they 
 				//downjumped off on accident
-				jumpState = JumpState.FALLING;
-				position.y -= 10; 
+				downJump();
 			}
 			
 			//allows boosting up to platform surfaces that player is just shy of

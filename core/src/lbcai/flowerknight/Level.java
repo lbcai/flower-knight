@@ -56,7 +56,10 @@ public class Level {
 	private DelayedRemovalArray<DamageNum> damageNums;
 	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
-
+	
+	//define the level bounds
+	public Rectangle levelBound = new Rectangle();
+	public float lowestTop;
 	
 	public Level(Viewport viewport) {
 		this.viewport = viewport;
@@ -201,6 +204,8 @@ public class Level {
 		platforms.add(new Platform(0, 1000, 200, 800));
 		platforms.add(new Platform(512, 1000, 200, 800));
 		platforms.add(new Platform(800, 0, 800, 50));
+		//this is the lowest platform in the map. height must be at least 72, so bottom is corrected to -172, 
+		//then +5 to top for background grass, this means the actual top will be -95 y position.
 		Platform longPlatform = new Platform(0, -100, 10000, 50);
 		platforms.add(longPlatform);
 		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
@@ -214,6 +219,16 @@ public class Level {
 		//enemies.add(new EnemyDandelion(enemyPlatform, this));
 		enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		platforms.add(enemyPlatform);
+		
+		
+		lowestTop = platforms.get(0).getTop();		
+		for (Platform platform : platforms) {
+			if (platform.getTop() < lowestTop) {
+				lowestTop = platform.getTop();
+			}
+		}
+		//x, y, width, height; set the size of the level (entities cannot exit this boundary)
+		levelBound.set(0, lowestTop, 2000, 500);
 
 
 	}
