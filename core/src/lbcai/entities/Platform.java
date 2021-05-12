@@ -363,11 +363,11 @@ public class Platform {
 	}
 
 	public float getTop() {
-		if (this.bottom < 0) {
-			System.out.println((this.bottom + this.height + 5) + " " + this.top);
-		}
-
-		return this.bottom + this.height + 5;
+		return this.top;
+	}
+	
+	public float getWidth() {
+		return this.width;
 	}
 	
 	public void debugRender(ShapeRenderer shape) {

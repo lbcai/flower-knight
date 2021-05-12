@@ -222,13 +222,15 @@ public class Level {
 		
 		
 		lowestTop = platforms.get(0).getTop();		
+		float lowestTopLength = platforms.get(0).getWidth();
 		for (Platform platform : platforms) {
 			if (platform.getTop() < lowestTop) {
 				lowestTop = platform.getTop();
+				lowestTopLength = platform.getWidth();
 			}
 		}
 		//x, y, width, height; set the size of the level (entities cannot exit this boundary)
-		levelBound.set(0, lowestTop, 2000, 500);
+		levelBound.set(0, lowestTop, lowestTopLength, 500);
 
 
 	}

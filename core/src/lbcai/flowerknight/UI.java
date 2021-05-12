@@ -175,14 +175,16 @@ public class UI {
 				lastLives += 1;
 				
 			} else if (player.lives < lastLives) {
+				if (player.lives > -1) {
+					//path that the petal will take to fly off the screen when player loses a life
+					//livesPetals.get(livesPetals.size() - 1).position.y -= 10;
+					livesPetals.get(livesPetals.size() - 1).fall();
+					//once the petal flies off the screen, remove it and update the lives value
+					if (livesPetals.get(livesPetals.size() - 1).position.y < cameraY - worldHeight) {
+						livesPetals.remove(livesPetals.size() - 1);
+						lastLives -= 1;
+				}
 				
-				//path that the petal will take to fly off the screen when player loses a life
-				//livesPetals.get(livesPetals.size() - 1).position.y -= 10;
-				livesPetals.get(livesPetals.size() - 1).fall();
-				//once the petal flies off the screen, remove it and update the lives value
-				if (livesPetals.get(livesPetals.size() - 1).position.y < cameraY - worldHeight) {
-					livesPetals.remove(livesPetals.size() - 1);
-					lastLives -= 1;
 				}
 				
 			}

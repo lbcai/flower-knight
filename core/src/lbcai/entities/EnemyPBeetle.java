@@ -187,6 +187,9 @@ public class EnemyPBeetle extends Enemy {
 				health = 0;
 			}
 			
+			//Keep enemy in level boundary
+			stayInLevel();
+			
 			if (health <= 0) {
 				level.dropItem(this);
 				inactive = true;

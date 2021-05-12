@@ -269,7 +269,7 @@ public class Player extends Entity {
 					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
 				}
 
-				if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(deathTime)) {
+				if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(deathTime) && lives > 0) {
 					if (deathFlash == 0) {
 						deathWaitTime = TimeUtils.nanoTime();
 						deathFlash = 1;
@@ -433,7 +433,7 @@ public class Player extends Entity {
 					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
 				}
 				
-				if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(deathTime)) {
+				if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(deathTime) && lives > 0) {
 					if (deathFlash == 0) {
 						deathWaitTime = TimeUtils.nanoTime();
 						deathFlash = 1;
@@ -501,8 +501,7 @@ public class Player extends Entity {
 			init();
 		}
 		
-		//Keep player in level boundary
-		stayInLevel();
+		
 		
 		//Use for collision detection of player.
 		if ((runState == RunState.SQUAT || boostCounter == 1) && jumpState != JumpState.FALLING) {
@@ -889,6 +888,11 @@ public class Player extends Entity {
 		
 			
 		}
+		
+		
+		//Keep player in level boundary
+		stayInLevel();
+		
 		
 		//Enter falling state if dropping, put this last because then we don't have issues where the player thinks it's falling
 		//but it's standing on the platform and this interacts badly with sticking to walls (allows head getting stuck on platform
