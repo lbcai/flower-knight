@@ -162,5 +162,8 @@ public abstract class Entity {
 		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
 	}
 
+	public Level getLevel() {
+		return this.level;
+	}
 	
 }

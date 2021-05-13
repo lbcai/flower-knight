@@ -206,7 +206,7 @@ public class Level {
 		platforms.add(new Platform(800, 0, 800, 50));
 		//this is the lowest platform in the map. height must be at least 72, so bottom is corrected to -172, 
 		//then +5 to top for background grass, this means the actual top will be -95 y position.
-		Platform longPlatform = new Platform(0, -100, 10000, 50);
+		Platform longPlatform = new Platform(0, -100, 10000, 500);
 		platforms.add(longPlatform);
 		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
 		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
@@ -216,21 +216,23 @@ public class Level {
 		player = new Player(new Vector2(100, 200), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		//enemies.add(new EnemyDandelion(enemyPlatform, this));
-		enemies.add(new EnemyPBeetle(enemyPlatform, this));
+		enemies.add(new EnemyDandelion(enemyPlatform, this));
+		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		
 		
 		lowestTop = platforms.get(0).getTop();		
 		float lowestTopLength = platforms.get(0).getWidth();
+		float lowestTopLeft = platforms.get(0).getLeft();
 		for (Platform platform : platforms) {
 			if (platform.getTop() < lowestTop) {
 				lowestTop = platform.getTop();
 				lowestTopLength = platform.getWidth();
+				lowestTopLeft = platform.getLeft();
 			}
 		}
 		//x, y, width, height; set the size of the level (entities cannot exit this boundary)
-		levelBound.set(0, lowestTop, lowestTopLength, 500);
+		levelBound.set(lowestTopLeft, lowestTop, lowestTopLength, 2500);
 
 
 	}

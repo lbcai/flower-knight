@@ -1,7 +1,6 @@
 package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -76,7 +75,7 @@ public class Bullet extends Entity {
 		if (position.x < cameraX - worldWidth || position.x > cameraX + worldWidth) {
 			active = false;
 		}
-		
+
 		hitBox.set(
 				position.x - Constants.bulletCenter.x,
 				position.y - Constants.bulletCenter.y,

@@ -370,6 +370,10 @@ public class Platform {
 		return this.width;
 	}
 	
+	public float getLeft() {
+		return this.left;
+	}
+	
 	public void debugRender(ShapeRenderer shape) {
 		shape.rect(this.left, this.bottom, this.width, this.height + 5);
 	}
