@@ -67,14 +67,14 @@ public abstract class Entity {
 	}
 	
 	void stayInLevel() {
-		if (position.x > level.levelBound.x + level.levelBound.width) {
-			position.x = level.levelBound.x + level.levelBound.width;
-		} else if (position.x < level.levelBound.x) {
-			position.x = level.levelBound.x;
+		if ((hitBox.x + hitBox.width) > (level.levelBound.x + level.levelBound.width)) {
+			position.x = level.levelBound.x + level.levelBound.width - (hitBox.width / 2);
+		} else if (hitBox.x < level.levelBound.x) {
+			position.x = level.levelBound.x + (hitBox.width / 2);
 		}
 		
-		if (position.y > level.levelBound.y + level.levelBound.height) {
-			position.y = level.levelBound.y + level.levelBound.height;
+		if ((hitBox.y + hitBox.height) > level.levelBound.y + level.levelBound.height) {
+			position.y = level.levelBound.y + level.levelBound.height - (hitBox.height - eyeHeight.y);
 		}
 		//no condition for dropping out the bottom of level because going to prevent downjumping through lowest platform on map
 		
