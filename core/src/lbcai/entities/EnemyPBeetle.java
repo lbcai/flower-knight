@@ -19,7 +19,7 @@ public class EnemyPBeetle extends Enemy {
 	
 	//actual position.y is represented by position.y BUT in order to make the beetle bob up and down, display the sprites
 	//using positionYsine, an adjusted position.y 
-	private float positionYsine;
+	protected float positionYsine;
 	
 	public EnemyPBeetle(Platform platform, Level level) {
 		super(platform, level);

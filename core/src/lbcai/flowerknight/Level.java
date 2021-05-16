@@ -18,6 +18,7 @@ import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
+import lbcai.entities.EnemyWaspScout;
 import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
 import lbcai.entities.ItemHealSmall;
@@ -217,7 +218,8 @@ public class Level {
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
 		//enemies.add(new EnemyDandelion(enemyPlatform, this));
-		enemies.add(new EnemyPBeetle(enemyPlatform, this));
+		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
+		enemies.add(new EnemyWaspScout(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		
 		

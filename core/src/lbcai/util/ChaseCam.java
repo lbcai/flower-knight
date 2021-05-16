@@ -69,7 +69,6 @@ public class ChaseCam {
 				camera.position.y = Constants.killPlane;
 			}
 			
-			System.out.println(camera.position.y);
 			
 		} else {
 			if (Gdx.input.isKeyPressed(Keys.A)) {
