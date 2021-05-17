@@ -27,7 +27,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 		super(platform, level);
 		wanderStateRandomizerVert = Arrays.asList(0, 1, 2);
 		goHome = false;
-		homeTracker = new Vector2(platform.centerX, platform.top);
+		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
 	}
 
 	@Override
@@ -79,33 +79,33 @@ public class EnemyWaspScout extends EnemyPBeetle {
 						//calm down
 						moveSpeed = Constants.enemyMoveSpeed;
 					}
-					System.out.println(wanderTime);
-					if (wanderTime != 0 && wanderTime % 20 == 0) {
+
+					if (wanderTime != 0 && wanderTime % 10 == 0) {
 						goHome = true;
 					}
 					
-					System.out.println(wanderTime);
+					System.out.println(wanderTime + " " + homeTracker + " " + position);
 					//return to home platform sometimes
 					if (goHome == true) {
-						System.out.println("gohome");
-						if (!(platform.left < position.x && position.x < platform.right)) {
-							float homePlatformCenter = platform.centerX;
-							if (position.x > homePlatformCenter) {
+
+						if (!hitBox.contains(homeTracker)) {
+							
+							if (position.x > platform.centerX + 10) {
 								flyLeft();
-							} else if (position.x < homePlatformCenter) {
+							} else if (position.x < platform.centerX - 10) {
 								flyRight();
+							} else if (position.x < platform.centerX + 10 && position.x > platform.centerX - 10) {
+								//do nothing
 							}
-						}
-						
-						if (position.y != platform.top + eyeHeight.y) {
-							if (platform.top < position.y) {
+							
+							if (platform.top + eyeHeight.y < position.y) {
 								flyDown();
-							} else if (platform.top > position.y) {
+							} else if (platform.top + eyeHeight.y > position.y) {
 								flyUp();
 							}
 						}
-						
-						if ((platform.left < position.x && position.x < platform.right) && (hitBox.contains(homeTracker))) {
+
+						if (hitBox.contains(homeTracker)) {
 							goHome = false;
 						}
 						
