@@ -22,12 +22,14 @@ public class EnemyWaspScout extends EnemyPBeetle {
 	int wanderStateVert;
 	boolean goHome;
 	Vector2 homeTracker;
+	int getAbovePlayer;
 	
 	public EnemyWaspScout(Platform platform, Level level) {
 		super(platform, level);
 		wanderStateRandomizerVert = Arrays.asList(0, 1, 2);
 		goHome = false;
 		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
+		getAbovePlayer = 0;
 	}
 
 	@Override
@@ -42,33 +44,63 @@ public class EnemyWaspScout extends EnemyPBeetle {
 				
 				if (aggroRange.overlaps(target.hitBox)) {
 					
-					if (moveSpeed != Constants.enemyMoveSpeedAggro) {
-						//increase speed when chasing
-						moveSpeed = Constants.enemyMoveSpeedAggro;
+					//the first thing the wasp scout should do when it sees a player is attempt to call other wasps for 
+					//backup. then, it will keep the player in sight but avoid going into attack range.
+					
+					if (moveSpeed != Constants.waspMoveSpeedAggro) {
+						//increase speed when chasing. wasp scout aggro move speed is faster than other enemies
+						moveSpeed = Constants.waspMoveSpeedAggro;
 					}
 					
-					//if enemy position IS NOT close enough to player:
-					if (!(target.position.x + (target.hitBox.width) > position.x && 
-							target.position.x - (target.hitBox.width) < position.x)) {
+					//call other wasps
+					
+					//keep the top or bottom of the aggro range box inside the player hitbox depending on whether the player
+					//is above or below the wasp scout. and since the aggro range box is taller than it is wide, if the wasp
+					//comes in aggro box width/2 of the player's position, back out. this will help it stay safe
+					//also keep the player within the width of the aggro box
+					
+					//requires testing when wasp is boxed against level bounds; how can wasp track player even while jump?
+					if (target.position.y >= position.y) {
 						
-						//just approach player
-						if (target.position.x > position.x) {
-							//move to the right if player is to enemy's right, but if enemy position is in player's hitbox x value, 
-							//don't. this prevents enemy from vibrating back and forth on top of player's position
-							moveRight(delta);
-						} else if (target.position.x < position.x) {
-							//same as above, but left
-							moveLeft(delta);
+						//check if wasp is being pushed into lowest platform on map, where it is unreachable, if so swap to
+						//flying above player
+						if (position.y < level.lowestTop && getAbovePlayer == 0) {
+							if (getAbovePlayer == 0) {
+								getAbovePlayer = 1;
+							}
 						}
-						
 
-					} else {
-						//if enemy position IS close enough to player, continue moving in direction already moving in
-						if (facing == Facing.RIGHT) {
-							moveRight(delta);
-						} else {
-							moveLeft(delta);
+						//if the target is above wasp EXCEPT when the wasp is under the lowest platform in the map
+						if (getAbovePlayer == 0) {
+							if (aggroRange.y + aggroRange.height > target.position.y) {
+								flyDown(delta);
+							} else if (aggroRange.y + aggroRange.height < target.position.y - 20) {
+								flyUp(delta);
+							}
+						} else if (getAbovePlayer == 1) {
+							//get above player if pushed below map
+							flyUp(delta);
 						}
+						
+					} else if (target.position.y < position.y) {
+						//reset pushed below map counter
+						if (getAbovePlayer == 1) {
+							getAbovePlayer = 0;
+						}
+						//if the target is below wasp
+						if (aggroRange.y < target.position.y - 20) {
+							flyUp(delta);
+						} else if (aggroRange.y > target.position.y) {
+							flyDown(delta);
+						}
+					}
+					
+					if (target.position.x > aggroRange.x + aggroRange.width) {
+						//if the target position is outside of the aggro box but the wasp can still see the player, get the
+						//player back into the box before they run off
+						moveRight(delta);
+					} else if (target.position.x < aggroRange.x) {
+						moveLeft(delta);
 					}
 					
 				} else {
@@ -80,7 +112,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 						moveSpeed = Constants.enemyMoveSpeed;
 					}
 
-					if (wanderTime != 0 && wanderTime % 10 == 0) {
+					if (wanderTime != 0 && wanderTime % 40 == 0) {
 						goHome = true;
 					}
 					
@@ -91,17 +123,17 @@ public class EnemyWaspScout extends EnemyPBeetle {
 						if (!hitBox.contains(homeTracker)) {
 							
 							if (position.x > platform.centerX + 10) {
-								flyLeft();
+								moveLeft(delta);
 							} else if (position.x < platform.centerX - 10) {
-								flyRight();
+								moveRight(delta);
 							} else if (position.x < platform.centerX + 10 && position.x > platform.centerX - 10) {
 								//do nothing
 							}
 							
 							if (platform.top + eyeHeight.y < position.y) {
-								flyDown();
+								flyDown(delta);
 							} else if (platform.top + eyeHeight.y > position.y) {
-								flyUp();
+								flyUp(delta);
 							}
 						}
 
@@ -122,19 +154,19 @@ public class EnemyWaspScout extends EnemyPBeetle {
 							runState = RunState.IDLE;
 						} else if (wanderState == 1) {
 							//move left
-							flyLeft();
+							moveLeft(delta);
 						} else if (wanderState == 2) {
 							//move right
-							flyRight();
+							moveRight(delta);
 						}
 						
 						//do nothing if wanderStateVert == 0
 						if (wanderStateVert == 1) {
 							//move up
-							flyUp();
+							flyUp(delta);
 						} else if (wanderStateVert == 2) {
 							//move down
-							flyDown();
+							flyDown(delta);
 						}
 					}
 
@@ -154,11 +186,12 @@ public class EnemyWaspScout extends EnemyPBeetle {
 					2 * collisionRadius.x,
 					2 * collisionRadius.y);
 			
+			//wasp scout should remain visible to player...probably should make aggroRange based on window size
 			aggroRange = new Rectangle(
 					position.x - Constants.aggroRadius.x,
-					position.y - Constants.aggroRadius.y / 4,
+					position.y - Constants.aggroRadius.y,
 					2 * Constants.aggroRadius.x,
-					1.5f * Constants.aggroRadius.y);
+					2 * Constants.aggroRadius.y);
 			
 			//if falling, set jumpstate to falling
 			if (velocity.y < 0) {
@@ -206,21 +239,11 @@ public class EnemyWaspScout extends EnemyPBeetle {
 		}
 	}
 	
-	public void flyLeft() {
-		facing = Facing.LEFT;
-		position.x -= 5;
+	public void flyDown(float delta) {
+		position.y -= delta * moveSpeed;
 	}
 	
-	public void flyRight() {
-		facing = Facing.RIGHT;
-		position.x += 5;
-	}
-	
-	public void flyDown() {
-		position.y -= 2;
-	}
-	
-	public void flyUp() {
-		position.y += 3;
+	public void flyUp(float delta) {
+		position.y += delta * moveSpeed;
 	}
 }

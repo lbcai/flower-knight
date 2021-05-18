@@ -132,6 +132,7 @@ public class Constants {
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
 	public static final float enemyMoveSpeed = 166f;
 	public static final float enemyMoveSpeedAggro = 500f;
+	public static final float waspMoveSpeedAggro = 1000f;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final Vector2 pBeetleCollisionRadius = new Vector2(50, 50);
@@ -150,6 +151,7 @@ public class Constants {
 	public static final float enemyFlinchTime = 0.3f;
 	public static final int respawnTime = 10; //20
 	public static final Vector2 aggroRadius = new Vector2(500, 500);
+	
 	
 	//item
 	public static final String life = "life";
