@@ -30,6 +30,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 		goHome = false;
 		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
 		getAbovePlayer = 0;
+		
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 						if (getAbovePlayer == 0) {
 							if (aggroRange.y + aggroRange.height > target.position.y) {
 								flyDown(delta);
-							} else if (aggroRange.y + aggroRange.height < target.position.y - 20) {
+							} else if (aggroRange.y + aggroRange.height < target.hitBox.y) {
 								flyUp(delta);
 							}
 						} else if (getAbovePlayer == 1) {
@@ -88,20 +89,30 @@ public class EnemyWaspScout extends EnemyPBeetle {
 							getAbovePlayer = 0;
 						}
 						//if the target is below wasp
-						if (aggroRange.y < target.position.y - 20) {
+						if (aggroRange.y < target.hitBox.y) {
 							flyUp(delta);
 						} else if (aggroRange.y > target.position.y) {
 							flyDown(delta);
 						}
 					}
 					
-					if (target.position.x > aggroRange.x + aggroRange.width) {
+					if (target.hitBox.x + target.hitBox.width > aggroRange.x + aggroRange.width) {
 						//if the target position is outside of the aggro box but the wasp can still see the player, get the
 						//player back into the box before they run off
 						moveRight(delta);
-					} else if (target.position.x < aggroRange.x) {
+						//if player travels fast enough exiting the aggroRange, put on a burst of speed to hopefully catch up
+						//check player velocity when dodging; turns out there is none because player is lerped for dodge
+						if (target.hitState == HitState.DODGE) {
+							Utils.lerpX(position, new Vector2(position.x + 400, position.y), 0.1f);
+						}
+					} else if (target.hitBox.x < aggroRange.x) {
 						moveLeft(delta);
+						if (target.hitState == HitState.DODGE) {
+							Utils.lerpX(position, new Vector2(position.x - 400, position.y), 0.1f);
+						}
 					}
+					
+					
 					
 				} else {
 					
@@ -115,8 +126,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 					if (wanderTime != 0 && wanderTime % 40 == 0) {
 						goHome = true;
 					}
-					
-					System.out.println(wanderTime + " " + homeTracker + " " + position);
+
 					//return to home platform sometimes
 					if (goHome == true) {
 
@@ -177,21 +187,23 @@ public class EnemyWaspScout extends EnemyPBeetle {
 					hitState = HitState.NOHIT;
 				}
 			}
-			
-			
 
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,
 					position.y - collisionRadius.y,
 					2 * collisionRadius.x,
 					2 * collisionRadius.y);
-			
+
 			//wasp scout should remain visible to player...probably should make aggroRange based on window size
+			//unfortunately this has the downside of giving the wasp more aggro range when the player extends the window size
+			//this allows the player to increase the distance between themselves and the wasp artificially.
+			//as a result, decided to set the wasp's aggro range as the default world size, larger resolutions will not 
+			//receive a benefit
 			aggroRange = new Rectangle(
-					position.x - Constants.aggroRadius.x,
-					position.y - Constants.aggroRadius.y,
-					2 * Constants.aggroRadius.x,
-					2 * Constants.aggroRadius.y);
+					position.x - Constants.defaultWorldWidth / 2,
+					position.y - Constants.defaultWorldHeight / 2,
+					Constants.defaultWorldWidth,
+					Constants.defaultWorldHeight);
 			
 			//if falling, set jumpstate to falling
 			if (velocity.y < 0) {
@@ -240,10 +252,11 @@ public class EnemyWaspScout extends EnemyPBeetle {
 	}
 	
 	public void flyDown(float delta) {
-		position.y -= delta * moveSpeed;
+		//added increase to vertical flight speed for wasp scout so player cannot fall out of aggroRange so easily
+		position.y -= delta * moveSpeed * 2;
 	}
 	
 	public void flyUp(float delta) {
-		position.y += delta * moveSpeed;
+		position.y += delta * moveSpeed * 2;
 	}
 }

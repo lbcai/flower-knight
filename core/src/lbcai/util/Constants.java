@@ -14,6 +14,8 @@ public class Constants {
 	public static final float worldGravity = 2000;
 	public static final float killPlane = -500;
 	public static final float cameraMoveSpeed = 512;
+	public static final float defaultWorldWidth = 1066;
+	public static final float defaultWorldHeight = 800;
 	//fix later
 	public static final String textureAtlas = "playerSpritesheet.atlas";
 	
@@ -132,7 +134,7 @@ public class Constants {
 	public static final Vector2 pBeetleEyeHeight = new Vector2(100, 100);
 	public static final float enemyMoveSpeed = 166f;
 	public static final float enemyMoveSpeedAggro = 500f;
-	public static final float waspMoveSpeedAggro = 1000f;
+	public static final float waspMoveSpeedAggro = 634f;
 	public static final float floatpBeetleAmplitude = 10;
 	public static final float floatpBeetlePeriod = 0.9f;
 	public static final Vector2 pBeetleCollisionRadius = new Vector2(50, 50);
