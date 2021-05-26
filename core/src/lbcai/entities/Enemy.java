@@ -269,6 +269,27 @@ public abstract class Enemy extends Entity {
 		return dropTable.get(index);
 	}
 	
+	public void chaseRandomness(float delta) {
+		//makes enemy move around back and forth instead of standing on player when enemy does not need to move anywhere else
+		//to keep up with player (aggro mode only)
+
+		if (wanderState == 0) {
+			if (position.x < target.position.x - ((Math.random() * 2) * hitBox.width)) {
+				wanderState = 1;
+			} else {
+				moveLeft(delta);
+			}
+			
+		} else if (wanderState == 1) {
+			if (position.x > target.position.x + ((Math.random() * 2) * hitBox.width)) {
+				wanderState = 0;
+			} else {
+				moveRight(delta);
+			}
+		}
+		
+	}
+	
 	/**
 	 * Allow debug rendering of enemy's sight range.
 	 */

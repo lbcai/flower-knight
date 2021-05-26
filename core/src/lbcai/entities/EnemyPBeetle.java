@@ -54,10 +54,8 @@ public class EnemyPBeetle extends Enemy {
 						moveSpeed = Constants.enemyMoveSpeedAggro;
 					}
 					
-					//if enemy position IS NOT close enough to player:
-					if (!(target.position.x + (target.hitBox.width) > position.x && 
-							target.position.x - (target.hitBox.width) < position.x)) {
-						
+					if (position.x < target.position.x - (2 * hitBox.width) && 
+							position.x > target.position.x + (2 * hitBox.width)) {
 						//just approach player
 						if (target.position.x > position.x) {
 							//move to the right if player is to enemy's right, but if enemy position is in player's hitbox x value, 
@@ -67,18 +65,11 @@ public class EnemyPBeetle extends Enemy {
 							//same as above, but left
 							moveLeft(delta);
 						}
-						
-
 					} else {
-						//if enemy position IS close enough to player, continue moving in direction already moving in
-						if (facing == Facing.RIGHT) {
-							moveRight(delta);
-						} else {
-							moveLeft(delta);
-						}
+						//if enemy is standing on player, move around
+						chaseRandomness(delta);
 					}
-					
-					
+
 					//separate from move check above so enemy can move and jump at once
 					//if player's foot is above the enemy, jump
 					if (target.hitBox.y > position.y) {
