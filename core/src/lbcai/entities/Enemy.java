@@ -272,20 +272,27 @@ public abstract class Enemy extends Entity {
 	public void chaseRandomness(float delta) {
 		//makes enemy move around back and forth instead of standing on player when enemy does not need to move anywhere else
 		//to keep up with player (aggro mode only)
-
+		
+		if (MathUtils.random() < 0.02) {
+			wanderState = (int) (MathUtils.random() * 2);
+		}
+		
 		if (wanderState == 0) {
-			if (position.x < target.position.x - ((Math.random() * 2) * hitBox.width)) {
+			if (position.x < target.position.x - (2 * hitBox.width) || hitBox.x < level.levelBound.x + 5) {
 				wanderState = 1;
 			} else {
 				moveLeft(delta);
 			}
 			
+			
 		} else if (wanderState == 1) {
-			if (position.x > target.position.x + ((Math.random() * 2) * hitBox.width)) {
+			if (position.x > target.position.x + (2 * hitBox.width) || (hitBox.x + hitBox.width) > 
+					(level.levelBound.x + level.levelBound.width - 5)) {
 				wanderState = 0;
 			} else {
 				moveRight(delta);
 			}
+			
 		}
 		
 	}

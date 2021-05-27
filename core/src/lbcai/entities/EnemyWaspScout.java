@@ -84,7 +84,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 						}
 						
 						//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
-						//chaseRandomness(delta);
+						chaseRandomness(delta);
 						
 					} else if (target.position.y < position.y) {
 						//reset pushed below map counter
@@ -98,7 +98,7 @@ public class EnemyWaspScout extends EnemyPBeetle {
 							flyDown(delta);
 						}
 						
-						//chaseRandomness(delta);
+						chaseRandomness(delta);
 						
 					}
 					
