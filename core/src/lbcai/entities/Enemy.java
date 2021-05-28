@@ -15,6 +15,7 @@ import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
+import lbcai.util.Enums.EnemyType;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
@@ -44,9 +45,14 @@ public abstract class Enemy extends Entity {
 	int wanderState;
 	long wanderTime;
 	
+	//enum to label enemy types e.g. wasp, flower, etc.
+	EnemyType enemyType;
 	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
+		
+		//default to none in case, placeholder
+		enemyType = EnemyType.NONE;
 		
 		//start enemy in idle position (0)
 		wanderState = 0;

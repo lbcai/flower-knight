@@ -11,25 +11,31 @@ import com.badlogic.gdx.utils.TimeUtils;
 import lbcai.flowerknight.Level;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
+import lbcai.util.Enums.EnemyType;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
 import lbcai.util.Enums.RunState;
 
-public class EnemyWaspScout extends EnemyPBeetle {
+public class EnemyWaspScout extends EnemyWasp {
 	
+	//normal wanderstate values randomize left and right behavior, but this enemy can fly in all directions. it also needs
+	//a randomized wanderstate value for up and down directions.
 	List<Integer> wanderStateRandomizerVert;
 	int wanderStateVert;
-	boolean goHome;
-	Vector2 homeTracker;
+	
+	//used if the player is above the enemy but the enemy is being pushed down into the floor and there is no space for it
 	int getAbovePlayer;
+	
+	//limit the calls a wasp scout can make to 1
+	int calledWasps;
 	
 	public EnemyWaspScout(Platform platform, Level level) {
 		super(platform, level);
 		wanderStateRandomizerVert = Arrays.asList(0, 1, 2);
-		goHome = false;
 		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
 		getAbovePlayer = 0;
+		calledWasps = 0;
 		
 	}
 
@@ -54,13 +60,13 @@ public class EnemyWaspScout extends EnemyPBeetle {
 					}
 					
 					//call other wasps
+					if (calledWasps == 0) {
+						callWasps(delta, target.position);
+						calledWasps = 1;
+					}
 					
 					//keep the top or bottom of the aggro range box inside the player hitbox depending on whether the player
-					//is above or below the wasp scout. and since the aggro range box is taller than it is wide, if the wasp
-					//comes in aggro box width/2 of the player's position, back out. this will help it stay safe
-					//also keep the player within the width of the aggro box
-					
-					//requires testing when wasp is boxed against level bounds; how can wasp track player even while jump?
+					//is above or below the wasp scout. 
 					if (target.position.y >= position.y) {
 						
 						//check if wasp is being pushed into lowest platform on map, where it is unreachable, if so swap to
@@ -264,5 +270,37 @@ public class EnemyWaspScout extends EnemyPBeetle {
 	
 	public void flyUp(float delta) {
 		position.y += delta * moveSpeed * 2;
+	}
+	
+	void callWasps(float delta, Vector2 targetPosition) {
+		//need to give the wasp scout a calling wasps state to play a special animation and lock it in place
+		for (Enemy enemy : level.getEnemies()) {
+			if (enemy.enemyType == EnemyType.WASP) {
+				EnemyWasp wasp = (EnemyWasp) enemy;
+				wasp.respondToCall(delta, targetPosition);
+			}
+		}
+	}
+	
+	@Override
+	void respondToCall(float delta, Vector2 targetPosition) {
+		//for scouts only. this code allows scout to fly up/down while moving left/right to target location
+		//non-scout ground units are more limited in their movement options
+		
+		if (!((targetPosition.x - (2 * hitBox.width)) < position.x && position.x < (targetPosition.x + (2 * hitBox.width)))) {
+			if (position.x > targetPosition.x) {
+				moveLeft(delta);
+			} else if (position.x < targetPosition.x) {
+				moveRight(delta);
+			}
+		} 
+		
+		if (position.y != targetPosition.y + eyeHeight.y) {
+			if (targetPosition.y + eyeHeight.y < position.y) {
+				flyDown(delta);
+			} else if (targetPosition.y + eyeHeight.y > position.y) {
+				flyUp(delta);
+			}
+		} 
 	}
 }

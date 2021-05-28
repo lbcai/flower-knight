@@ -40,5 +40,10 @@ public class Enums {
 			DEATH
 		}
 		
+		public enum EnemyType {
+			WASP,
+			FLOWER,
+			NONE
+		}
 
 }
