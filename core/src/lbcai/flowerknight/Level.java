@@ -18,6 +18,7 @@ import lbcai.entities.DustCloud;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
+import lbcai.entities.EnemyWaspLancer;
 import lbcai.entities.EnemyWaspScout;
 import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
@@ -220,6 +221,7 @@ public class Level {
 		//enemies.add(new EnemyDandelion(enemyPlatform, this));
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		enemies.add(new EnemyWaspScout(enemyPlatform, this));
+		enemies.add(new EnemyWaspLancer(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		
 		

@@ -137,6 +137,11 @@ public class EnemyWaspScout extends EnemyWasp {
 
 					if (wanderTime != 0 && wanderTime % 40 == 0) {
 						goHome = true;
+						if (calledWasps == 1) {
+							//reset the ability to call wasps if the wasp has wandered around for a while without seeing
+							//the player
+							calledWasps = 0;
+						}
 					}
 
 					//return to home platform sometimes
@@ -157,12 +162,10 @@ public class EnemyWaspScout extends EnemyWasp {
 							} else if (platform.top + eyeHeight.y > position.y) {
 								flyUp(delta);
 							}
-						}
-
-						if (hitBox.contains(homeTracker)) {
+						} else {
 							goHome = false;
 						}
-						
+
 					} else {
 						//wander on screen
 						//2% chance every update for enemy to change behavior
@@ -188,7 +191,11 @@ public class EnemyWaspScout extends EnemyWasp {
 							flyUp(delta);
 						} else if (wanderStateVert == 2) {
 							//move down
-							flyDown(delta);
+							if (position.y > level.lowestTop) {
+								//do not allow the scout to fly below the level
+								flyDown(delta);
+							}
+							
 						}
 					}
 
