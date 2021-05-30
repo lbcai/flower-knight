@@ -22,4 +22,8 @@ public class EnemyWaspLancer extends EnemyWasp {
 		}
 	}
 	
+	void stab() {
+		
+	}
+	
 }

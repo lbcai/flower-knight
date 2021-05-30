@@ -97,6 +97,8 @@ public abstract class EnemyWasp extends Enemy {
 						downJump();
 					}
 					
+					speedFollow(delta);
+					
 				} else {
 
 					if (moveSpeed != Constants.enemyMoveSpeed) {
@@ -342,6 +344,25 @@ public abstract class EnemyWasp extends Enemy {
 			}
 		}
 				
+	}
+	
+	//help keep the player inside the aggro range box when player is on the edge
+	void speedFollow(float delta) {
+		if (target.hitBox.x + target.hitBox.width > aggroRange.x + aggroRange.width) {
+			//if the target position is outside of the aggro box but the wasp can still see the player, get the
+			//player back into the box before they run off
+			moveRight(delta);
+			//if player travels fast enough exiting the aggroRange, put on a burst of speed to hopefully catch up
+			//check player velocity when dodging; turns out there is none because player is lerped for dodge
+			if (target.hitState == HitState.DODGE) {
+				Utils.lerpX(position, new Vector2(position.x + 400, position.y), 0.1f);
+			}
+		} else if (target.hitBox.x < aggroRange.x) {
+			moveLeft(delta);
+			if (target.hitState == HitState.DODGE) {
+				Utils.lerpX(position, new Vector2(position.x - 400, position.y), 0.1f);
+			}
+		}
 	}
 	
 	void harvestFlower() {
