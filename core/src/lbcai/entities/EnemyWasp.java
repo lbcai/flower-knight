@@ -348,6 +348,7 @@ public abstract class EnemyWasp extends Enemy {
 	
 	//help keep the player inside the aggro range box when player is on the edge
 	void speedFollow(float delta) {
+		//horizontal only
 		if (target.hitBox.x + target.hitBox.width > aggroRange.x + aggroRange.width) {
 			//if the target position is outside of the aggro box but the wasp can still see the player, get the
 			//player back into the box before they run off
@@ -362,6 +363,12 @@ public abstract class EnemyWasp extends Enemy {
 			if (target.hitState == HitState.DODGE) {
 				Utils.lerpX(position, new Vector2(position.x - 400, position.y), 0.1f);
 			}
+		}
+		//vertical only
+		if (target.hitBox.y + target.hitBox.height > aggroRange.y + aggroRange.height) {
+			startJump();
+		} else if (target.hitBox.y < aggroRange.y) {
+			downJump();
 		}
 	}
 	

@@ -146,7 +146,8 @@ public class Constants {
 	public static final float dandelionMoveSpeed = 0;
 	public static final Vector2 dandelionCollisionRadius = new Vector2 (60, 90);
 	public static final String bullet = "bulletseed";
-	public static final float bulletMoveSpeed = 600;
+	public static final float bulletMoveSpeed = 900; //600
+	public static final float arrowMoveSpeed = 800;
 	public static final float bulletCycleTime = 0.2f;
 	public static final float bulletCooldown = 1.5f;
 	public static final Vector2 bulletCenter = new Vector2(25, 25);

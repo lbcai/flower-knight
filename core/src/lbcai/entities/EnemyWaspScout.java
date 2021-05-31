@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.flowerknight.Level;
@@ -29,14 +30,14 @@ public class EnemyWaspScout extends EnemyWasp {
 	
 	//limit the calls a wasp scout can make to 1
 	int calledWasps;
-	
+
 	public EnemyWaspScout(Platform platform, Level level) {
 		super(platform, level);
 		wanderStateRandomizerVert = Arrays.asList(0, 1, 2);
 		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
 		getAbovePlayer = 0;
 		calledWasps = 0;
-		
+
 	}
 
 	@Override
@@ -89,9 +90,6 @@ public class EnemyWaspScout extends EnemyWasp {
 							flyUp(delta);
 						}
 						
-						//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
-						chaseRandomness(delta);
-						
 					} else if (target.position.y < position.y) {
 						//reset pushed below map counter
 						if (getAbovePlayer == 1) {
@@ -103,15 +101,24 @@ public class EnemyWaspScout extends EnemyWasp {
 						} else if (aggroRange.y > target.position.y) {
 							flyDown(delta);
 						}
-						
-						chaseRandomness(delta);
-						
 					}
+					
+					//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
+					chaseRandomness(delta);
 					
 					speedFollow(delta);
 					
+					//check if any other wasp enemies in aggro box sight range. if so, allow scout to do an annoying knockback
+					//attack on the player
+					for (Enemy enemy : level.getEnemies()) {
+						if (enemy.enemyType == EnemyType.WASP && enemy != this) {
+							if (aggroRange.overlaps(enemy.hitBox)) {
+								dive();
+							}
+						}
+					}
 					
-					
+
 				} else {
 					
 					wanderTime = (long) Utils.secondsSince(startTime);
@@ -249,6 +256,8 @@ public class EnemyWaspScout extends EnemyWasp {
 				alpha += 15f/255f;
 				if (alpha >= 255f/255f) {
 					health = maxHealth;
+					getAbovePlayer = 0;
+					calledWasps = 0;
 					inactive = false;
 					alpha = 255f/255f;
 				}
@@ -296,4 +305,29 @@ public class EnemyWaspScout extends EnemyWasp {
 			}
 		} 
 	}
+	
+	@Override
+	//help keep the player inside the aggro range box when player is on the edge
+	void speedFollow(float delta) {
+		if (target.hitBox.x + target.hitBox.width > aggroRange.x + aggroRange.width) {
+			//if the target position is outside of the aggro box but the wasp can still see the player, get the
+			//player back into the box before they run off
+			moveRight(delta);
+			//if player travels fast enough exiting the aggroRange, put on a burst of speed to hopefully catch up
+			//check player velocity when dodging; turns out there is none because player is lerped for dodge
+			if (target.hitState == HitState.DODGE) {
+				Utils.lerpX(position, new Vector2(position.x + 400, position.y), 0.1f);
+			}
+		} else if (target.hitBox.x < aggroRange.x) {
+			moveLeft(delta);
+			if (target.hitState == HitState.DODGE) {
+				Utils.lerpX(position, new Vector2(position.x - 400, position.y), 0.1f);
+			}
+		}
+	}
+	
+	void dive() {
+		System.out.println("diving");
+	}
+	
 }

@@ -1,21 +1,28 @@
 package lbcai.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.flowerknight.Level;
+import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
 public class EnemyWaspArcher extends EnemyWasp {
 	
+	//for spawning arrow
 	Vector2 bulletPosition;
+	
+	//for shooting arrow animation
+	long shootStartTime;
 	
 	public EnemyWaspArcher(Platform platform, Level level) {
 		super(platform, level);
@@ -45,13 +52,17 @@ public class EnemyWaspArcher extends EnemyWasp {
 				
 				if (aggroRange.overlaps(target.hitBox)) {
 					
-					if (moveSpeed != Constants.enemyMoveSpeedAggro) {
+					if (moveSpeed != Constants.waspMoveSpeedAggro) {
 						//increase speed when chasing
-						moveSpeed = Constants.enemyMoveSpeedAggro;
+						moveSpeed = Constants.waspMoveSpeedAggro;
 					}
 					
-					if (position.x > target.position.x - (2 * hitBox.width) && 
-							position.x < target.position.x + (2 * hitBox.width)) {
+					//keep the enemy away from melee range of player unless the player corners the enemy against the wall
+					//of the level, then allow it and just shoot arrows
+					if (position.x > (target.position.x - (3 * hitBox.width)) && 
+							position.x < (target.position.x + (3 * hitBox.width)) && 
+							(position.x > (level.levelBound.x + (hitBox.width / 2)) && 
+									position.x < (level.levelBound.x + level.levelBound.width - (hitBox.width / 2)))) {
 						//if too close to player, move away
 						if (target.position.x > position.x) {
 							//if player is to the right of archer:
@@ -63,21 +74,21 @@ public class EnemyWaspArcher extends EnemyWasp {
 					} else {
 						//if player is in aggro range but outside of melee range, shoot arrows at player
 						shootArrow();
-						
-						//if player is leaving the aggro range, follow player
-						speedFollow(delta);
 					}
 
 					//separate from move check above so enemy can move and jump at once
-					//if player's foot is above the enemy, jump
-					if (target.hitBox.y > position.y) {
+					//if player is a certain vertical distance away, jump or downjump to follow them
+					if (target.hitBox.y > (position.y + (hitBox.height * 3))) {
 						//spam jump
 						startJump();
 						
-					} else if (target.position.y < position.y) {
+					} else if (target.position.y < (position.y - (hitBox.height * 3))) {
 						//downjump if player is below enemy
 						downJump();
 					}
+					
+					//if player is leaving the aggro range, follow player
+					speedFollow(delta);
 					
 				} else {
 
@@ -157,11 +168,12 @@ public class EnemyWaspArcher extends EnemyWasp {
 					2 * collisionRadius.x,
 					2 * collisionRadius.y);
 			
+			//expanded vertical range for archer
 			aggroRange = new Rectangle(
 					position.x - Constants.aggroRadius.x,
-					position.y - Constants.aggroRadius.y / 4,
+					position.y - Constants.aggroRadius.y,
 					2 * Constants.aggroRadius.x,
-					1.5f * Constants.aggroRadius.y);
+					2 * Constants.aggroRadius.y);
 			
 			//if falling, set jumpstate to falling
 			if (velocity.y < 0) {
@@ -216,18 +228,92 @@ public class EnemyWaspArcher extends EnemyWasp {
 		}
 
 	}
+
+	@Override
+	public void render(SpriteBatch batch) {
+		Boolean flipx = false;
+		
+		if (inactive == false) {
+
+			//placeholder animations
+			if (runState == RunState.IDLE) {
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+			} else if (runState == RunState.RUN) {
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+			}
+			
+			if (hitState == HitState.IFRAME) {
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+				if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
+					hitState = HitState.NOHIT;
+				}
+			}
+			//use for attacking animation
+			if (lockState == LockState.LOCK) {
+				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
+			} else if (lockState == LockState.ATTACK1LOCK) {
+				float shootTime = Utils.secondsSince(shootStartTime);
+				region = Assets.instance.waspArcherAssets.shootLeftAnim.getKeyFrame(shootTime);
+				if (Assets.instance.waspArcherAssets.shootLeftAnim.isAnimationFinished(shootTime)) {
+					lockState = LockState.FREE;
+				}
+			}
+			
+			//for mobs, just flip the sprites over to save resources instead of generating flipped sprites
+			if (facing == Facing.LEFT) {
+				flipx = false;
+			} else if (facing == Facing.RIGHT) {
+				flipx = true;
+			}
+		}
+		
+		
+		batch.setColor(1, 1, 1, alpha);
+		batch.draw(region.getTexture(), 
+				(position.x - eyeHeight.x), 
+				(positionYsine - eyeHeight.y), 
+				0, 
+				0, 
+				region.getRegionWidth(), 
+				region.getRegionHeight(), 
+				1, 
+				1, 
+				0, 
+				region.getRegionX(), 
+				region.getRegionY(), 
+				region.getRegionWidth(), 
+				region.getRegionHeight(), 
+				flipx, 
+				false);
+		batch.setColor(1, 1, 1, 1);
+	}
+
 	
 	void shootArrow() {
-		if (facing == Facing.LEFT) {
-			bulletPosition = new Vector2(
-					position.x - hitBox.width/2,
-					position.y);
-		} else {
-			bulletPosition = new Vector2(
-					position.x + hitBox.width/2,
-					position.y);
+		if (lockState == LockState.FREE) {
+			
+			lockState = LockState.ATTACK1LOCK;
+			shootStartTime = TimeUtils.nanoTime();
+			
+			if (target.position.x < position.x) {
+				facing = Facing.LEFT;
+			} else {
+				facing = Facing.RIGHT;
+			}
+			
+			if (facing == Facing.LEFT) {
+				bulletPosition = new Vector2(
+						position.x - hitBox.width/2,
+						position.y);
+			} else {
+				bulletPosition = new Vector2(
+						position.x + hitBox.width/2,
+						position.y);
+			}
+			
+			level.spawnBullet(bulletPosition, facing, damage, 1);
 		}
-		level.spawnBullet(bulletPosition, facing, damage);
+		
 	}
 
 }

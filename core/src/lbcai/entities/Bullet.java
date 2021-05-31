@@ -20,8 +20,10 @@ public class Bullet extends Entity {
 	public Boolean active;
 	private Vector2 targetPath;
 	private float angle;
+	private int type;
+	private float moveSpeed;
 	
-	public Bullet(Level level, Vector2 position, Facing facing, int damage) {
+	public Bullet(Level level, Vector2 position, Facing facing, int damage, int type) {
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position.cpy();
 		this.facing = facing;
@@ -29,7 +31,14 @@ public class Bullet extends Entity {
 		this.level = level;
 		this.damage = damage;
 		this.range = damage/2;
+		this.type = type;
 		active = true;
+		
+		if (type == 0) {
+			moveSpeed = Constants.bulletMoveSpeed;
+		} else if (type == 1) {
+			moveSpeed = Constants.arrowMoveSpeed;
+		}
 		
 		Vector2 playerHitBox = new Vector2();
 		level.getPlayer().hitBox.getCenter(playerHitBox);
@@ -55,11 +64,11 @@ public class Bullet extends Entity {
 	public void update(float delta) {
 		//set position of bullet based on the aim vector established above
 		if (facing == Facing.LEFT) {
-			position.x -= targetPath.x * Constants.bulletMoveSpeed * delta;
-			position.y -= targetPath.y * Constants.bulletMoveSpeed * delta;
+			position.x -= targetPath.x * moveSpeed * delta;
+			position.y -= targetPath.y * moveSpeed * delta;
 		} else {
-			position.x += targetPath.x * Constants.bulletMoveSpeed * delta;
-			position.y += targetPath.y * Constants.bulletMoveSpeed * delta;
+			position.x += targetPath.x * moveSpeed * delta;
+			position.y += targetPath.y * moveSpeed * delta;
 		}
 		
 
@@ -87,7 +96,13 @@ public class Bullet extends Entity {
 	public void render(SpriteBatch batch) {
 
 		float animTime = Utils.secondsSince(startTime);
-		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
+		if (type == 0) {
+			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
+		} else if (type == 1) {
+			//arrow placeholder graphic here
+			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
+		}
+		
 		
 		if (facing == Facing.LEFT) {
 			flipx = false;

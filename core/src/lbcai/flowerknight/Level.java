@@ -202,8 +202,10 @@ public class Level {
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50));
 		platforms.add(new Platform(0, 0, 512, 50));
-		platforms.add(new Platform(100, 85, 300, 50));
-		platforms.add(new Platform(100, 160, 500, 50));
+		platforms.add(new Platform(100, 300, 900, 50));
+		platforms.add(new Platform(100, 200, 900, 50));
+		platforms.add(new Platform(100, 400, 900, 50));
+		platforms.add(new Platform(100, 500, 900, 50));
 		platforms.add(new Platform(0, 1000, 200, 800));
 		platforms.add(new Platform(512, 1000, 200, 800));
 		platforms.add(new Platform(800, 0, 800, 50));
@@ -280,8 +282,8 @@ public class Level {
 		return player;
 	}
 	
-	public void spawnBullet(Vector2 position, Facing facing, int damage) {
-		bullets.add(new Bullet(this, position, facing, damage));
+	public void spawnBullet(Vector2 position, Facing facing, int damage, int type) {
+		bullets.add(new Bullet(this, position, facing, damage, type));
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
