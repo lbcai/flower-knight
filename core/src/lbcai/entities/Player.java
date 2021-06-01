@@ -266,6 +266,10 @@ public class Player extends Entity {
 				if (jumpState == JumpState.FALLING) {
 					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
 				} else {
+					//spawn dust cloud when player is sliding in death animation
+					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) == 16) {
+						level.spawnDustCloud(new Vector2(position.x + 120, position.y - eyeHeight.y), facing.LEFT, 0);
+					}
 					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
 				}
 
@@ -431,6 +435,9 @@ public class Player extends Entity {
 					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
 				} else {
 					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
+					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(deathTime) == 16) {
+						level.spawnDustCloud(new Vector2(position.x - 100, position.y - eyeHeight.y), facing.RIGHT, 0);
+					}
 				}
 				
 				if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(deathTime) && lives > 0) {
@@ -892,7 +899,6 @@ public class Player extends Entity {
 		
 		//Keep player in level boundary
 		stayInLevel();
-		
 		
 		//Enter falling state if dropping, put this last because then we don't have issues where the player thinks it's falling
 		//but it's standing on the platform and this interacts badly with sticking to walls (allows head getting stuck on platform

@@ -16,6 +16,7 @@ import lbcai.util.Enums.EnemyType;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
 public class EnemyWaspScout extends EnemyWasp {
@@ -30,6 +31,9 @@ public class EnemyWaspScout extends EnemyWasp {
 	
 	//limit the calls a wasp scout can make to 1
 	int calledWasps;
+	
+	//used to calc dive attack times and animations
+	long diveStartTime;
 
 	public EnemyWaspScout(Platform platform, Level level) {
 		super(platform, level);
@@ -327,7 +331,11 @@ public class EnemyWaspScout extends EnemyWasp {
 	}
 	
 	void dive() {
-		System.out.println("diving");
+		if (lockState == LockState.FREE) {
+			lockState = LockState.ATTACK1LOCK;
+			diveStartTime = TimeUtils.nanoTime();
+		}
+		
 	}
 	
 }

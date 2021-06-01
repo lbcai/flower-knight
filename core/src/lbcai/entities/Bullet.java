@@ -45,9 +45,23 @@ public class Bullet extends Entity {
 		//make a vector from bullet origin point to player (target) and normalize to a unit vector, also get angle of vector
 		//relative to x-axis so we know what angle to tilt the sprite at
 		if (facing == Facing.LEFT) {
-			this.targetPath = new Vector2(position.x - playerHitBox.x, position.y - playerHitBox.y).nor();
+			//if bullet is facing left, the player is to the left of the enemy shooting bullet & the bullet itself
+			
+			//if the player is walking away, aim a little higher
+			if (level.getPlayer().velocity.x < -600) {
+				this.targetPath = new Vector2(position.x - playerHitBox.x, position.y - (playerHitBox.y + 30)).nor();
+			} else {
+				this.targetPath = new Vector2(position.x - playerHitBox.x, position.y - playerHitBox.y).nor();
+			}
+			
 		} else {
-			this.targetPath = new Vector2(playerHitBox.x - position.x, playerHitBox.y - position.y).nor();
+			//if bullet facing right, the player is to the right 
+			if (level.getPlayer().velocity.x > 600) {
+				this.targetPath = new Vector2(playerHitBox.x - position.x, (playerHitBox.y + 30) - position.y).nor();
+			} else {
+				this.targetPath = new Vector2(playerHitBox.x - position.x, playerHitBox.y - position.y).nor();
+			}
+			
 		}
 	
 		this.angle = targetPath.angleDeg();
@@ -99,7 +113,7 @@ public class Bullet extends Entity {
 		if (type == 0) {
 			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
 		} else if (type == 1) {
-			//arrow placeholder graphic here
+			//wasp arrow placeholder graphic here
 			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(animTime);	
 		}
 		

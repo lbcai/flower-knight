@@ -62,13 +62,16 @@ public class EnemyDandelion extends Enemy {
 			
 			//if monster sees player, do following
 			if (aggroRange.overlaps(target.hitBox)) {
+				//face player
 				if (target.position.x < position.x) {
 					facing = Facing.LEFT;
 				} else {
 					facing = Facing.RIGHT;
 				}
 				
+				//bulletPosition is the spawn location of this new bullet coming out.
 				Vector2 bulletPosition;
+				//bulletWaitTime is the time since last bullet was shot.
 				float bulletWaitTime = Utils.secondsSince(bulletShotLastTime);
 				//check if bullet is not on cooldown and if player is not below the dandelion (can't see below its own platform) before
 				//shooting at player.
