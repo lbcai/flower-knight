@@ -96,7 +96,7 @@ public class Constants {
 	public static final int playerBaseDamage = 20;
 	public static final int playerBaseRange = playerBaseDamage/2;
 	public static final Vector2 attackRange1 = new Vector2(150, 170);
-	public static final int baseHealth = 100; //100
+	public static final int baseHealth = 1; //100
 	public static final int baseLives = 3;
 	public static final float deathWaitTime = 1.5f;
 	

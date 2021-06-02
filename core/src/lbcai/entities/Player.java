@@ -266,11 +266,22 @@ public class Player extends Entity {
 				if (jumpState == JumpState.FALLING) {
 					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
 				} else {
+					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
+					
+					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 9) {
+						position.x -= 5 * deathTime;
+					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 11 &&
+							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 14) {
+						position.x -= 2 * deathTime;
+					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
+							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 22) {
+						position.x -= 7 * deathTime;
+					}
 					//spawn dust cloud when player is sliding in death animation
 					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) == 16) {
-						level.spawnDustCloud(new Vector2(position.x + 120, position.y - eyeHeight.y), facing.LEFT, 0);
+						level.spawnDustCloud(new Vector2(position.x + 120, position.y - eyeHeight.y), Facing.LEFT, 0);
 					}
-					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
+					
 				}
 
 				if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(deathTime) && lives > 0) {
@@ -436,7 +447,7 @@ public class Player extends Entity {
 				} else {
 					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(deathTime);
 					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(deathTime) == 16) {
-						level.spawnDustCloud(new Vector2(position.x - 100, position.y - eyeHeight.y), facing.RIGHT, 0);
+						level.spawnDustCloud(new Vector2(position.x - 100, position.y - eyeHeight.y), Facing.RIGHT, 0);
 					}
 				}
 				
@@ -929,7 +940,7 @@ public class Player extends Entity {
 				
 			}
 
-			Utils.lerpX(position, targetPosition, 0.04f);
+			//Utils.lerpX(position, targetPosition, 0.04f);
 
 		}
 		
