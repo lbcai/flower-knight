@@ -50,11 +50,20 @@ public class EnemyWaspScout extends EnemyWasp {
 			//if not dead, do your thing
 			lastFramePosition.set(position);
 			position.mulAdd(velocity, delta);
-
+			
+			if ((wanderTime != 0 && wanderTime % 40 == 0) || target.health < 1) {
+				goHome = true;
+				if (calledWasps == 1) {
+					//reset the ability to call wasps if the wasp has wandered around for a while without seeing
+					//the player, or if the player is killed
+					calledWasps = 0;
+				}
+			}
+			
 			//if not stunned from being hit, do the AI things
 			if (hitState != HitState.IFRAME) {
 				
-				if (aggroRange.overlaps(target.hitBox)) {
+				if (aggroRange.overlaps(target.hitBox) && goHome == false) {
 					
 					//the first thing the wasp scout should do when it sees a player is attempt to call other wasps for 
 					//backup. then, it will keep the player in sight but avoid going into attack range.
@@ -132,15 +141,6 @@ public class EnemyWaspScout extends EnemyWasp {
 						moveSpeed = Constants.enemyMoveSpeed;
 					}
 
-					if (wanderTime != 0 && wanderTime % 40 == 0) {
-						goHome = true;
-						if (calledWasps == 1) {
-							//reset the ability to call wasps if the wasp has wandered around for a while without seeing
-							//the player
-							calledWasps = 0;
-						}
-					}
-
 					//return to home platform sometimes
 					if (goHome == true) {
 
@@ -154,9 +154,9 @@ public class EnemyWaspScout extends EnemyWasp {
 								//do nothing
 							}
 							
-							if (platform.top + eyeHeight.y < position.y) {
+							if (platform.top + eyeHeight.y + 5 < position.y) {
 								flyDown(delta);
-							} else if (platform.top + eyeHeight.y > position.y) {
+							} else if (platform.top + eyeHeight.y - 5 > position.y) {
 								flyUp(delta);
 							}
 						} else {
@@ -267,6 +267,7 @@ public class EnemyWaspScout extends EnemyWasp {
 				}
 			}
 		}
+
 	}
 	
 	public void flyDown(float delta) {

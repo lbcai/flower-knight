@@ -50,6 +50,9 @@ public abstract class EnemyWasp extends Enemy {
 			velocity.y -= delta * Constants.worldGravity;
 			position.mulAdd(velocity, delta);
 
+			if (wanderTime != 0 && wanderTime % 40 == 0 || target.health < 1) {
+				goHome = true;
+			}
 			
 			for (Platform platform : level.getPlatforms()) {
 				if (landOnPlatform(platform)) {
@@ -63,7 +66,7 @@ public abstract class EnemyWasp extends Enemy {
 			//if not stunned from being hit, do the AI things
 			if (hitState != HitState.IFRAME) {
 				
-				if (aggroRange.overlaps(target.hitBox)) {
+				if (aggroRange.overlaps(target.hitBox) && goHome == false) {
 					
 					if (moveSpeed != Constants.enemyMoveSpeedAggro) {
 						//increase speed when chasing
@@ -107,11 +110,7 @@ public abstract class EnemyWasp extends Enemy {
 					}
 					
 					wanderTime = (long) Utils.secondsSince(startTime);
-					
-					if (wanderTime != 0 && wanderTime % 40 == 0) {
-						goHome = true;
-					}
-					
+
 					//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
 					//idle/wander ai. avoid having holes in the map with this method
 					if (goHome == true) {
@@ -227,6 +226,7 @@ public abstract class EnemyWasp extends Enemy {
 				}
 			}
 		}
+
 	}
 	
 	@Override
