@@ -134,13 +134,6 @@ public class EnemyWaspScout extends EnemyWasp {
 
 				} else {
 					
-					wanderTime = (long) Utils.secondsSince(startTime);
-					//no player in sight, random movement
-					if (moveSpeed != Constants.enemyMoveSpeed) {
-						//calm down
-						moveSpeed = Constants.enemyMoveSpeed;
-					}
-
 					//return to home platform sometimes
 					if (goHome == true) {
 
@@ -163,7 +156,19 @@ public class EnemyWaspScout extends EnemyWasp {
 							goHome = false;
 						}
 
+						if (aggroRange.contains(target.hitBox)) {
+							goHome = false;
+						}
+						
 					} else {
+						
+						wanderTime = (long) Utils.secondsSince(startTime);
+						//no player in sight, random movement
+						if (moveSpeed != Constants.enemyMoveSpeed) {
+							//calm down
+							moveSpeed = Constants.enemyMoveSpeed;
+						}
+						
 						//wander on screen
 						//2% chance every update for enemy to change behavior
 						if (MathUtils.random() < 0.02) {

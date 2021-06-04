@@ -104,13 +104,6 @@ public abstract class EnemyWasp extends Enemy {
 					
 				} else {
 
-					if (moveSpeed != Constants.enemyMoveSpeed) {
-						//calm down
-						moveSpeed = Constants.enemyMoveSpeed;
-					}
-					
-					wanderTime = (long) Utils.secondsSince(startTime);
-
 					//imagine the player leaves the aggro range. get enemy back to home platform, then if on home platform, run
 					//idle/wander ai. avoid having holes in the map with this method
 					if (goHome == true) {
@@ -142,8 +135,20 @@ public abstract class EnemyWasp extends Enemy {
 						} else {
 							goHome = false;
 						}
+						
+						if (aggroRange.contains(target.hitBox)) {
+							goHome = false;
+						}
+						
 					} else {
 						//wander ANYWHERE not just on home platform!
+						
+						if (moveSpeed != Constants.enemyMoveSpeed) {
+							//calm down
+							moveSpeed = Constants.enemyMoveSpeed;
+						}
+						
+						wanderTime = (long) Utils.secondsSince(startTime);	
 						
 						//1% chance every update for enemy to change behavior
 						if (MathUtils.random() < 0.02) {

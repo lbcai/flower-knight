@@ -70,7 +70,9 @@ public abstract class Entity {
 		if ((hitBox.x + hitBox.width) > (level.levelBound.x + level.levelBound.width)) {
 			position.x = level.levelBound.x + level.levelBound.width - (hitBox.width / 2);
 		} else if (hitBox.x < level.levelBound.x) {
-			position.x = level.levelBound.x + (hitBox.width / 2);
+			//had to do this differently due to player's hitbox being off center depending on direction facing -- caused by
+			//setup during sprite alignment. next time make sure all mirrored animations center perfectly
+			position.x = level.levelBound.x + (position.x - hitBox.x);
 		}
 		
 		if ((hitBox.y + hitBox.height) > level.levelBound.y + level.levelBound.height) {

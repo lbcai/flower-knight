@@ -268,17 +268,15 @@ public class Player extends Entity {
 				} else {
 					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(deathTime);
 					
-					if (position.x > level.levelBound.x + 40) {
-						if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 9) {
-							position.x -= 5 * deathTime;
-						} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 11 &&
-								Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 14) {
-							position.x -= 2 * deathTime;
-						} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
-								Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 22) {
-							position.x -= 7 * deathTime;
-						} 
-					}
+					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 9) {
+						position.x -= 5 * deathTime;
+					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 11 &&
+							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 14) {
+						position.x -= 2 * deathTime;
+					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
+							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) <= 22) {
+						position.x -= 7 * deathTime;
+					} 
 					
 					//spawn dust cloud when player is sliding in death animation
 					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(deathTime) == 16) {
@@ -518,7 +516,7 @@ public class Player extends Entity {
 	public void update(float delta, Array<Platform> platforms) {
 		//Use position vector to set last frame position.
 		lastFramePosition.set(position);
-
+		System.out.println(position + " " + level.levelBound.x + " " + hitBox.x);
 		//Subtract delta * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
 		if (jumpState != JumpState.WALL) {
@@ -567,7 +565,7 @@ public class Player extends Entity {
 						Constants.playerHeight - 20);
 			} else {
 				hitBox.set(
-						position.x - Constants.playerStance / 2 + 10,
+						(position.x - Constants.playerStance / 2) + 10,
 						position.y - eyeHeight.y, 
 						Constants.playerStance,
 						Constants.playerHeight - 20);
