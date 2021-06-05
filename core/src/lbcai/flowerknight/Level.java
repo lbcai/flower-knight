@@ -74,16 +74,17 @@ public class Level {
 	public void update(float delta) {
 		player.update(delta, platforms);
 		
-		if (dustCloudCounter == 0) {
-			if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
-				spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
-			} else if (player.jumpCounter == 2) {
-				spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
-			}
-			
-		} else if (dustCloudCounter == 1) {
+		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
+			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
+		} else if (player.jumpCounter == 2) {
+			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
+		}
+		
+		if (dustCloudCounter == 1) {
 			if ((player.runState != RunState.SKID && player.hitState != HitState.DODGE) && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
-				dustCloudCounter = 0;
+				if (player.health > 0) {
+					dustCloudCounter = 0;
+				}
 			}
 		}
 
@@ -285,8 +286,10 @@ public class Level {
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
-		dustClouds.add(new DustCloud(position, facing, type));
-		dustCloudCounter = 1;
+		if (dustCloudCounter != 1) {
+			dustClouds.add(new DustCloud(position, facing, type));
+			dustCloudCounter = 1;
+		}
 	}
 	
 	public void spawnHitEffect(Rectangle rectangle, Facing facing, int type) {

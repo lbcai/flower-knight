@@ -34,7 +34,10 @@ public class EnemyWaspScout extends EnemyWasp {
 	
 	//used to calc dive attack times and animations
 	long diveStartTime;
-
+	float diveStartPosition;
+	int parabolaStage = 0;
+	Vector2 diveGoalPosition = new Vector2();
+	
 	public EnemyWaspScout(Platform platform, Level level) {
 		super(platform, level);
 		wanderStateRandomizerVert = Arrays.asList(0, 1, 2);
@@ -60,154 +63,162 @@ public class EnemyWaspScout extends EnemyWasp {
 				}
 			}
 			
-			//if not stunned from being hit, do the AI things
-			if (hitState != HitState.IFRAME) {
-				
-				if (aggroRange.overlaps(target.hitBox) && goHome == false) {
+			if (lockState == LockState.ATTACK1LOCK) {
+				dive(delta);
+			} else {
+				//if not stunned from being hit, do the AI things
+				if (hitState != HitState.IFRAME) {
 					
-					//the first thing the wasp scout should do when it sees a player is attempt to call other wasps for 
-					//backup. then, it will keep the player in sight but avoid going into attack range.
-					
-					if (moveSpeed != Constants.waspMoveSpeedAggro) {
-						//increase speed when chasing. wasp scout aggro move speed is faster than other enemies
-						moveSpeed = Constants.waspMoveSpeedAggro;
-					}
-					
-					//call other wasps
-					if (calledWasps == 0) {
-						callWasps(delta, target.position);
-						calledWasps = 1;
-					}
-					
-					//keep the top or bottom of the aggro range box inside the player hitbox depending on whether the player
-					//is above or below the wasp scout. 
-					if (target.position.y >= position.y) {
+					if (aggroRange.overlaps(target.hitBox) && goHome == false) {
 						
-						//check if wasp is being pushed into lowest platform on map, where it is unreachable, if so swap to
-						//flying above player
-						if (position.y < level.lowestTop && getAbovePlayer == 0) {
+						//the first thing the wasp scout should do when it sees a player is attempt to call other wasps for 
+						//backup. then, it will keep the player in sight but avoid going into attack range.
+						
+						if (moveSpeed != Constants.waspMoveSpeedAggro) {
+							//increase speed when chasing. wasp scout aggro move speed is faster than other enemies
+							moveSpeed = Constants.waspMoveSpeedAggro;
+						}
+						
+						//call other wasps
+						if (calledWasps == 0) {
+							callWasps(delta, target.position);
+							calledWasps = 1;
+						}
+						
+						//keep the top or bottom of the aggro range box inside the player hitbox depending on whether the player
+						//is above or below the wasp scout. 
+						if (target.position.y >= position.y) {
+							
+							//check if wasp is being pushed into lowest platform on map, where it is unreachable, if so swap to
+							//flying above player
+							if (position.y < level.lowestTop && getAbovePlayer == 0) {
+								if (getAbovePlayer == 0) {
+									getAbovePlayer = 1;
+								}
+							}
+
+							//if the target is above wasp EXCEPT when the wasp is under the lowest platform in the map
 							if (getAbovePlayer == 0) {
-								getAbovePlayer = 1;
-							}
-						}
-
-						//if the target is above wasp EXCEPT when the wasp is under the lowest platform in the map
-						if (getAbovePlayer == 0) {
-							if (aggroRange.y + aggroRange.height > target.position.y) {
-								flyDown(delta);
-							} else if (aggroRange.y + aggroRange.height < target.hitBox.y) {
+								if (aggroRange.y + aggroRange.height > target.position.y) {
+									flyDown(delta);
+								} else if (aggroRange.y + aggroRange.height < target.hitBox.y) {
+									flyUp(delta);
+								}
+							} else if (getAbovePlayer == 1) {
+								//get above player if pushed below map
 								flyUp(delta);
 							}
-						} else if (getAbovePlayer == 1) {
-							//get above player if pushed below map
-							flyUp(delta);
+							
+						} else if (target.position.y < position.y) {
+							//reset pushed below map counter
+							if (getAbovePlayer == 1) {
+								getAbovePlayer = 0;
+							}
+							//if the target is below wasp
+							if (aggroRange.y < target.hitBox.y) {
+								flyUp(delta);
+							} else if (aggroRange.y > target.position.y) {
+								flyDown(delta);
+							}
 						}
 						
-					} else if (target.position.y < position.y) {
-						//reset pushed below map counter
-						if (getAbovePlayer == 1) {
-							getAbovePlayer = 0;
-						}
-						//if the target is below wasp
-						if (aggroRange.y < target.hitBox.y) {
-							flyUp(delta);
-						} else if (aggroRange.y > target.position.y) {
-							flyDown(delta);
-						}
-					}
-					
-					//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
-					chaseRandomness(delta);
-					
-					speedFollow(delta);
-					
-					//check if any other wasp enemies in aggro box sight range. if so, allow scout to do an annoying knockback
-					//attack on the player
-					for (Enemy enemy : level.getEnemies()) {
-						if (enemy.enemyType == EnemyType.WASP && enemy != this) {
-							if (aggroRange.overlaps(enemy.hitBox)) {
-								dive();
+						//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
+						chaseRandomness(delta);
+						
+						speedFollow(delta);
+						
+						//check if any other wasp enemies in aggro box sight range. if so, allow scout to do an annoying knockback
+						//attack on the player
+						for (Enemy enemy : level.getEnemies()) {
+							if (enemy.enemyType == EnemyType.WASP && enemy != this) {
+								if (aggroRange.overlaps(enemy.hitBox) && enemy.inactive == false) {
+									if (Math.abs(position.x - target.position.x) < (hitBox.width * 2)) {
+										dive(delta);
+									}
+									
+								}
 							}
-						}
-					}
-					
-
-				} else {
-					
-					//return to home platform sometimes
-					if (goHome == true) {
-
-						if (!hitBox.contains(homeTracker)) {
-							
-							if (position.x > platform.centerX + 10) {
-								moveLeft(delta);
-							} else if (position.x < platform.centerX - 10) {
-								moveRight(delta);
-							} else if (position.x < platform.centerX + 10 && position.x > platform.centerX - 10) {
-								//do nothing
-							}
-							
-							if (platform.top + eyeHeight.y + 5 < position.y) {
-								flyDown(delta);
-							} else if (platform.top + eyeHeight.y - 5 > position.y) {
-								flyUp(delta);
-							}
-						} else {
-							goHome = false;
-						}
-
-						if (aggroRange.contains(target.hitBox)) {
-							goHome = false;
 						}
 						
 					} else {
 						
-						wanderTime = (long) Utils.secondsSince(startTime);
-						//no player in sight, random movement
-						if (moveSpeed != Constants.enemyMoveSpeed) {
-							//calm down
-							moveSpeed = Constants.enemyMoveSpeed;
-						}
-						
-						//wander on screen
-						//2% chance every update for enemy to change behavior
-						if (MathUtils.random() < 0.02) {
-							wanderState = (int) (MathUtils.random() * wanderStateRandomizer.size());
-						} else if (MathUtils.random() < 0.05) {
-							wanderStateVert = (int) (MathUtils.random() * wanderStateRandomizerVert.size());
-						}
-						
-						if (wanderState == 0 && wanderStateVert == 0) {
-							runState = RunState.IDLE;
-						} else if (wanderState == 1) {
-							//move left
-							moveLeft(delta);
-						} else if (wanderState == 2) {
-							//move right
-							moveRight(delta);
-						}
-						
-						//do nothing if wanderStateVert == 0
-						if (wanderStateVert == 1) {
-							//move up
-							flyUp(delta);
-						} else if (wanderStateVert == 2) {
-							//move down
-							if (position.y > level.lowestTop) {
-								//do not allow the scout to fly below the level
-								flyDown(delta);
+						//return to home platform sometimes
+						if (goHome == true) {
+
+							if (!hitBox.contains(homeTracker)) {
+								
+								if (position.x > platform.centerX + 10) {
+									moveLeft(delta);
+								} else if (position.x < platform.centerX - 10) {
+									moveRight(delta);
+								} else if (position.x < platform.centerX + 10 && position.x > platform.centerX - 10) {
+									//do nothing
+								}
+								
+								if (platform.top + eyeHeight.y + 5 < position.y) {
+									flyDown(delta);
+								} else if (platform.top + eyeHeight.y - 5 > position.y) {
+									flyUp(delta);
+								}
+							} else {
+								goHome = false;
+							}
+
+							if (aggroRange.contains(target.hitBox)) {
+								goHome = false;
 							}
 							
+						} else {
+							
+							wanderTime = (long) Utils.secondsSince(startTime);
+							//no player in sight, random movement
+							if (moveSpeed != Constants.enemyMoveSpeed) {
+								//calm down
+								moveSpeed = Constants.enemyMoveSpeed;
+							}
+							
+							//wander on screen
+							//2% chance every update for enemy to change behavior
+							if (MathUtils.random() < 0.02) {
+								wanderState = (int) (MathUtils.random() * wanderStateRandomizer.size());
+							} else if (MathUtils.random() < 0.05) {
+								wanderStateVert = (int) (MathUtils.random() * wanderStateRandomizerVert.size());
+							}
+							
+							if (wanderState == 0 && wanderStateVert == 0) {
+								runState = RunState.IDLE;
+							} else if (wanderState == 1) {
+								//move left
+								moveLeft(delta);
+							} else if (wanderState == 2) {
+								//move right
+								moveRight(delta);
+							}
+							
+							//do nothing if wanderStateVert == 0
+							if (wanderStateVert == 1) {
+								//move up
+								flyUp(delta);
+							} else if (wanderStateVert == 2) {
+								//move down
+								if (position.y > level.lowestTop) {
+									//do not allow the scout to fly below the level
+									flyDown(delta);
+								}
+								
+							}
 						}
-					}
 
-				}
-				
-			} else {
-				if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
-					hitState = HitState.NOHIT;
+					}
+					
+				} else {
+					if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
+						hitState = HitState.NOHIT;
+					}
 				}
 			}
+			
+			
 
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,
@@ -336,10 +347,43 @@ public class EnemyWaspScout extends EnemyWasp {
 		}
 	}
 	
-	void dive() {
+	void dive(float delta) {
+		//dive at player in a parabola-ish shape
+		
 		if (lockState == LockState.FREE) {
+			
 			lockState = LockState.ATTACK1LOCK;
 			diveStartTime = TimeUtils.nanoTime();
+			target.hitBox.getCenter(diveGoalPosition);
+			
+			if (diveGoalPosition.x - position.x > 0) {
+				facing = Facing.RIGHT;
+			} else {
+				facing = Facing.LEFT;
+			}
+			
+		} else if (lockState == LockState.ATTACK1LOCK) {
+
+			if (parabolaStage == 0) {
+				
+				position.lerp(diveGoalPosition, 0.1f);
+				if (hitBox.contains(diveGoalPosition)) {
+					parabolaStage = 1;
+				}
+			} else if (parabolaStage == 1) {
+				if (facing == Facing.RIGHT) {
+					position.lerp(new Vector2((target.position.x + (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
+				} else {
+					position.lerp(new Vector2((target.position.x - (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
+				}
+				if (position.y + 20 >= (target.position.y + (aggroRange.height / 2))) {
+					lockState = LockState.FREE;
+					parabolaStage = 0;
+				}
+			}
+			
+			
+
 		}
 		
 	}

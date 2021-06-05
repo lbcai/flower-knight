@@ -516,7 +516,7 @@ public class Player extends Entity {
 	public void update(float delta, Array<Platform> platforms) {
 		//Use position vector to set last frame position.
 		lastFramePosition.set(position);
-		System.out.println(position + " " + level.levelBound.x + " " + hitBox.x);
+
 		//Subtract delta * gravity from player velocity to make player accelerate downwards the longer they are in air.
 		//Update is called every frame (delta). This means every frame the velocity is affected in a downwards motion.
 		if (jumpState != JumpState.WALL) {
@@ -544,7 +544,7 @@ public class Player extends Entity {
 						Constants.playerHeight - 70);
 			} else {
 				hitBox.set(
-						position.x - Constants.playerStance - 20,
+						position.x - Constants.playerStance - 18,
 						position.y - eyeHeight.y, 
 						Constants.playerStance + 50,
 						Constants.playerHeight - 70);
