@@ -122,6 +122,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Array<AtlasRegion> landRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> landLeftCombat = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> landRightCombat = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> deathLeft = new Array<AtlasRegion>();
+		public final Array<AtlasRegion> deathRight = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> knockdownLeft = new Array<AtlasRegion>();
 		public final Array<AtlasRegion> knockdownRight = new Array<AtlasRegion>();
 		
@@ -156,6 +158,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<TextureRegion> landRightAnim;
 		public final Animation<TextureRegion> landLeftCombatAnim;
 		public final Animation<TextureRegion> landRightCombatAnim;
+		public final Animation<TextureRegion> deathLeftAnim;
+		public final Animation<TextureRegion> deathRightAnim;
 		public final Animation<TextureRegion> knockdownLeftAnim;
 		public final Animation<TextureRegion> knockdownRightAnim;
 		
@@ -428,74 +432,126 @@ public class Assets implements Disposable, AssetErrorListener {
 			landRightCombat.add(atlas.findRegion(Constants.landRightCombat, 6));
 			landRightCombatAnim = new Animation(Constants.landCycleTime, landRightCombat, PlayMode.NORMAL);
 			
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 1)); //0
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2)); //1
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2)); //2
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 2)); //3
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3)); //4
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3)); //5
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 3)); //6
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 4)); //7
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 5)); //8
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 6)); //9
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 7)); //10
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 8)); //11
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 9)); //12
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 10)); //13
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 11)); //14
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 12)); //15
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 13)); //16
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 14)); //17
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15)); //18
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15)); //19
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15)); //20
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 15)); //21
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 16)); //22
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 16)); //23
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 17)); //24
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 18)); //25
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 19)); //26
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //27
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //28
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //29
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //30
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //31
-			knockdownLeft.add(atlas.findRegion(Constants.knockdownLeft, 20)); //32
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 1)); //0
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //1
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //2
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //3
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //4
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //5
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //6
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 4)); //7
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 5)); //8
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 6)); //9
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 7)); //10
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 8)); //11
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 9)); //12
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 10)); //13
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 11)); //14
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 12)); //15
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 13)); //16
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 14)); //17
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //18
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //19
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //20
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //21
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 16)); //22
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 16)); //23
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 17)); //24
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 18)); //25
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 19)); //26
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //27
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //28
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //29
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //30
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //31
+			deathLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //32
+			deathLeftAnim = new Animation(Constants.knockdownCycleTime, deathLeft, PlayMode.NORMAL);
+			
+			deathRight.add(atlas.findRegion(Constants.deathRight, 1)); //0
+			deathRight.add(atlas.findRegion(Constants.deathRight, 2)); //1
+			deathRight.add(atlas.findRegion(Constants.deathRight, 2)); //2
+			deathRight.add(atlas.findRegion(Constants.deathRight, 2)); //3
+			deathRight.add(atlas.findRegion(Constants.deathRight, 3)); //4
+			deathRight.add(atlas.findRegion(Constants.deathRight, 3)); //5
+			deathRight.add(atlas.findRegion(Constants.deathRight, 3)); //6
+			deathRight.add(atlas.findRegion(Constants.deathRight, 4)); //7
+			deathRight.add(atlas.findRegion(Constants.deathRight, 5)); //8
+			deathRight.add(atlas.findRegion(Constants.deathRight, 6)); //9
+			deathRight.add(atlas.findRegion(Constants.deathRight, 7)); //10
+			deathRight.add(atlas.findRegion(Constants.deathRight, 8)); //11
+			deathRight.add(atlas.findRegion(Constants.deathRight, 9)); //12
+			deathRight.add(atlas.findRegion(Constants.deathRight, 10)); //13
+			deathRight.add(atlas.findRegion(Constants.deathRight, 11)); //14
+			deathRight.add(atlas.findRegion(Constants.deathRight, 12)); //15
+			deathRight.add(atlas.findRegion(Constants.deathRight, 13)); //16
+			deathRight.add(atlas.findRegion(Constants.deathRight, 14)); //17
+			deathRight.add(atlas.findRegion(Constants.deathRight, 15)); //18
+			deathRight.add(atlas.findRegion(Constants.deathRight, 15)); //19
+			deathRight.add(atlas.findRegion(Constants.deathRight, 15)); //20
+			deathRight.add(atlas.findRegion(Constants.deathRight, 15)); //21
+			deathRight.add(atlas.findRegion(Constants.deathRight, 16)); //22
+			deathRight.add(atlas.findRegion(Constants.deathRight, 16)); //23
+			deathRight.add(atlas.findRegion(Constants.deathRight, 17)); //24
+			deathRight.add(atlas.findRegion(Constants.deathRight, 18)); //25
+			deathRight.add(atlas.findRegion(Constants.deathRight, 19)); //26
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //27
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //28
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //29
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //30 
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //31
+			deathRight.add(atlas.findRegion(Constants.deathRight, 20)); //32
+			deathRightAnim = new Animation(Constants.knockdownCycleTime, deathRight, PlayMode.NORMAL);
+			
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 1)); //0
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //1
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //2
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 2)); //3
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //4
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //5
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 3)); //6
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 13)); //7
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 14)); //8
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //9
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //10
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //11
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 15)); //12
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 16)); //13
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 16)); //14
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 17)); //15
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 18)); //16
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 19)); //17
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //18
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //19
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //20
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //21
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //22
+			knockdownLeft.add(atlas.findRegion(Constants.deathLeft, 20)); //23
 			knockdownLeftAnim = new Animation(Constants.knockdownCycleTime, knockdownLeft, PlayMode.NORMAL);
 			
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 1)); //0
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 2)); //1
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 2)); //2
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 2)); //3
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 3)); //4
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 3)); //5
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 3)); //6
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 4)); //7
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 5)); //8
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 6)); //9
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 7)); //10
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 8)); //11
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 9)); //12
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 10)); //13
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 11)); //14
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 12)); //15
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 13)); //16
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 14)); //17
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 15)); //18
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 15)); //19
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 15)); //20
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 15)); //21
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 16)); //22
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 16)); //23
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 17)); //24
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 18)); //25
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 19)); //26
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //27
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //28
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //29
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //30 
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //31
-			knockdownRight.add(atlas.findRegion(Constants.knockdownRight, 20)); //32
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 1)); //0
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 2)); //1
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 2)); //2
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 2)); //3
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 3)); //4
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 3)); //5
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 3)); //6
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 13)); //7
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 14)); //8
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 15)); //9
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 15)); //10
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 15)); //11
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 15)); //12
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 16)); //13
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 16)); //14
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 17)); //15
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 18)); //16
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 19)); //17
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //18
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //19
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //20
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //21
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //22
+			knockdownRight.add(atlas.findRegion(Constants.deathRight, 20)); //23
 			knockdownRightAnim = new Animation(Constants.knockdownCycleTime, knockdownRight, PlayMode.NORMAL);
 			
 		}

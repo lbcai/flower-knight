@@ -59,8 +59,8 @@ public class Constants {
 	public static final String landRight = "Landright";
 	public static final String landLeftCombat = "Landcombatleft";
 	public static final String landRightCombat = "Landcombatright";
-	public static final String knockdownLeft = "Knockdownleft";
-	public static final String knockdownRight = "Knockdownright";
+	public static final String deathLeft = "Knockdownleft";
+	public static final String deathRight = "Knockdownright";
 	
 	public static final float skidCycleTime = 0.025f;
 	public static final float runCycleTime = 0.04f;

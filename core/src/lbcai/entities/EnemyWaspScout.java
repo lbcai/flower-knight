@@ -24,6 +24,7 @@ public class EnemyWaspScout extends EnemyWasp {
 	//normal wanderstate values randomize left and right behavior, but this enemy can fly in all directions. it also needs
 	//a randomized wanderstate value for up and down directions.
 	List<Integer> wanderStateRandomizerVert;
+	//this is the randomized wanderstate value. normal horizontal wanderstate value is already included in superclasses.
 	int wanderStateVert;
 	
 	//used if the player is above the enemy but the enemy is being pushed down into the floor and there is no space for it
@@ -34,8 +35,11 @@ public class EnemyWaspScout extends EnemyWasp {
 	
 	//used to calc dive attack times and animations
 	long diveStartTime;
-	float diveStartPosition;
+	//used so the wasp knows which direction above or below the player to return to after diving to the player
+	int diveDirection;
+	//used so the wasp knows whether it's diving towards the player or returning to safety
 	int parabolaStage = 0;
+	//used to mark the target location of the dive attack even if player moves away
 	Vector2 diveGoalPosition = new Vector2();
 	
 	public EnemyWaspScout(Platform platform, Level level) {
@@ -44,7 +48,10 @@ public class EnemyWaspScout extends EnemyWasp {
 		homeTracker = new Vector2(platform.centerX, platform.top + eyeHeight.y);
 		getAbovePlayer = 0;
 		calledWasps = 0;
-
+		
+		//this enemy does no damage.
+		damage = 0;
+		range = 0;
 	}
 
 	@Override
@@ -348,38 +355,74 @@ public class EnemyWaspScout extends EnemyWasp {
 	}
 	
 	void dive(float delta) {
-		//dive at player in a parabola-ish shape
+		//dive at player in a V-shape
 		
 		if (lockState == LockState.FREE) {
 			
 			lockState = LockState.ATTACK1LOCK;
 			diveStartTime = TimeUtils.nanoTime();
+			
+			//get the target's position at the start of the dive and place it in diveGoalPosition
 			target.hitBox.getCenter(diveGoalPosition);
 			
+			//depending on if target is to left or right of wasp, change facing direction to look natural
 			if (diveGoalPosition.x - position.x > 0) {
 				facing = Facing.RIGHT;
 			} else {
 				facing = Facing.LEFT;
 			}
 			
+			if (diveGoalPosition.y - position.y > 0) {
+				//the wasp began below the player.
+				diveDirection = 0;
+			} else {
+				//the wasp began above the player.
+				diveDirection = 1;
+			}
+			
 		} else if (lockState == LockState.ATTACK1LOCK) {
 
 			if (parabolaStage == 0) {
-				
+				//initial dive from safe position to player
+				//set boolean knockback to true so if dive successfully hits player, player is knocked back
+				if (knockback == false) {
+					knockback = true;
+				}
+				//the actual dive
 				position.lerp(diveGoalPosition, 0.1f);
+				
 				if (hitBox.contains(diveGoalPosition)) {
 					parabolaStage = 1;
+					knockback = false;
 				}
+				
 			} else if (parabolaStage == 1) {
-				if (facing == Facing.RIGHT) {
-					position.lerp(new Vector2((target.position.x + (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
-				} else {
-					position.lerp(new Vector2((target.position.x - (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
+				//secondary dive from player to a position safe from player; if the wasp dove from below, return below. if it
+				//dove from above, return above.
+				if (diveDirection == 0) {
+					//below
+					if (facing == Facing.RIGHT) {
+						position.lerp(new Vector2((target.position.x + (hitBox.width * 2)), (target.position.y - (aggroRange.height / 2))), 0.1f);
+					} else {
+						position.lerp(new Vector2((target.position.x - (hitBox.width * 2)), (target.position.y - (aggroRange.height / 2))), 0.1f);
+					}
+					if (position.y - 20 <= (target.position.y - (aggroRange.height / 2))) {
+						lockState = LockState.FREE;
+						parabolaStage = 0;
+					}
+				} else if (diveDirection == 1) {
+					//above
+					if (facing == Facing.RIGHT) {
+						position.lerp(new Vector2((target.position.x + (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
+					} else {
+						position.lerp(new Vector2((target.position.x - (hitBox.width * 2)), (target.position.y + (aggroRange.height / 2))), 0.1f);
+					}
+					if (position.y + 20 >= (target.position.y + (aggroRange.height / 2))) {
+						lockState = LockState.FREE;
+						parabolaStage = 0;
+					}
 				}
-				if (position.y + 20 >= (target.position.y + (aggroRange.height / 2))) {
-					lockState = LockState.FREE;
-					parabolaStage = 0;
-				}
+				
 			}
 			
 			

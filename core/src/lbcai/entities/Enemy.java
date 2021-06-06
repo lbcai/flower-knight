@@ -36,6 +36,8 @@ public abstract class Enemy extends Entity {
 	long inactiveTimer;
 	//is this "enemy" an object and cannot give touch damage to the player? if so, mark false
 	public boolean touchDmg;
+	//is the enemy able to knock back the player currently?
+	boolean knockback;
 	//zone for enemy to see in (for player detection)
 	Rectangle aggroRange;
 
@@ -51,6 +53,8 @@ public abstract class Enemy extends Entity {
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
 		
+		//default to false because most attacks do not knock back the player significantly
+		knockback = false;
 		//default to none in case, placeholder
 		enemyType = EnemyType.NONE;
 		

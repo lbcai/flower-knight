@@ -217,7 +217,7 @@ public class Level {
 		
 		
 		//Add player to the level. Add a start position for the level as input.
-		player = new Player(new Vector2(100, 200), this);
+		player = new Player(new Vector2(100, 800), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
 		//enemies.add(new EnemyDandelion(enemyPlatform, this));

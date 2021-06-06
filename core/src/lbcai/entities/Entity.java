@@ -56,7 +56,7 @@ public abstract class Entity {
 	long runStartTime;
 	long idleStartTime;
 	long timeSinceHit;
-	
+	long downStartTime;
 	
 	
 
@@ -164,6 +164,15 @@ public abstract class Entity {
 		return leftSideFootOnPlatform || rightSideFootOnPlatform || bothFootOnPlatform;
 	}
 
+	public void knockedDown() {
+		//whichever direction facing is, fly in that direction.
+		if (lockState != LockState.DOWN) {
+			//there is no hitState for being downed because you can still take damage when you are locked and on the floor.
+			lockState = LockState.DOWN;
+			downStartTime = TimeUtils.nanoTime();
+		}
+	}
+	
 	public Level getLevel() {
 		return this.level;
 	}
