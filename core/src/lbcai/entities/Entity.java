@@ -177,4 +177,7 @@ public abstract class Entity {
 		return this.level;
 	}
 	
+	public LockState getLockState() {
+		return lockState;
+	}
 }

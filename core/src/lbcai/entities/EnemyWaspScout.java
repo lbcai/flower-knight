@@ -50,8 +50,7 @@ public class EnemyWaspScout extends EnemyWasp {
 		calledWasps = 0;
 		
 		//this enemy does no damage.
-		damage = 0;
-		range = 0;
+		touchDmg = false;
 	}
 
 	@Override
@@ -265,6 +264,9 @@ public class EnemyWaspScout extends EnemyWasp {
 			
 			//calculate the bobbing motion
 			sineMovement();
+			
+			//determine if hitting player
+			detectHitPlayer(target);
 
 		} else {
 			if (Utils.secondsSince(inactiveTimer) < Constants.respawnTime) {

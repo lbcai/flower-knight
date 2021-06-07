@@ -50,11 +50,15 @@ public abstract class Enemy extends Entity {
 	//enum to label enemy types e.g. wasp, flower, etc.
 	EnemyType enemyType;
 	
+	long hitPlayerTime;
+	int hitPlayerRecently;
+	
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
 		
 		//default to false because most attacks do not knock back the player significantly
 		knockback = false;
+		hitPlayerRecently = 0;
 		//default to none in case, placeholder
 		enemyType = EnemyType.NONE;
 		
@@ -264,14 +268,57 @@ public abstract class Enemy extends Entity {
 		
 	}
 	
+	public void detectHitPlayer(Player player) {
+		if (hitBox.overlaps(player.hitBox)) {
+			//facing: this is the direction that the player is on the enemy
+			if (player.position.x > position.x) {
+				//player is to enemy's right
+				if (touchDmg == true) {
+					doesDamage(player, Facing.RIGHT);
+				}
+				
+				if (knockback == false) {
+					player.flinch(Facing.RIGHT);
+				} else {
+					player.knockedDown();
+				}
+			} else {
+				if (touchDmg == true) {
+					doesDamage(player, Facing.LEFT);
+				}
+				
+				if (knockback == false) {
+					player.flinch(Facing.LEFT);
+				} else {
+					player.knockedDown();
+				}
+			}
+			
+		}
+	}
+	
 	public void doesDamage(Player player, Facing facing) {
 		//touch damage method
-		int damageInstance = (int) (Math.random() * ((damage + range) - 
-				(damage - range) + 1) + 
-				(damage - range));
-		player.health -= damageInstance;
-		player.level.spawnDmgNum(player.position, damageInstance, facing);
-		player.level.spawnHitEffect(player.hitBox, facing, 0);
+		if (hitPlayerRecently == 0) {
+			if (player.hitState == HitState.NOHIT) {
+				hitPlayerRecently = 1;
+				hitPlayerTime = TimeUtils.nanoTime();
+				int damageInstance = (int) (Math.random() * ((damage + range) - 
+						(damage - range) + 1) + 
+						(damage - range));
+				player.health -= damageInstance;
+				player.level.spawnDmgNum(player.position, damageInstance, facing);
+				player.level.spawnHitEffect(player.hitBox, facing, 0);
+				player.hitState = HitState.IFRAME;
+			}
+			
+		} else {
+			if (Utils.secondsSince(hitPlayerTime) > Constants.iFrameLength) {
+				hitPlayerRecently = 0;
+				
+			}
+		}
+		
 	}
 	
 	public int rollDrop() {

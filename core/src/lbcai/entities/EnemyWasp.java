@@ -208,6 +208,9 @@ public abstract class EnemyWasp extends Enemy {
 			
 			//calculate the bobbing motion
 			sineMovement();
+			
+			//determine if hitting player
+			detectHitPlayer(target);
 
 		} else {
 			if (Utils.secondsSince(inactiveTimer) < Constants.respawnTime) {

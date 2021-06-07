@@ -237,6 +237,7 @@ public class Player extends Entity {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(dodgeTime);
 				if (Assets.instance.playerAssets.skidRightAnim.isAnimationFinished(dodgeTime)) {
+					System.out.println("test");
 					lockState = LockState.FREE;
 					hitState = HitState.NOHIT;
 				}
@@ -261,50 +262,81 @@ public class Player extends Entity {
 				}
 			}
 			
-			if (lockState == LockState.DEATH) {
-				float deathTime = Utils.secondsSince(deathStartTime);
+			if (lockState == LockState.DOWN) {
+				
+				float downTime = Utils.secondsSince(downStartTime);
+				
 				if (jumpState == JumpState.FALLING) {
-					region = Assets.instance.playerAssets.deathRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
+					//since time determines frame played, multiply time for each frame by the frame desired
+					//frame 5 is a falling frame in this case
+					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
 				} else {
-					region = Assets.instance.playerAssets.deathRightAnim.getKeyFrame(deathTime);
 					
-					if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 9) {
-						position.x -= 5 * deathTime;
-					} else if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) >= 11 &&
-							Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 14) {
-						position.x -= 2 * deathTime;
-					} else if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
-							Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 22) {
-						position.x -= 7 * deathTime;
-					} 
+					region = Assets.instance.playerAssets.knockdownRightAnim.getKeyFrame(downTime);
 					
-					//spawn dust cloud when player is sliding in death animation
-					if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) == 16) {
-						level.spawnDustCloud(new Vector2(position.x + 50, position.y - eyeHeight.y), Facing.LEFT, 0);
+					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) <= 6) {
+						position.x -= 10 * downTime;
+					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) >= 7 &&
+							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) <= 13) {
+						position.x -= 7 * downTime;
 					}
 					
+					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) == 7) {
+						level.spawnDustCloud(new Vector2(position.x + 60, position.y - eyeHeight.y), Facing.LEFT, 0);
+					}
+					
+					if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(downTime)) {
+						//after knocked down let the player up
+						lockState = LockState.FREE;
+					}
 				}
-
-				if (Assets.instance.playerAssets.deathRightAnim.isAnimationFinished(deathTime) && lives > 0) {
-					if (deathFlash == 0) {
-						deathWaitTime = TimeUtils.nanoTime();
-						deathFlash = 1;
-					} else if (deathFlash == 1) {
-						float deathFlashTime = Utils.secondsSince(deathWaitTime);
-						if (deathFlashTime < Constants.deathWaitTime) {
-							if (flashCounter == 0 || flashCounter % 5 != 0) {
-								flashCounter += 1;
-								alpha -= 5f/255f;
-							} else if (flashCounter % 5 == 0) {
-								batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
-								flashCounter = 0;
+				
+				} else if (lockState == LockState.DEATH) {
+					
+					float deathTime = Utils.secondsSince(deathStartTime);
+					
+					if (jumpState == JumpState.FALLING) {
+						region = Assets.instance.playerAssets.deathRightAnim.getKeyFrame(Constants.knockdownCycleTime * 5);
+					} else {
+						region = Assets.instance.playerAssets.deathRightAnim.getKeyFrame(deathTime);
+						
+						if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 9) {
+							position.x -= 5 * deathTime;
+						} else if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) >= 11 &&
+								Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 14) {
+							position.x -= 2 * deathTime;
+						} else if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
+								Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 22) {
+							position.x -= 7 * deathTime;
+						} 
+						
+						//spawn dust cloud when player is sliding in death animation
+						if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) == 16) {
+							level.spawnDustCloud(new Vector2(position.x + 50, position.y - eyeHeight.y), Facing.LEFT, 0);
+						}
+						
+					}
+	
+					if (Assets.instance.playerAssets.deathRightAnim.isAnimationFinished(deathTime) && lives > 0) {
+						if (deathFlash == 0) {
+							deathWaitTime = TimeUtils.nanoTime();
+							deathFlash = 1;
+						} else if (deathFlash == 1) {
+							float deathFlashTime = Utils.secondsSince(deathWaitTime);
+							if (deathFlashTime < Constants.deathWaitTime) {
+								if (flashCounter == 0 || flashCounter % 5 != 0) {
+									flashCounter += 1;
+									alpha -= 5f/255f;
+								} else if (flashCounter % 5 == 0) {
+									batch.setColor(183f/255f, 183f/255f, 183f/255f, alpha);
+									flashCounter = 0;
+								}
+							} else {
+								init();
 							}
-						} else {
-							init();
 						}
 					}
 				}
-			}
 			
 		} else if (facing == Facing.LEFT) {
 			if (jumpState == JumpState.GROUNDED) {
@@ -452,10 +484,12 @@ public class Player extends Entity {
 				} else {
 					
 					region = Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrame(downTime);
-
-					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) >= 7 &&
+					
+					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) <= 6) {
+						position.x += 10 * downTime;
+					} else if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) >= 7 &&
 							Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) <= 13) {
-						position.x += 5 * downTime;
+						position.x += 7 * downTime;
 					}
 					
 					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) == 7) {
@@ -712,37 +746,6 @@ public class Player extends Entity {
 			}
 		}
 
-		//Collision detection with enemies, includes the direction the hit is coming from. Must go after platform checking code.
-		for (Enemy enemy : level.getEnemies()) {
-			if (enemy.inactive == false && enemy.touchDmg == true) {
-				//have to make new rectangle because enemies move (bottom left x, bottom left y, width, height)
-				if (hitBox.overlaps(enemy.hitBox)) {
-					if (position.x < enemy.position.x && hitState == HitState.NOHIT) {
-						velocity.x = 0;
-						//player is on the left of the enemy
-						enemy.doesDamage(this, Facing.LEFT);
-						if (enemy.knockback == false) {
-							flinch(Facing.LEFT);
-						} else {
-							knockedDown();
-						}
-
-					} else if (position.x > enemy.position.x && hitState == HitState.NOHIT) {
-						velocity.x = 0;
-						//player is on the right of the enemy
-						enemy.doesDamage(this, Facing.RIGHT);
-						if (enemy.knockback == false) {
-							flinch(Facing.RIGHT);
-						} else {
-							knockedDown();
-						}
-
-					}
-				}
-			}
-
-		}
-
 		//check if projectiles are hitting player
 		for (Bullet bullet : level.getBullets()) {
 
@@ -761,7 +764,6 @@ public class Player extends Entity {
 			}
 		}
 
-		
 		//move player during attack animation, dodge animation
 		if (lockState == LockState.ATTACK1LOCK) {
 			Utils.lerpX(position, targetPosition, 0.5f);
@@ -987,12 +989,12 @@ public class Player extends Entity {
 				}
 				
 			}
-
+			
 			//Utils.lerpX(position, targetPosition, 0.04f);
 
 		}
 		
-
+		System.out.println(lives + " " + lockState + " " + hitState + " " + health + " " + deathFlash + " " + flashCounter);
 	}
 	
 	/**
@@ -1059,7 +1061,7 @@ public class Player extends Entity {
 	}
 	
 
-	private void flinch(Facing facing) {
+	public void flinch(Facing facing) {
 		//the facing indicates direction player must flinch (damage is coming from the opposite facing)
 		//if facing is left, damage is coming from right side and player must flinch left
 		//if player is knocked down, do not do the moving part of this code
@@ -1085,9 +1087,11 @@ public class Player extends Entity {
 			}
 		}
 		
-		hitState = HitState.IFRAME;
-		lockState = LockState.LOCK;
 		timeSinceHit = TimeUtils.nanoTime();
+		//if player is not already knocked down, lock them into the normal flinch
+		if (lockState != LockState.DOWN) {
+			lockState = LockState.LOCK;
+		}
 		
 	}
 	

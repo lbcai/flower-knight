@@ -31,6 +31,7 @@ import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
 import lbcai.util.Enums.JumpState;
+import lbcai.util.Enums.LockState;
 import lbcai.util.Enums.RunState;
 
 public class Level {
@@ -82,7 +83,7 @@ public class Level {
 		
 		if (dustCloudCounter == 1) {
 			if ((player.runState != RunState.SKID && player.hitState != HitState.DODGE) && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
-				if (player.health > 0) {
+				if (player.getLockState() != LockState.DEATH && player.getLockState() != LockState.DOWN) {
 					dustCloudCounter = 0;
 				}
 			}

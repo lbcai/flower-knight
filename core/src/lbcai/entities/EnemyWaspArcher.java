@@ -200,6 +200,9 @@ public class EnemyWaspArcher extends EnemyWasp {
 			
 			//calculate the bobbing motion
 			sineMovement();
+			
+			//determine if hitting player
+			detectHitPlayer(target);
 
 		} else {
 			if (Utils.secondsSince(inactiveTimer) < Constants.respawnTime) {
