@@ -10,6 +10,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 import lbcai.util.Enums.Facing;
+import lbcai.util.Enums.HitState;
 
 public class Bullet extends Entity {
 	
@@ -23,7 +24,14 @@ public class Bullet extends Entity {
 	private int type;
 	private float moveSpeed;
 	
+	boolean touchDmg;
+	boolean knockback;
+	
 	public Bullet(Level level, Vector2 position, Facing facing, int damage, int type) {
+		
+		touchDmg = true;
+		knockback = false;
+		
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position.cpy();
 		this.facing = facing;
@@ -105,6 +113,8 @@ public class Bullet extends Entity {
 				1.5f * Constants.bulletCenter.x,
 				1.5f * Constants.bulletCenter.y);
 		
+		detectHitPlayer(level.getPlayer());
+		
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -143,15 +153,49 @@ public class Bullet extends Entity {
 		
 	}
 	
+	public void detectHitPlayer(Player player) {
+		if (hitBox.overlaps(player.hitBox)) {
+			//facing: this is the direction that the player is on the enemy
+			if (player.position.x > position.x) {
+				//player is to enemy's right
+				if (touchDmg == true) {
+					doesDamage(player, Facing.RIGHT);
+				}
+				
+				if (knockback == false) {
+					player.flinch(Facing.RIGHT);
+				} else {
+					player.knockedDown();
+				}
+			} else {
+				if (touchDmg == true) {
+					doesDamage(player, Facing.LEFT);
+				}
+				
+				if (knockback == false) {
+					player.flinch(Facing.LEFT);
+				} else {
+					player.knockedDown();
+				}
+			}
+			
+		}
+	}
+	
 	public void doesDamage(Player player, Facing facing) {
 		//touch damage method
-		int damageInstance = (int) (Math.random() * ((damage + range) - 
-				(damage - range) + 1) + 
-				(damage - range));
-		player.health -= damageInstance;
-		player.level.spawnDmgNum(player.position, damageInstance, facing);
-		player.level.spawnHitEffect(player.hitBox, facing, 2);
-		active = false;
+		if (player.hitState == HitState.NOHIT) {
+			int damageInstance = (int) (Math.random() * ((damage + range) - 
+					(damage - range) + 1) + 
+					(damage - range));
+			player.health -= damageInstance;
+			player.level.spawnDmgNum(player.position, damageInstance, facing);
+			player.level.spawnHitEffect(player.hitBox, facing, 2);
+			player.hitState = HitState.IFRAME;
+			active = false;
+		}
+		
 	}
+
 	
 }

@@ -236,8 +236,9 @@ public class Player extends Entity {
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(dodgeTime);
+				//cannot put check if anim is finished here because if the dodge anim is interrupted, player never resets
+				//dodge hitstate
 				if (Assets.instance.playerAssets.skidRightAnim.isAnimationFinished(dodgeTime)) {
-					System.out.println("test");
 					lockState = LockState.FREE;
 					hitState = HitState.NOHIT;
 				}
@@ -746,23 +747,7 @@ public class Player extends Entity {
 			}
 		}
 
-		//check if projectiles are hitting player
-		for (Bullet bullet : level.getBullets()) {
-
-			//if player comes in contact with bullet, stop player, make flinch, destroy bullet
-			if (hitBox.overlaps(bullet.hitBox)) {
-				if (position.x < bullet.position.x && hitState == HitState.NOHIT) {
-					velocity.x = 0;
-					flinch(Facing.LEFT);
-					bullet.doesDamage(this, Facing.LEFT);
-					
-				} else if (position.x > bullet.position.x && hitState == HitState.NOHIT) {
-					velocity.x = 0;
-					flinch(Facing.RIGHT);
-					bullet.doesDamage(this, Facing.RIGHT);
-				}
-			}
-		}
+		
 
 		//move player during attack animation, dodge animation
 		if (lockState == LockState.ATTACK1LOCK) {
