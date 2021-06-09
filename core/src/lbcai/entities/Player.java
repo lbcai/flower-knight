@@ -71,6 +71,13 @@ public class Player extends Entity {
 	 */
 	public Player(Vector2 spawnLocation, Level level) {
 		
+		//prob don't need this
+		touchDmg = false;
+		flipx = false;
+		
+		//will use in future
+		knockback = false;
+		
 		this.spawnLocation = spawnLocation;
 		//the current level we are in
 		this.level = level;
@@ -220,47 +227,32 @@ public class Player extends Entity {
 			if (lockState == LockState.ATTACKJUMP) {
 				float attackTime = Utils.secondsSince(attackStartTime);
 				region = Assets.instance.playerAssets.jumpAttack1RightAnim.getKeyFrame(attackTime);
-				if (Assets.instance.playerAssets.jumpAttack1RightAnim.isAnimationFinished(attackTime)) {
-					lockState = LockState.FREE;
-				}
+				
 			}
 			
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = Utils.secondsSince(attackStartTime);
 				region = Assets.instance.playerAssets.attack1RightAnim.getKeyFrame(attackTime);
 
-				if (Assets.instance.playerAssets.attack1RightAnim.isAnimationFinished(attackTime)) {
-					lockState = LockState.FREE;
-					attackStartTime = TimeUtils.nanoTime();
-				}
+				
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
 				region = Assets.instance.playerAssets.skidRightAnim.getKeyFrame(dodgeTime);
-				//cannot put check if anim is finished here because if the dodge anim is interrupted, player never resets
-				//dodge hitstate
-				if (Assets.instance.playerAssets.skidRightAnim.isAnimationFinished(dodgeTime)) {
-					lockState = LockState.FREE;
-					hitState = HitState.NOHIT;
-				}
+				
 			}
 
 			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
 					float attackTime = Utils.secondsSince(attackStartTime);
 					region = Assets.instance.playerAssets.attack1RightEndAnim.getKeyFrame(attackTime);
-					if (Assets.instance.playerAssets.attack1RightEndAnim.isAnimationFinished(attackTime)) {
-						attackComboCounter = 0;
-					}
+					
 				}
 			}
 
 			if (boostCounter == 1) {
 				float boostTime = Utils.secondsSince(boostStartTime);
 				region = Assets.instance.playerAssets.boostToPlatRightAnim.getKeyFrame(boostTime);
-				if (Assets.instance.playerAssets.boostToPlatRightAnim.isAnimationFinished(boostTime)) {
-					boostCounter = 0;
-					lockState = LockState.FREE;
-				}
+				
 			}
 			
 			if (lockState == LockState.DOWN) {
@@ -286,10 +278,6 @@ public class Player extends Entity {
 						level.spawnDustCloud(new Vector2(position.x + 60, position.y - eyeHeight.y), Facing.LEFT, 0);
 					}
 					
-					if (Assets.instance.playerAssets.knockdownRightAnim.isAnimationFinished(downTime)) {
-						//after knocked down let the player up
-						lockState = LockState.FREE;
-					}
 				}
 				
 				} else if (lockState == LockState.DEATH) {
@@ -431,47 +419,31 @@ public class Player extends Entity {
 						idleTransitionCounter = 2;
 					}
 				}
-				
-				if (Assets.instance.playerAssets.jumpAttack1LeftAnim.isAnimationFinished(attackTime)) {
-					lockState = LockState.FREE;
-				}
+
 			}
 			
 			if (lockState == LockState.ATTACK1LOCK) {
 				float attackTime = Utils.secondsSince(attackStartTime);
 				region = Assets.instance.playerAssets.attack1LeftAnim.getKeyFrame(attackTime);
 
-				if (Assets.instance.playerAssets.attack1LeftAnim.isAnimationFinished(attackTime)) {
-					lockState = LockState.FREE;
-					attackStartTime = TimeUtils.nanoTime();
-				}
 			} else if (lockState == LockState.DODGE) {
 				float dodgeTime = Utils.secondsSince(dodgeStartTime);
-				//placeholder
 				region = Assets.instance.playerAssets.skidLeftAnim.getKeyFrame(dodgeTime);
-				if (Assets.instance.playerAssets.skidLeftAnim.isAnimationFinished(dodgeTime)) {
-					lockState = LockState.FREE;
-					hitState = HitState.NOHIT;
-				}
+				
 			}
 
 			if (lockState == LockState.FREE && runState == RunState.IDLE) {
 				if (attackComboCounter == 1) {
 					float attackTime = Utils.secondsSince(attackStartTime);
 					region = Assets.instance.playerAssets.attack1LeftEndAnim.getKeyFrame(attackTime);
-					if (Assets.instance.playerAssets.attack1LeftEndAnim.isAnimationFinished(attackTime)) {
-						attackComboCounter = 0;
-					}
+
 				}
 			}
 
 			if (boostCounter == 1) {
 				float boostTime = Utils.secondsSince(boostStartTime);
 				region = Assets.instance.playerAssets.boostToPlatLeftAnim.getKeyFrame(boostTime);
-				if (Assets.instance.playerAssets.boostToPlatLeftAnim.isAnimationFinished(boostTime)) {
-					boostCounter = 0;
-					lockState = LockState.FREE;
-				}
+
 			}
 
 			if (lockState == LockState.DOWN) {
@@ -497,10 +469,6 @@ public class Player extends Entity {
 						level.spawnDustCloud(new Vector2(position.x - 60, position.y - eyeHeight.y), Facing.RIGHT, 0);
 					}
 					
-					if (Assets.instance.playerAssets.knockdownLeftAnim.isAnimationFinished(downTime)) {
-						//after knocked down let the player up
-						lockState = LockState.FREE;
-					}
 					}
 				} else if (lockState == LockState.DEATH) {
 					
@@ -733,7 +701,7 @@ public class Player extends Entity {
 			}
 		}
 
-		
+		//for being hit
 		if (lockState == LockState.LOCK) {
 			if (Utils.secondsSince(timeSinceHit) > Constants.animLockTime) {
 				lockState = LockState.FREE;
@@ -752,8 +720,44 @@ public class Player extends Entity {
 		//move player during attack animation, dodge animation
 		if (lockState == LockState.ATTACK1LOCK) {
 			Utils.lerpX(position, targetPosition, 0.5f);
-		} else if (lockState == LockState.DODGE) {
+			float attackTime = Utils.secondsSince(attackStartTime);
+			if (attackTime > Assets.instance.playerAssets.attack1RightAnim.getAnimationDuration()) {
+				lockState = LockState.FREE;
+				attackStartTime = TimeUtils.nanoTime();
+			}
+		} else if (lockState == LockState.DODGE || hitState == HitState.DODGE) {
 			Utils.lerpX(position, targetPosition, 0.1f);
+			float dodgeTime = Utils.secondsSince(dodgeStartTime);
+			if (dodgeTime > Assets.instance.playerAssets.skidRightAnim.getAnimationDuration()) {
+				lockState = LockState.FREE;
+				hitState = HitState.NOHIT;
+			}
+		} else if (lockState == LockState.ATTACKJUMP) {
+			float attackTime = Utils.secondsSince(attackStartTime);
+			if (attackTime > Assets.instance.playerAssets.jumpAttack1RightAnim.getAnimationDuration()) {
+				lockState = LockState.FREE;
+			}
+		} else if (lockState == LockState.DOWN) {
+			float downTime = Utils.secondsSince(downStartTime);
+			if (downTime > Assets.instance.playerAssets.knockdownRightAnim.getAnimationDuration() 
+					&& jumpState == JumpState.GROUNDED) {
+				lockState = LockState.FREE;
+			}
+		} else if (lockState == LockState.FREE && runState == RunState.IDLE) {
+			if (attackComboCounter == 1) {
+				float attackTime = Utils.secondsSince(attackStartTime);
+				if (attackTime > Assets.instance.playerAssets.knockdownRightAnim.getAnimationDuration()) {
+					attackComboCounter = 0;
+				}
+			}
+		}
+
+		if (boostCounter == 1) {
+			float boostTime = Utils.secondsSince(boostStartTime);
+			if (boostTime > Assets.instance.playerAssets.boostToPlatRightAnim.getAnimationDuration()) {
+				boostCounter = 0;
+				lockState = LockState.FREE;
+			}
 		}
 		
 		
@@ -974,12 +978,9 @@ public class Player extends Entity {
 				}
 				
 			}
-			
-			//Utils.lerpX(position, targetPosition, 0.04f);
 
 		}
-		
-		System.out.println(lives + " " + lockState + " " + hitState + " " + health + " " + deathFlash + " " + flashCounter);
+
 	}
 	
 	/**

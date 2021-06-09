@@ -101,7 +101,7 @@ public class Level {
 		for (Bullet bullet : bullets) {
 			//update any bullets in the bullet array
 			bullet.update(delta);
-			if (!bullet.active) {
+			if (bullet.inactive == true) {
 				//if the bullet is not active (aka it is outside of the viewport), delete from bullet array
 				//removeValue only removes the first instance of the thing, false means use .equals() for comparison and not ==
 				bullets.removeValue(bullet, false);
@@ -221,9 +221,9 @@ public class Level {
 		player = new Player(new Vector2(100, 800), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50);
-		//enemies.add(new EnemyDandelion(enemyPlatform, this));
+		enemies.add(new EnemyDandelion(enemyPlatform, this));
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
-		//enemies.add(new EnemyWaspScout(enemyPlatform, this));
+		enemies.add(new EnemyWaspScout(enemyPlatform, this));
 		enemies.add(new EnemyWaspArcher(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		

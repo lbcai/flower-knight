@@ -91,6 +91,8 @@ public class EnemyDandelion extends Enemy {
 				}
 			}
 			
+			//determine if hitting player
+			detectHitPlayer(target);
 			
 			if (health <= 0) {
 				level.dropItem(this);

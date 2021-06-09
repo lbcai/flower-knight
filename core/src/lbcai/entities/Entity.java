@@ -58,8 +58,17 @@ public abstract class Entity {
 	long timeSinceHit;
 	long downStartTime;
 	
-	
+	//is this "enemy" an object and cannot give touch damage to the player? if so, mark false. 
+	boolean touchDmg;
+	//is the enemy able to knock back the player currently?
+	boolean knockback;
 
+	//is enemy in the death state? for bullets, should we remove the bullet from existence?
+	public boolean inactive;
+	
+	//for determining whether to flip sprite based on left or right facing
+	boolean flipx;
+	
 	public void debugRender(ShapeRenderer shape) {
 
 		shape.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);

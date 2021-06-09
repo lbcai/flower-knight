@@ -31,13 +31,9 @@ public abstract class Enemy extends Entity {
 	public int health;
 	Player target;
 	
-	//is enemy in the death state?
-	public boolean inactive;
+	//countdown til respawn
 	long inactiveTimer;
-	//is this "enemy" an object and cannot give touch damage to the player? if so, mark false
-	public boolean touchDmg;
-	//is the enemy able to knock back the player currently?
-	boolean knockback;
+
 	//zone for enemy to see in (for player detection)
 	Rectangle aggroRange;
 
@@ -181,8 +177,7 @@ public abstract class Enemy extends Entity {
 	}
 	
 	public void render(SpriteBatch batch) {
-		Boolean flipx = false;
-		
+
 		if (inactive == false) {
 			
 			//placeholder animations
@@ -273,25 +268,31 @@ public abstract class Enemy extends Entity {
 			//facing: this is the direction that the player is on the enemy
 			if (player.position.x > position.x) {
 				//player is to enemy's right
-				if (touchDmg == true) {
-					doesDamage(player, Facing.RIGHT);
+				if (player.hitState == HitState.NOHIT) {
+					if (touchDmg == true) {
+						doesDamage(player, Facing.RIGHT);
+					}
+					
+					if (knockback == false) {
+						player.flinch(Facing.RIGHT);
+					} else {
+						player.knockedDown();
+					}
 				}
 				
-				if (knockback == false) {
-					player.flinch(Facing.RIGHT);
-				} else {
-					player.knockedDown();
-				}
 			} else {
-				if (touchDmg == true) {
-					doesDamage(player, Facing.LEFT);
+				if (player.hitState == HitState.NOHIT) {
+					if (touchDmg == true) {
+						doesDamage(player, Facing.LEFT);
+					}
+					
+					if (knockback == false) {
+						player.flinch(Facing.LEFT);
+					} else {
+						player.knockedDown();
+					}
 				}
 				
-				if (knockback == false) {
-					player.flinch(Facing.LEFT);
-				} else {
-					player.knockedDown();
-				}
 			}
 			
 		}
@@ -300,17 +301,17 @@ public abstract class Enemy extends Entity {
 	public void doesDamage(Player player, Facing facing) {
 		//touch damage method
 		if (hitPlayerRecently == 0) {
-			if (player.hitState == HitState.NOHIT) {
-				hitPlayerRecently = 1;
-				hitPlayerTime = TimeUtils.nanoTime();
-				int damageInstance = (int) (Math.random() * ((damage + range) - 
-						(damage - range) + 1) + 
-						(damage - range));
-				player.health -= damageInstance;
-				player.level.spawnDmgNum(player.position, damageInstance, facing);
-				player.level.spawnHitEffect(player.hitBox, facing, 0);
-				player.hitState = HitState.IFRAME;
-			}
+			
+			hitPlayerRecently = 1;
+			hitPlayerTime = TimeUtils.nanoTime();
+			int damageInstance = (int) (Math.random() * ((damage + range) - 
+					(damage - range) + 1) + 
+					(damage - range));
+			player.health -= damageInstance;
+			player.level.spawnDmgNum(player.position, damageInstance, facing);
+			player.level.spawnHitEffect(player.hitBox, facing, 0);
+			player.hitState = HitState.IFRAME;
+
 			
 		} else {
 			if (Utils.secondsSince(hitPlayerTime) > Constants.iFrameLength) {

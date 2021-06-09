@@ -16,16 +16,9 @@ public class Bullet extends Entity {
 	
 	private final Facing facing;
 	private long startTime;
-	private Boolean flipx;
-	//For deciding when the clean up the bullet object.
-	public Boolean active;
 	private Vector2 targetPath;
 	private float angle;
 	private int type;
-	private float moveSpeed;
-	
-	boolean touchDmg;
-	boolean knockback;
 	
 	public Bullet(Level level, Vector2 position, Facing facing, int damage, int type) {
 		
@@ -40,7 +33,7 @@ public class Bullet extends Entity {
 		this.damage = damage;
 		this.range = damage/2;
 		this.type = type;
-		active = true;
+		inactive = false;
 		
 		if (type == 0) {
 			moveSpeed = Constants.bulletMoveSpeed;
@@ -104,7 +97,7 @@ public class Bullet extends Entity {
 		//decided to add an extra half screenwidth offscreen before deletion in case the player is moving fast and the bullet
 		//comes back on screen. it should still be there or else it's immersion-breaking
 		if (position.x < cameraX - worldWidth || position.x > cameraX + worldWidth) {
-			active = false;
+			inactive = true;
 		}
 
 		hitBox.set(
@@ -158,25 +151,31 @@ public class Bullet extends Entity {
 			//facing: this is the direction that the player is on the enemy
 			if (player.position.x > position.x) {
 				//player is to enemy's right
-				if (touchDmg == true) {
-					doesDamage(player, Facing.RIGHT);
+				if (player.hitState == HitState.NOHIT) {
+					if (touchDmg == true) {
+						doesDamage(player, Facing.RIGHT);
+					}
+					
+					if (knockback == false) {
+						player.flinch(Facing.RIGHT);
+					} else {
+						player.knockedDown();
+					}
 				}
 				
-				if (knockback == false) {
-					player.flinch(Facing.RIGHT);
-				} else {
-					player.knockedDown();
-				}
 			} else {
-				if (touchDmg == true) {
-					doesDamage(player, Facing.LEFT);
+				if (player.hitState == HitState.NOHIT) {
+					if (touchDmg == true) {
+						doesDamage(player, Facing.LEFT);
+					}
+					
+					if (knockback == false) {
+						player.flinch(Facing.LEFT);
+					} else {
+						player.knockedDown();
+					}
 				}
 				
-				if (knockback == false) {
-					player.flinch(Facing.LEFT);
-				} else {
-					player.knockedDown();
-				}
 			}
 			
 		}
@@ -184,16 +183,16 @@ public class Bullet extends Entity {
 	
 	public void doesDamage(Player player, Facing facing) {
 		//touch damage method
-		if (player.hitState == HitState.NOHIT) {
-			int damageInstance = (int) (Math.random() * ((damage + range) - 
-					(damage - range) + 1) + 
-					(damage - range));
-			player.health -= damageInstance;
-			player.level.spawnDmgNum(player.position, damageInstance, facing);
-			player.level.spawnHitEffect(player.hitBox, facing, 2);
-			player.hitState = HitState.IFRAME;
-			active = false;
-		}
+
+		int damageInstance = (int) (Math.random() * ((damage + range) - 
+				(damage - range) + 1) + 
+				(damage - range));
+		player.health -= damageInstance;
+		player.level.spawnDmgNum(player.position, damageInstance, facing);
+		player.level.spawnHitEffect(player.hitBox, facing, 2);
+		player.hitState = HitState.IFRAME;
+		inactive = true;
+
 		
 	}
 
