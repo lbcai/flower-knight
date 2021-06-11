@@ -157,14 +157,28 @@ public class Level {
 	public void render(SpriteBatch batch) {
 		
 		for (Platform platform : platforms) {
-			platform.render(batch);
+			platform.renderBackTiles(batch);
 		}
 		
 		for (Enemy enemy : enemies) {
 			enemy.render(batch);
 		}
 		
+		//to keep grass rendering below player if player is standing in front of a platform
+		for (Platform platform : platforms) {
+			if (player.position.y - player.eyeHeight.y < platform.getTop()) {
+				platform.renderFrontTiles(batch);
+			}
+		}
+
 		player.render(batch);
+		
+		//to keep grass rendering above player if player is on the grassy platform
+		for (Platform platform : platforms) {
+			if (player.position.y - player.eyeHeight.y >= platform.getTop()) {
+				platform.renderFrontTiles(batch);
+			}
+		}
 		
 		for (Bullet bullet : bullets) {
 			bullet.render(batch);

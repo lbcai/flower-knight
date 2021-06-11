@@ -308,7 +308,7 @@ public class Platform {
 	 * 
 	 * @param batch is a disposable object that renders textures on quads, need for nine patch.
 	 */
-	public void render(SpriteBatch batch) {
+	public void renderBackTiles(SpriteBatch batch) {
 		
 		//render background tiles first
 		for (Tile tile : tilesBack) {
@@ -330,6 +330,16 @@ public class Platform {
 					false);
 		}
 		
+	}
+	
+	public void renderFrontTiles(SpriteBatch batch) {
+		//render grasses here
+		//must include a check somewhere to determine if player's y-value is below the grass (if so, render below player)
+		//else render above player
+		//ignoring player and other entities, grasses always render above background platform tiles and under foreground tiles
+		//may be practical to include the foreground tiles on whatever "layer" the grass ends up being on to keep the grass under
+		//the foreground tiles
+		
 		//render foreground covering tiles last
 		for (Tile tile : tiles) {
 			batch.draw(tile.region.getTexture(), 
@@ -349,9 +359,6 @@ public class Platform {
 					false, 
 					false);
 		}
-		
-		
-		
 	}
 	
 	public String getId() {
