@@ -160,10 +160,6 @@ public class Level {
 			platform.renderBackTiles(batch);
 		}
 		
-		for (Enemy enemy : enemies) {
-			enemy.render(batch);
-		}
-		
 		//to keep grass rendering below player if player is standing in front of a platform
 		for (Platform platform : platforms) {
 			if (player.position.y - player.eyeHeight.y < platform.getTop()) {
@@ -171,6 +167,14 @@ public class Level {
 			}
 		}
 
+		//since enemies also have to be rendered under the grass, this may cause problems. keep an eye on this
+		//one possible inefficient solution is to add a separate before and after enemy check under the player before and after
+		//check. so the enemies are first determined, then the player (for grass rendering above them) and the player always
+		//renders above enemies so player can see where they are.
+		for (Enemy enemy : enemies) {
+			enemy.render(batch);
+		}
+		
 		player.render(batch);
 		
 		//to keep grass rendering above player if player is on the grassy platform

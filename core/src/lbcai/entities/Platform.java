@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
+import lbcai.util.Utils;
 
 public class Platform {
 	
@@ -28,11 +29,13 @@ public class Platform {
 	
 	ArrayList<Tile> tiles = new ArrayList<Tile>();
 	ArrayList<Tile> tilesBack = new ArrayList<Tile>();
+	ArrayList<Grass> grass = new ArrayList<Grass>();
 	
 	//used to link enemies to platforms
 	String id;
 	
 	class Tile {
+		
 		Vector2 position;
 		TextureRegion region;
 		int statusCounter = 5;
@@ -211,11 +214,28 @@ public class Platform {
 					region = Assets.instance.platformAssets.tileSet1_2;
 					position = new Vector2((platform.left + 30) + ((tilesSize - 1) * 
 							Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y + 10);
+					grass.add(new Grass(position));
 				}
 				
 				
 			}
 
+		}
+		
+	}
+	
+	class Grass {
+		
+		Vector2 position;
+		TextureRegion region;
+		
+		//constructor
+		//platform is the platform we are making with this grass
+		//position is the position of the tile this grass will be aligned with
+		Grass(Vector2 position) {
+			//placeholder
+			region = Assets.instance.lifeAssets.healLargeAnim.getKeyFrame(0);
+			this.position = position;
 		}
 		
 	}
@@ -334,11 +354,24 @@ public class Platform {
 	
 	public void renderFrontTiles(SpriteBatch batch) {
 		//render grasses here
-		//must include a check somewhere to determine if player's y-value is below the grass (if so, render below player)
-		//else render above player
-		//ignoring player and other entities, grasses always render above background platform tiles and under foreground tiles
-		//may be practical to include the foreground tiles on whatever "layer" the grass ends up being on to keep the grass under
-		//the foreground tiles
+		for (Grass grass : grass) {
+			batch.draw(grass.region.getTexture(), 
+					grass.position.x, 
+					grass.position.y, 
+					0, 
+					0, 
+					grass.region.getRegionWidth(), 
+					grass.region.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					grass.region.getRegionX(), 
+					grass.region.getRegionY(), 
+					grass.region.getRegionWidth(), 
+					grass.region.getRegionHeight(), 
+					false, 
+					false);
+		}
 		
 		//render foreground covering tiles last
 		for (Tile tile : tiles) {
