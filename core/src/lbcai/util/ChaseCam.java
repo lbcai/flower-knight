@@ -25,10 +25,10 @@ public class ChaseCam {
 	private Vector2 camera2DPosition;
 
 	
-	public ChaseCam(Camera camera, Player target) {
+	public ChaseCam(Camera camera, Level level) {
 		this.camera = camera;
-		this.target = target;
-		this.level = target.getLevel();
+		this.target = level.getPlayer();
+		this.level = level;
 		camera2DPosition = new Vector2();
 		following = true;
 		

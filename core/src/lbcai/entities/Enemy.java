@@ -110,6 +110,7 @@ public abstract class Enemy extends Entity {
 		
 	}
 
+	@Override
 	public void update(float delta) {
 		
 		if (inactive == false) {
@@ -176,6 +177,7 @@ public abstract class Enemy extends Entity {
 		}
 	}
 	
+	@Override
 	public void render(SpriteBatch batch) {
 
 		if (inactive == false) {

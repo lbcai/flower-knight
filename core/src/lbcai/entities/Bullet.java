@@ -76,6 +76,7 @@ public class Bullet extends Entity {
 		
 	}
 	
+	@Override
 	public void update(float delta) {
 		//set position of bullet based on the aim vector established above
 		if (facing == Facing.LEFT) {
@@ -110,6 +111,7 @@ public class Bullet extends Entity {
 		
 	}
 	
+	@Override
 	public void render(SpriteBatch batch) {
 
 		float animTime = Utils.secondsSince(startTime);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import lbcai.util.Assets;
 import lbcai.util.Constants;
@@ -214,6 +215,7 @@ public class Platform {
 					region = Assets.instance.platformAssets.tileSet1_2;
 					position = new Vector2((platform.left + 30) + ((tilesSize - 1) * 
 							Constants.midUpTileDim.x), platform.top - Constants.cornerTileDim.y + 10);
+					
 					grass.add(new Grass(position));
 				}
 				
@@ -228,14 +230,26 @@ public class Platform {
 		
 		Vector2 position;
 		TextureRegion region;
+		long startTime;
 		
 		//constructor
 		//platform is the platform we are making with this grass
 		//position is the position of the tile this grass will be aligned with
 		Grass(Vector2 position) {
 			//placeholder
-			region = Assets.instance.lifeAssets.healLargeAnim.getKeyFrame(0);
-			this.position = position;
+			//add random code to random type of grass
+			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(0);
+			//add 20 to x position because 20px of fading grass on both sides of grass asset expect fading 'transition' grass
+			//to leak onto edges of other platform tiles
+			//and add 20 to y position because want to avoid covering too much grass with the front tiles
+			this.position = new Vector2(position.x - 20, position.y + 20);
+			startTime = TimeUtils.nanoTime();
+		}
+		
+		void update() {
+			float animTime = Utils.secondsSince(startTime);
+			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(animTime);
+			
 		}
 		
 	}
@@ -355,6 +369,7 @@ public class Platform {
 	public void renderFrontTiles(SpriteBatch batch) {
 		//render grasses here
 		for (Grass grass : grass) {
+
 			batch.draw(grass.region.getTexture(), 
 					grass.position.x, 
 					grass.position.y, 
@@ -391,6 +406,12 @@ public class Platform {
 					tile.region.getRegionHeight(), 
 					false, 
 					false);
+		}
+	}
+	
+	public void update() {
+		for (Grass grass : grass) {
+			grass.update();
 		}
 	}
 	

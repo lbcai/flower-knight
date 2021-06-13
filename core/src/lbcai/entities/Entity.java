@@ -69,6 +69,14 @@ public abstract class Entity {
 	//for determining whether to flip sprite based on left or right facing
 	boolean flipx;
 	
+	public void update(float delta) {
+		//overridden by subclasses
+	}
+	
+	public void render(SpriteBatch batch) {
+		//overridden by subclasses
+	}
+	
 	public void debugRender(ShapeRenderer shape) {
 
 		shape.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);

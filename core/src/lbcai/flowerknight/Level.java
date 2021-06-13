@@ -73,7 +73,7 @@ public class Level {
 	}
 	
 	public void update(float delta) {
-		player.update(delta, platforms);
+		player.update(delta);
 		
 		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
@@ -95,6 +95,10 @@ public class Level {
 			enemy.update(delta);
 		}
 		enemies.end();
+		
+		for (Platform platform : platforms) {
+			platform.update();
+		}
 		
 		//removals from the delayed removal array are queued after begin and actually performed after end.
 		bullets.begin();
@@ -160,13 +164,6 @@ public class Level {
 			platform.renderBackTiles(batch);
 		}
 		
-		//to keep grass rendering below player if player is standing in front of a platform
-		for (Platform platform : platforms) {
-			if (player.position.y - player.eyeHeight.y < platform.getTop()) {
-				platform.renderFrontTiles(batch);
-			}
-		}
-
 		//since enemies also have to be rendered under the grass, this may cause problems. keep an eye on this
 		//one possible inefficient solution is to add a separate before and after enemy check under the player before and after
 		//check. so the enemies are first determined, then the player (for grass rendering above them) and the player always
@@ -175,6 +172,13 @@ public class Level {
 			enemy.render(batch);
 		}
 		
+		//to keep grass rendering below player if player is standing in front of a platform
+		for (Platform platform : platforms) {
+			if (player.position.y - player.eyeHeight.y < platform.getTop()) {
+				platform.renderFrontTiles(batch);
+			}
+		}
+
 		player.render(batch);
 		
 		//to keep grass rendering above player if player is on the grassy platform
@@ -224,6 +228,7 @@ public class Level {
 		platforms.add(new Platform(100, 200, 900, 50));
 		platforms.add(new Platform(100, 400, 900, 50));
 		platforms.add(new Platform(100, 500, 900, 50));
+		platforms.add(new Platform(100, 700, 10, 50));
 		platforms.add(new Platform(0, 1000, 200, 800));
 		platforms.add(new Platform(512, 1000, 200, 800));
 		platforms.add(new Platform(800, 0, 800, 50));

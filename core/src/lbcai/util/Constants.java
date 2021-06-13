@@ -125,6 +125,7 @@ public class Constants {
 	public static final Vector2 midUpTileDim = new Vector2(90, 36);
 	public static final Vector2 midSideTileDim = new Vector2(36, 60);
 	public static final Vector2 midTileDim = new Vector2(90, 60);
+	public static final String grass1 = "grass_1_placeholder";
 	
 	
 	//enemies

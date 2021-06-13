@@ -47,6 +47,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public DmgNumAssets dmgNumAssets;
 	public UIAssets UIassets;
 	public WaspArcherAssets waspArcherAssets;
+	public FrontGrassAssets frontGrassAssets;
 	
 	/**
 	 * This AssetManager will load our TextureAtlas/spritesheet once and distribute it to all entities that need it.
@@ -84,6 +85,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		dmgNumAssets = new DmgNumAssets(atlas);
 		UIassets = new UIAssets(atlas);
 		waspArcherAssets = new WaspArcherAssets(atlas);
+		frontGrassAssets = new FrontGrassAssets(atlas);
 	}
 	
 	/**
@@ -637,6 +639,19 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		public DustAssets(TextureAtlas atlas) {
 			dust = atlas.findRegion(Constants.runDust);
+		}
+		
+	}
+	
+	public class FrontGrassAssets {
+		
+		public final Array<AtlasRegion> grass1 = new Array<AtlasRegion>();
+		public final Animation<TextureRegion> grass1BaseAnim;
+		
+		public FrontGrassAssets(TextureAtlas atlas) {
+			grass1.add(atlas.findRegion(Constants.grass1, 1));
+			grass1.add(atlas.findRegion(Constants.grass1, 2));
+			grass1BaseAnim = new Animation(Constants.skidTime, grass1, PlayMode.LOOP);
 		}
 		
 	}

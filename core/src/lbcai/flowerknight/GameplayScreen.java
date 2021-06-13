@@ -68,7 +68,7 @@ public class GameplayScreen extends ScreenAdapter {
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		
-		chaseCam = new ChaseCam(viewport.getCamera(), level.player);
+		chaseCam = new ChaseCam(viewport.getCamera(), level);
 		ui = new UI(level);
 		
 		

@@ -139,6 +139,7 @@ public class Player extends Entity {
      * Will display the texture dictated by src values (texel values). Flip determines if the texture is mirrored along the axis.
 	 * @param batch SpriteBatch from GameplayScreen
 	 */
+	@Override
 	public void render(SpriteBatch batch) {
 
 		//Change the display depending on the direction the character faces.
@@ -544,7 +545,8 @@ public class Player extends Entity {
 	 * @param delta the time in seconds so we avoid framerate problems and changing the passing of time on different devices.
 	 * 				Usually in some fraction of a second. This actually represents the time since last frame.
 	 */
-	public void update(float delta, Array<Platform> platforms) {
+	@Override
+	public void update(float delta) {
 		//Use position vector to set last frame position.
 		lastFramePosition.set(position);
 
@@ -623,7 +625,7 @@ public class Player extends Entity {
 		//Detect if landed on a platform. Must have this after vertical velocity code above, or else
 		//weird behavior with jumping happens. Note that order in Java DOES matter!
 		//Also collision detection with sides of platform.
-		for (Platform platform : platforms) {
+		for (Platform platform : level.getPlatforms()) {
 
 			if (landOnPlatform(platform)) {
 				if (jumpState == JumpState.FALLING) {
@@ -918,7 +920,7 @@ public class Player extends Entity {
 			
 			//allows boosting up to platform surfaces that player is just shy of
 			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-				for (Platform platform : platforms) {
+				for (Platform platform : level.getPlatforms()) {
 					if (boostUpToPlatform(platform)) {
 						position.y = platform.top + eyeHeight.y;
 						velocity.setZero();
