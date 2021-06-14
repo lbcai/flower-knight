@@ -71,16 +71,20 @@ public class Player extends Entity {
 	 */
 	public Player(Vector2 spawnLocation, Level level) {
 		
+		zValue = 6;
+		//the current level we are in
+		this.level = level;
+		//add player to list of items that must be rendered in the level
+		level.getRenderables().add(this);
+		
 		//prob don't need this
 		touchDmg = false;
 		flipx = false;
 		
 		//will use in future
 		knockback = false;
-		
 		this.spawnLocation = spawnLocation;
-		//the current level we are in
-		this.level = level;
+		
 		position = new Vector2();
 		lastFramePosition = new Vector2();
 		velocity = new Vector2();

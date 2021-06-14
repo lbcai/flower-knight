@@ -25,11 +25,13 @@ public class Bullet extends Entity {
 		touchDmg = true;
 		knockback = false;
 		
+		this.level = level;
+		level.getRenderables().add(this);
+		
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position.cpy();
 		this.facing = facing;
 		this.startTime = TimeUtils.nanoTime();
-		this.level = level;
 		this.damage = damage;
 		this.range = damage/2;
 		this.type = type;

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
@@ -27,6 +28,7 @@ public class Platform {
 	float height;
 	int tilesDimensionWidth;
 	int tilesDimensionHeight;
+	Level level;
 	
 	ArrayList<Tile> tiles = new ArrayList<Tile>();
 	ArrayList<Tile> tilesBack = new ArrayList<Tile>();
@@ -35,16 +37,23 @@ public class Platform {
 	//used to link enemies to platforms
 	String id;
 	
-	class Tile {
+	class Tile implements Renderable {
 		
 		Vector2 position;
 		TextureRegion region;
 		int statusCounter = 5;
+		//0 for foreground tiles 1 for background tiles
+		int type;
+		int zValue;
 		
 		//constructor
 		Tile(int tilesSize, Platform platform, int type) {
 			
+			this.type = type;
+			level.getRenderables().add(this);
+			
 			if (type == 0) {
+				zValue = 1;
 				//if tile is for foreground:
 				
 				//FIRST: figure out which tile to display
@@ -196,6 +205,7 @@ public class Platform {
 				}
 				
 			} else if (type == 1) {
+				zValue = 10;
 				//PLACEHOLDER! these should not use the same tiles as the above, these are background tiles.
 				
 				//if tile is for background grass, only do the first uppermost row of tiles
@@ -224,18 +234,47 @@ public class Platform {
 
 		}
 		
+		public void render(SpriteBatch batch) {
+			batch.draw(region.getTexture(), 
+					position.x, 
+					position.y, 
+					0, 
+					0, 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					region.getRegionX(), 
+					region.getRegionY(), 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					false, 
+					false);
+		}
+		
+		public int getzValue() {
+			return zValue;
+		}
+		
+		public int getyValue() {
+			return (int) top;
+		}
 	}
 	
-	class Grass {
+	class Grass implements Renderable {
 		
 		Vector2 position;
 		TextureRegion region;
 		long startTime;
+		//for render order
+		int zValue;
 		
 		//constructor
 		//platform is the platform we are making with this grass
 		//position is the position of the tile this grass will be aligned with
 		Grass(Vector2 position) {
+			zValue = 8;
 			//placeholder
 			//add random code to random type of grass
 			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(0);
@@ -243,13 +282,46 @@ public class Platform {
 			//to leak onto edges of other platform tiles
 			//and add 20 to y position because want to avoid covering too much grass with the front tiles
 			this.position = new Vector2(position.x - 20, position.y + 20);
+			
+			//add some random time value on so each grass object starts at a different point in the animation
+			//alternatively we can get a sweeping animation effect in the grass if we make the grass start at a certain point
+			//depending on the size of tilesSize at the time of grass creation
 			startTime = TimeUtils.nanoTime();
+			level.getRenderables().add(this);
 		}
 		
 		void update() {
+			
 			float animTime = Utils.secondsSince(startTime);
 			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(animTime);
 			
+		}
+		
+		public void render(SpriteBatch batch) {
+			batch.draw(region.getTexture(), 
+					position.x, 
+					position.y, 
+					0, 
+					0, 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					1, 
+					1, 
+					0, 
+					region.getRegionX(), 
+					region.getRegionY(), 
+					region.getRegionWidth(), 
+					region.getRegionHeight(), 
+					false, 
+					false);
+		}
+		
+		public int getzValue() {
+			return zValue;
+		}
+		
+		public int getyValue() {
+			return (int) top;
 		}
 		
 	}
@@ -262,7 +334,9 @@ public class Platform {
 	 * @param width   difference between left and right edges of platform
 	 * @param height  difference between top and bottom edges of platform
 	 */
-	public Platform(float left, float top, float width, float height) {
+	public Platform(float left, float top, float width, float height, Level level) {
+		
+		this.level = level;
 		
 		//for tiled platforms, dimensions are as follows:
 		//corner pieces: 55x60px
@@ -336,79 +410,7 @@ public class Platform {
 		
 		
 	}
-	
-	/**
-	 * Render method for platforms.
-	 * 
-	 * @param batch is a disposable object that renders textures on quads, need for nine patch.
-	 */
-	public void renderBackTiles(SpriteBatch batch) {
-		
-		//render background tiles first
-		for (Tile tile : tilesBack) {
-			batch.draw(tile.region.getTexture(), 
-					tile.position.x, 
-					tile.position.y, 
-					0, 
-					0, 
-					tile.region.getRegionWidth(), 
-					tile.region.getRegionHeight(), 
-					1, 
-					1, 
-					0, 
-					tile.region.getRegionX(), 
-					tile.region.getRegionY(), 
-					tile.region.getRegionWidth(), 
-					tile.region.getRegionHeight(), 
-					false, 
-					false);
-		}
-		
-	}
-	
-	public void renderFrontTiles(SpriteBatch batch) {
-		//render grasses here
-		for (Grass grass : grass) {
 
-			batch.draw(grass.region.getTexture(), 
-					grass.position.x, 
-					grass.position.y, 
-					0, 
-					0, 
-					grass.region.getRegionWidth(), 
-					grass.region.getRegionHeight(), 
-					1, 
-					1, 
-					0, 
-					grass.region.getRegionX(), 
-					grass.region.getRegionY(), 
-					grass.region.getRegionWidth(), 
-					grass.region.getRegionHeight(), 
-					false, 
-					false);
-		}
-		
-		//render foreground covering tiles last
-		for (Tile tile : tiles) {
-			batch.draw(tile.region.getTexture(), 
-					tile.position.x, 
-					tile.position.y, 
-					0, 
-					0, 
-					tile.region.getRegionWidth(), 
-					tile.region.getRegionHeight(), 
-					1, 
-					1, 
-					0, 
-					tile.region.getRegionX(), 
-					tile.region.getRegionY(), 
-					tile.region.getRegionWidth(), 
-					tile.region.getRegionHeight(), 
-					false, 
-					false);
-		}
-	}
-	
 	public void update() {
 		for (Grass grass : grass) {
 			grass.update();

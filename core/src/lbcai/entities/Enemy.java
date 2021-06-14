@@ -52,6 +52,10 @@ public abstract class Enemy extends Entity {
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
 		
+		zValue = 5;
+		this.level = level;
+		level.getRenderables().add(this);
+		
 		//default to false because most attacks do not knock back the player significantly
 		knockback = false;
 		hitPlayerRecently = 0;
@@ -66,7 +70,6 @@ public abstract class Enemy extends Entity {
 		touchDmg = true;
 		inactive = false;
 		region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-		this.level = level;
 		this.platform = platform;
 		this.eyeHeight = Constants.pBeetleEyeHeight;
 		this.moveSpeed = Constants.enemyMoveSpeed;
@@ -355,6 +358,10 @@ public abstract class Enemy extends Entity {
 			
 		}
 		
+	}
+	
+	public int getzValue() {
+		return zValue;
 	}
 	
 	/**

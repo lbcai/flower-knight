@@ -27,7 +27,11 @@ import lbcai.util.Enums.RunState;
  *
  */
 
-public abstract class Entity {
+public abstract class Entity implements Renderable {
+	
+	//this is for render order stuff
+	int zValue;
+	
 	Rectangle hitBox;
 	public Vector2 position;
 	public Vector2 lastFramePosition;
@@ -196,5 +200,13 @@ public abstract class Entity {
 	
 	public LockState getLockState() {
 		return lockState;
+	}
+	
+	public int getzValue() {
+		return zValue;
+	}
+	
+	public int getyValue() {
+		return (int) position.y;
 	}
 }

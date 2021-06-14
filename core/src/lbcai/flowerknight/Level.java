@@ -1,5 +1,9 @@
 package lbcai.flowerknight;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +31,7 @@ import lbcai.entities.ItemHealSmall;
 import lbcai.entities.ItemLife;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
+import lbcai.entities.Renderable;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
@@ -48,6 +53,10 @@ public class Level {
 	 * Make an array of platforms to hold all platforms in the level.
 	 */
 	Array<Platform> platforms;
+	
+	//list of stuff that must be rendered, will sort by z value and render in order, lowest values render first, highest render
+	//last
+	ArrayList<Renderable> renderables;
 	
 	/**
 	 * DelayedRemovalArray of enemies. This type of array allows for removal of items from the array even while iterating.
@@ -109,15 +118,17 @@ public class Level {
 				//if the bullet is not active (aka it is outside of the viewport), delete from bullet array
 				//removeValue only removes the first instance of the thing, false means use .equals() for comparison and not ==
 				bullets.removeValue(bullet, false);
+				renderables.remove(bullet);
 			}
 		}
 		bullets.end();
 
 		dustClouds.begin();
-		for (int i = 0; i < dustClouds.size; i++) {
-			dustClouds.get(i).update(delta);
-			if (dustClouds.get(i).isExpired()) {
-				dustClouds.removeIndex(i);
+		for (DustCloud dust : dustClouds) {
+			dust.update(delta);
+			if (dust.isExpired()) {
+				dustClouds.removeValue(dust, false);
+				renderables.remove(dust);
 			}
 		}
 		dustClouds.end();
@@ -160,40 +171,14 @@ public class Level {
 	 */
 	public void render(SpriteBatch batch) {
 		
-		for (Platform platform : platforms) {
-			platform.renderBackTiles(batch);
-		}
+		//sort the items that must be rendered by z value. lowest z value items will be rendered first
+		Collections.sort(renderables, (r1, r2) -> {int zDiff = r1.getzValue() - r2.getzValue(); 
+													if (zDiff == 0) return r1.getyValue() - r2.getyValue();
+													return zDiff;} );
 		
-		//since enemies also have to be rendered under the grass, this may cause problems. keep an eye on this
-		//one possible inefficient solution is to add a separate before and after enemy check under the player before and after
-		//check. so the enemies are first determined, then the player (for grass rendering above them) and the player always
-		//renders above enemies so player can see where they are.
-		for (Enemy enemy : enemies) {
-			enemy.render(batch);
-		}
-		
-		//to keep grass rendering below player if player is standing in front of a platform
-		for (Platform platform : platforms) {
-			if (player.position.y - player.eyeHeight.y < platform.getTop()) {
-				platform.renderFrontTiles(batch);
-			}
-		}
-
-		player.render(batch);
-		
-		//to keep grass rendering above player if player is on the grassy platform
-		for (Platform platform : platforms) {
-			if (player.position.y - player.eyeHeight.y >= platform.getTop()) {
-				platform.renderFrontTiles(batch);
-			}
-		}
-		
-		for (Bullet bullet : bullets) {
-			bullet.render(batch);
-		}
-		
-		for (DustCloud dustcloud : dustClouds) {
-			dustcloud.render(batch);
+		//render the sorted list of items that must be rendered
+		for (Renderable render : renderables) {
+			render.render(batch);
 		}
 		
 		for (Item item : items) {
@@ -213,6 +198,7 @@ public class Level {
 	private void initDebugLevel() {
 		
 		//Initialize the array of platforms and enemies, etc.
+		renderables = new ArrayList<Renderable>();
 		platforms = new Array<Platform>();
 		enemies = new DelayedRemovalArray<Enemy>();
 		bullets = new DelayedRemovalArray<Bullet>();
@@ -222,19 +208,19 @@ public class Level {
 		items = new DelayedRemovalArray<Item>();
 		
 		//left, top, width, height
-		platforms.add(new Platform(500, 75, 200, 50));
-		platforms.add(new Platform(0, 0, 512, 50));
-		platforms.add(new Platform(100, 300, 900, 50));
-		platforms.add(new Platform(100, 200, 900, 50));
-		platforms.add(new Platform(100, 400, 900, 50));
-		platforms.add(new Platform(100, 500, 900, 50));
-		platforms.add(new Platform(100, 700, 10, 50));
-		platforms.add(new Platform(0, 1000, 200, 800));
-		platforms.add(new Platform(512, 1000, 200, 800));
-		platforms.add(new Platform(800, 0, 800, 50));
+		platforms.add(new Platform(500, 75, 200, 50, this));
+		platforms.add(new Platform(0, 0, 512, 50, this));
+		platforms.add(new Platform(100, 300, 900, 50, this));
+		platforms.add(new Platform(100, 200, 900, 50, this));
+		platforms.add(new Platform(100, 400, 900, 50, this));
+		platforms.add(new Platform(100, 500, 900, 50, this));
+		platforms.add(new Platform(100, 700, 10, 50, this));
+		platforms.add(new Platform(0, 1000, 200, 800, this));
+		platforms.add(new Platform(512, 1000, 200, 800, this));
+		platforms.add(new Platform(800, 0, 800, 50, this));
 		//this is the lowest platform in the map. height must be at least 72, so bottom is corrected to -172, 
 		//then +5 to top for background grass, this means the actual top will be -95 y position.
-		Platform longPlatform = new Platform(0, -100, 10000, 500);
+		Platform longPlatform = new Platform(0, -100, 10000, 500, this);
 		platforms.add(longPlatform);
 		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
 		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
@@ -243,7 +229,7 @@ public class Level {
 		//Add player to the level. Add a start position for the level as input.
 		player = new Player(new Vector2(100, 800), this);
 		
-		Platform enemyPlatform = new Platform(700, 160, 500, 50);
+		Platform enemyPlatform = new Platform(700, 160, 500, 50, this);
 		enemies.add(new EnemyDandelion(enemyPlatform, this));
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		enemies.add(new EnemyWaspScout(enemyPlatform, this));
@@ -285,6 +271,10 @@ public class Level {
 		return platforms;
 	}
 	
+	public ArrayList<Renderable> getRenderables() {
+		return renderables;
+	}
+	
 	public DelayedRemovalArray<Enemy> getEnemies() {
 		return enemies;
 	}
@@ -311,7 +301,7 @@ public class Level {
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
 		if (dustCloudCounter != 1) {
-			dustClouds.add(new DustCloud(position, facing, type));
+			dustClouds.add(new DustCloud(position, facing, type, this));
 			dustCloudCounter = 1;
 		}
 	}

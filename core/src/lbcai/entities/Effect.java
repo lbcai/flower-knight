@@ -10,18 +10,23 @@ import lbcai.util.Enums.Facing;
  * @author lbcai
  *
  */
-public abstract class Effect {
+public abstract class Effect implements Renderable {
 
 	TextureRegion region;
 	float alpha = 255f/255f;
 	Vector2 position;
 	Facing facing;
+	int zValue = 11;
 	
 	public boolean isExpired() {
 		if (alpha <= 0f/255f) {
 			return true;
 		}
 		return false;
+	}
+	
+	public int getzValue() {
+		return zValue;
 	}
 	
 }
