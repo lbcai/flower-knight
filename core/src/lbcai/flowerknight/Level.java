@@ -88,16 +88,40 @@ public class Level {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
 		} else if (player.jumpCounter == 2) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
+		} else if (player.getLockState() == LockState.DOWN) {
+			//...added this later. getlockstate because finally consciously understood what a getter is for
+			//now it is not necessary to make random things public everywhere
+			if (player.getDustFlag() == 1) {
+				if (player.facing == Facing.RIGHT) {
+					spawnDustCloud(new Vector2(player.position.x + 60, player.position.y - player.eyeHeight.y), Facing.LEFT, 0);
+				} else {
+					spawnDustCloud(new Vector2(player.position.x - 60, player.position.y - player.eyeHeight.y), Facing.RIGHT, 0);
+				}
+			}
+			
+		} else if (player.getLockState() == LockState.DEATH) {
+			//...added this later. getlockstate because finally consciously understood what a getter is for
+			//now it is not necessary to make random things public everywhere
+			if (player.getDustFlag() == 1) {
+				if (player.facing == Facing.RIGHT) {
+					spawnDustCloud(new Vector2(player.position.x + 60, player.position.y - player.eyeHeight.y), Facing.LEFT, 0);
+				} else {
+					spawnDustCloud(new Vector2(player.position.x - 60, player.position.y - player.eyeHeight.y), Facing.RIGHT, 0);
+				}
+			}
+			
 		}
 		
 		if (dustCloudCounter == 1) {
 			if ((player.runState != RunState.SKID && player.hitState != HitState.DODGE) && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
 				if (player.getLockState() != LockState.DEATH && player.getLockState() != LockState.DOWN) {
 					dustCloudCounter = 0;
+					//reset dust flag in player for death and down sliding dust
+					player.setDustFlag();
 				}
 			}
 		}
-
+		
 		enemies.begin();
 		for (int i = 0; i < enemies.size; i++) {
 			Enemy enemy = enemies.get(i);
@@ -172,9 +196,11 @@ public class Level {
 	public void render(SpriteBatch batch) {
 		
 		//sort the items that must be rendered by z value. lowest z value items will be rendered first
+		//lambda expression (args) -> {body}
 		Collections.sort(renderables, (r1, r2) -> {int zDiff = r1.getzValue() - r2.getzValue(); 
-													if (zDiff == 0) return r1.getyValue() - r2.getyValue();
-													return zDiff;} );
+													if (zDiff == 0) return r2.getyValue() - r1.getyValue();
+													return zDiff;
+													});
 		
 		//render the sorted list of items that must be rendered
 		for (Renderable render : renderables) {

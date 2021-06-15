@@ -53,7 +53,7 @@ public class Platform {
 			level.getRenderables().add(this);
 			
 			if (type == 0) {
-				zValue = 1;
+				zValue = 6;
 				//if tile is for foreground:
 				
 				//FIRST: figure out which tile to display
@@ -205,7 +205,7 @@ public class Platform {
 				}
 				
 			} else if (type == 1) {
-				zValue = 10;
+				zValue = 1;
 				//PLACEHOLDER! these should not use the same tiles as the above, these are background tiles.
 				
 				//if tile is for background grass, only do the first uppermost row of tiles
@@ -274,14 +274,14 @@ public class Platform {
 		//platform is the platform we are making with this grass
 		//position is the position of the tile this grass will be aligned with
 		Grass(Vector2 position) {
-			zValue = 8;
+			zValue = 6;
 			//placeholder
 			//add random code to random type of grass
 			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(0);
 			//add 20 to x position because 20px of fading grass on both sides of grass asset expect fading 'transition' grass
 			//to leak onto edges of other platform tiles
 			//and add 20 to y position because want to avoid covering too much grass with the front tiles
-			this.position = new Vector2(position.x - 20, position.y + 20);
+			this.position = new Vector2(position.x - 20, position.y + 18);
 			
 			//add some random time value on so each grass object starts at a different point in the animation
 			//alternatively we can get a sweeping animation effect in the grass if we make the grass start at a certain point
@@ -293,7 +293,7 @@ public class Platform {
 		void update() {
 			
 			float animTime = Utils.secondsSince(startTime);
-			region = Assets.instance.frontGrassAssets.grass1BaseAnim.getKeyFrame(animTime);
+			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 			
 		}
 		
@@ -321,7 +321,9 @@ public class Platform {
 		}
 		
 		public int getyValue() {
-			return (int) top;
+			//add +1 to artificially pad the y value returned, this will keep the grass rendered behind the front tiles and
+			//in whatever front/behind position required when rendered against player/other entities.
+			return (int) (top + 1);
 		}
 		
 	}

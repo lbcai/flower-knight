@@ -24,6 +24,8 @@ public class EnemyPBeetle extends Enemy {
 	public EnemyPBeetle(Platform platform, Level level) {
 		super(platform, level);
 		positionYsine = position.y;
+		
+		level.getRenderables().add(this);
 	}
 	
 	@Override

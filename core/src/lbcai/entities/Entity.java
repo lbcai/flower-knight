@@ -47,7 +47,7 @@ public abstract class Entity implements Renderable {
 	Level level;
 	
 	//public so level can determine where to draw effects in some cases
-	public Vector2 eyeHeight;
+	public Vector2 eyeHeight = new Vector2(500, 500);
 	public Facing facing;
 	public HitState hitState;
 	public RunState runState;
@@ -207,6 +207,8 @@ public abstract class Entity implements Renderable {
 	}
 	
 	public int getyValue() {
-		return (int) position.y;
+		//add 2 to keep the entity in the right render layer compared to grass, which must have a y value lower than front 
+		//platform due to overlap, so it has a little artificial padding added
+		return (int) (position.y - eyeHeight.y + 2);
 	}
 }

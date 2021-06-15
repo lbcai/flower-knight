@@ -55,6 +55,8 @@ public class Player extends Entity {
 	private int boostCounter = 0;
 	private int deathFlash = 0;
 	
+	//to indicate to level that it should make a dust cloud
+	private int dustFlag = 0;
 	
 	//determining the direction of the last source of damage, for launching from large hits or death
 	private Facing flinchDirection;
@@ -74,9 +76,7 @@ public class Player extends Entity {
 		zValue = 6;
 		//the current level we are in
 		this.level = level;
-		//add player to list of items that must be rendered in the level
-		level.getRenderables().add(this);
-		
+
 		//prob don't need this
 		touchDmg = false;
 		flipx = false;
@@ -97,6 +97,10 @@ public class Player extends Entity {
 		eyeHeight = Constants.playerHead;
 		moveSpeed = Constants.moveSpeed;
 		lives = Constants.baseLives;
+		
+		//add player to list of items that must be rendered in the level
+		level.getRenderables().add(this);
+		
 		init();
 		
 	}
@@ -105,6 +109,7 @@ public class Player extends Entity {
 	 * Initialize the player, i.e. on respawn.
 	 */
 	public void init() {
+		dustFlag = 0;
 		position.set(spawnLocation);
 		lastFramePosition.set(spawnLocation);
 		velocity.setZero();
@@ -277,10 +282,7 @@ public class Player extends Entity {
 					} else if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) >= 7 &&
 							Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) <= 13) {
 						position.x -= 7 * downTime;
-					}
-					
-					if (Assets.instance.playerAssets.knockdownRightAnim.getKeyFrameIndex(downTime) == 7) {
-						level.spawnDustCloud(new Vector2(position.x + 60, position.y - eyeHeight.y), Facing.LEFT, 0);
+						dustFlag = 1;
 					}
 					
 				}
@@ -302,12 +304,8 @@ public class Player extends Entity {
 						} else if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) >= 15 && 
 								Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) <= 22) {
 							position.x -= 7 * deathTime;
+							dustFlag = 1;
 						} 
-						
-						//spawn dust cloud when player is sliding in death animation
-						if (Assets.instance.playerAssets.deathRightAnim.getKeyFrameIndex(deathTime) == 16) {
-							level.spawnDustCloud(new Vector2(position.x + 50, position.y - eyeHeight.y), Facing.LEFT, 0);
-						}
 						
 					}
 	
@@ -468,11 +466,8 @@ public class Player extends Entity {
 					} else if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) >= 7 &&
 							Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) <= 13) {
 						position.x += 7 * downTime;
-					}
-					
-					if (Assets.instance.playerAssets.knockdownLeftAnim.getKeyFrameIndex(downTime) == 7) {
-						level.spawnDustCloud(new Vector2(position.x - 60, position.y - eyeHeight.y), Facing.RIGHT, 0);
-					}
+						dustFlag = 1;
+					} 
 					
 					}
 				} else if (lockState == LockState.DEATH) {
@@ -492,11 +487,9 @@ public class Player extends Entity {
 						} else if (Assets.instance.playerAssets.deathLeftAnim.getKeyFrameIndex(deathTime) >= 15 && 
 								Assets.instance.playerAssets.deathLeftAnim.getKeyFrameIndex(deathTime) <= 22) {
 							position.x += 7 * deathTime;
+							dustFlag = 1;
 						} 
-						
-						if (Assets.instance.playerAssets.deathLeftAnim.getKeyFrameIndex(deathTime) == 16) {
-							level.spawnDustCloud(new Vector2(position.x - 60, position.y - eyeHeight.y), Facing.RIGHT, 0);
-						}
+
 					}
 					
 					if (Assets.instance.playerAssets.deathLeftAnim.isAnimationFinished(deathTime) && lives > 0) {
@@ -569,7 +562,6 @@ public class Player extends Entity {
 		}
 		
 		
-		
 		//Use for collision detection of player.
 		if ((runState == RunState.SQUAT || boostCounter == 1) && jumpState != JumpState.FALLING) {
 
@@ -638,7 +630,7 @@ public class Player extends Entity {
 				jumpState = JumpState.GROUNDED;
 				position.y = platform.top + eyeHeight.y;
 				velocity.setZero();
-				if (jumpCounter >= 2) {
+				if (jumpCounter >= 1) {
 					jumpCounter = 0;
 				}
 				//prevents player from skidding off platforms (for convenience)
@@ -1129,6 +1121,14 @@ public class Player extends Entity {
 			idleTransitionCounter = 0;
 		}
 		runState = RunState.IDLE;
+	}
+	
+	public int getDustFlag() {
+		return dustFlag;
+	}
+	
+	public void setDustFlag() {
+		dustFlag = 0;
 	}
 	
 	/**

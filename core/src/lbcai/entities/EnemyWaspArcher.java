@@ -27,6 +27,7 @@ public class EnemyWaspArcher extends EnemyWasp {
 	public EnemyWaspArcher(Platform platform, Level level) {
 		super(platform, level);
 		bulletPosition = new Vector2();
+		level.getRenderables().add(this);
 	}
 	
 	@Override

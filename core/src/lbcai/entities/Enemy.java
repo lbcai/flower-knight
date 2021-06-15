@@ -52,9 +52,8 @@ public abstract class Enemy extends Entity {
 	//default enemy type will be a potato beetle
 	public Enemy(Platform platform, Level level) {
 		
-		zValue = 5;
+		zValue = 6;
 		this.level = level;
-		level.getRenderables().add(this);
 		
 		//default to false because most attacks do not knock back the player significantly
 		knockback = false;

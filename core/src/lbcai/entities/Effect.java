@@ -29,4 +29,8 @@ public abstract class Effect implements Renderable {
 		return zValue;
 	}
 	
+	public int getyValue() {
+		return (int) position.y;
+	}
+	
 }
