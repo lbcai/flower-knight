@@ -50,6 +50,7 @@ public abstract class EnemyWasp extends Enemy {
 			velocity.y -= delta * Constants.worldGravity;
 			position.mulAdd(velocity, delta);
 
+			
 			if (wanderTime != 0 && wanderTime % 40 == 0 || target.health < 1) {
 				goHome = true;
 			}
@@ -134,6 +135,7 @@ public abstract class EnemyWasp extends Enemy {
 							}
 						} else {
 							goHome = false;
+							wanderTime = 0;
 						}
 						
 						if (aggroRange.contains(target.hitBox)) {

@@ -83,11 +83,12 @@ public class Level {
 	
 	public void update(float delta) {
 		player.update(delta);
-		
+		System.out.println(dustCloudCounter + " " + player.hitState + " " + player.jumpCounter);
 		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
 		} else if (player.jumpCounter == 2) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
+			
 		} else if (player.getLockState() == LockState.DOWN) {
 			//...added this later. getlockstate because finally consciously understood what a getter is for
 			//now it is not necessary to make random things public everywhere
@@ -253,13 +254,14 @@ public class Level {
 		
 		
 		//Add player to the level. Add a start position for the level as input.
-		player = new Player(new Vector2(100, 800), this);
+		player = new Player(new Vector2(2000, 800), this);
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50, this);
 		enemies.add(new EnemyDandelion(enemyPlatform, this));
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		enemies.add(new EnemyWaspScout(enemyPlatform, this));
 		enemies.add(new EnemyWaspArcher(enemyPlatform, this));
+		enemies.add(new EnemyWaspLancer(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		
 		

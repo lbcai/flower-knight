@@ -170,6 +170,7 @@ public class EnemyWaspScout extends EnemyWasp {
 								}
 							} else {
 								goHome = false;
+								wanderTime = 0;
 							}
 
 							if (aggroRange.contains(target.hitBox)) {

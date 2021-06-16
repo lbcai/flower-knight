@@ -37,7 +37,7 @@ public class EnemyWaspArcher extends EnemyWasp {
 			lastFramePosition.set(position);
 			velocity.y -= delta * Constants.worldGravity;
 			position.mulAdd(velocity, delta);
-			
+
 			if (wanderTime != 0 && wanderTime % 40 == 0 || target.health < 1) {
 				goHome = true;
 			}
@@ -126,6 +126,7 @@ public class EnemyWaspArcher extends EnemyWasp {
 							}
 						} else {
 							goHome = false;
+							wanderTime = 0;
 						}
 						
 						if (aggroRange.contains(target.hitBox)) {
