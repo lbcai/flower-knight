@@ -1131,6 +1131,10 @@ public class Player extends Entity {
 		dustFlag = 0;
 	}
 	
+	public int getDodgeKey() {
+		return dodgeKey;
+	}
+	
 	/**
 	 * Allow debug rendering of player's last attack damage zone. Other entity hitboxes are rendered with code in the Entity
 	 * class. Enemies with special attack zones should also use a similar method to this one.

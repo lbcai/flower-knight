@@ -83,9 +83,10 @@ public class Level {
 	
 	public void update(float delta) {
 		player.update(delta);
-		System.out.println(dustCloudCounter + " " + player.hitState + " " + player.jumpCounter);
+		System.out.println(dustClouds.size + " " + dustCloudCounter);
 		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
+	
 		} else if (player.jumpCounter == 2) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 1);
 			
@@ -114,6 +115,17 @@ public class Level {
 		}
 		
 		if (dustCloudCounter == 1) {
+			
+			//allows player to dodge and spawn dust cloud at any time, even after consecutive dodges
+			//normally the dustCloudCounter is what stops multiple clouds from forming at once, but in this case using a keydown
+			//and making sure player actually is dodging seems to work
+			//and this case is only necessary when player is out of jumps and is trying to dodge
+			if (Gdx.input.isKeyJustPressed(player.getDodgeKey()) && player.hitState == HitState.DODGE && 
+					player.jumpCounter == 2) {
+				dustCloudCounter = 0;
+				spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
+			}
+			
 			if ((player.runState != RunState.SKID && player.hitState != HitState.DODGE) && (player.jumpCounter == 0 || player.jumpCounter == 1)) {
 				if (player.getLockState() != LockState.DEATH && player.getLockState() != LockState.DOWN) {
 					dustCloudCounter = 0;
@@ -328,7 +340,7 @@ public class Level {
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
-		if (dustCloudCounter != 1) {
+		if (dustCloudCounter == 0) {
 			dustClouds.add(new DustCloud(position, facing, type, this));
 			dustCloudCounter = 1;
 		}

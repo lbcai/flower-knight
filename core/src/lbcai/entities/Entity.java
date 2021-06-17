@@ -202,6 +202,10 @@ public abstract class Entity implements Renderable {
 		return lockState;
 	}
 	
+	public JumpState getJumpState() {
+		return jumpState;
+	}
+	
 	public int getzValue() {
 		return zValue;
 	}
