@@ -12,7 +12,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 
-public class Item {
+public class Item implements Renderable {
 	
 	protected Vector2 lastPosition = new Vector2();
 	protected Vector2 startPosition = new Vector2();
@@ -26,6 +26,8 @@ public class Item {
 	protected Player player;
 	protected int rotation;
 	protected float alpha = 255f/255f;
+	//render order, must go above player and under grass
+	int zValue = 6;
 	
 	Rectangle hitBox;
 	Vector2 position = new Vector2();
@@ -51,6 +53,8 @@ public class Item {
 				position.y - Constants.itemCenter.y,
 				Constants.itemCenter.x * 2,
 				Constants.itemCenter.y * 2);
+		
+		level.getRenderables().add(this);
 		
 	}
 	
@@ -158,6 +162,17 @@ public class Item {
 			return true;
 		}
 		return false;
+	}
+	
+	public int getzValue() {
+		return zValue;
+	}
+	
+	public int getyValue() {
+		//add 2 to keep the entity in the right render layer compared to grass, which must have a y value lower than front 
+		//platform due to overlap, so it has a little artificial padding added
+		//entities are +2 so +3 keeps the items above entities
+		return (int) (position.y - Constants.itemCenter.y + 3);
 	}
 	
 }

@@ -54,6 +54,8 @@ public class BreakableObject extends Enemy {
 		
 		dropTable = Arrays.asList(2);
 		
+		level.getRenderables().add(this);
+		
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
@@ -65,7 +66,7 @@ public class DamageNum extends Effect {
 	}
 
 	//constructor
-	public DamageNum(Vector2 position, int number, Facing facing) {
+	public DamageNum(Vector2 position, int number, Facing facing, Level level) {
 		this.position = position;
 		this.digitsList = new ArrayList<Digit>();
 		this.facing = facing;
@@ -77,6 +78,8 @@ public class DamageNum extends Effect {
 			//construct the digit and add it to the DamageNum
 			digitsList.add(new Digit(position, j, currentDigit));
 		}
+		
+		level.getRenderables().add(this);
 	}
 	
 	public void render(SpriteBatch batch) {

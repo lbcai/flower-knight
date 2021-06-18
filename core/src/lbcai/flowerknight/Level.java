@@ -176,6 +176,7 @@ public class Level {
 			if (item.isExpired() == true) {
 				//if item expires or falls off map, remove
 				items.removeValue(item, false);
+				renderables.remove(item);
 			}
 		}
 		items.end();
@@ -184,6 +185,7 @@ public class Level {
 		for (HitEffect effect : hitEffects) {
 			if (effect.isExpired() == true) {
 				hitEffects.removeValue(effect, false);
+				renderables.remove(effect);
 			}
 		}
 		hitEffects.end();
@@ -193,6 +195,7 @@ public class Level {
 			damageNum.update(delta);
 			if (damageNum.isExpired() == true) {
 				damageNums.removeValue(damageNum, false);
+				renderables.remove(damageNum);
 			}
 		}
 		damageNums.end();
@@ -218,18 +221,6 @@ public class Level {
 		//render the sorted list of items that must be rendered
 		for (Renderable render : renderables) {
 			render.render(batch);
-		}
-		
-		for (Item item : items) {
-			item.render(batch);
-		}
-		
-		for (HitEffect effect : hitEffects) {
-			effect.render(batch);
-		}
-		
-		for (DamageNum damageNum : damageNums) {
-			damageNum.render(batch);
 		}
 		
 	}
@@ -353,11 +344,11 @@ public class Level {
 		rectangle.getCenter(position);
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
-		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type));
+		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type, this));
 	}
 	
 	public void spawnDmgNum(Vector2 position, int number, Facing facing) {
-		damageNums.add(new DamageNum(position, number, facing));
+		damageNums.add(new DamageNum(position, number, facing, this));
 	}
 	
 	public void dropItem(Enemy enemy) {
