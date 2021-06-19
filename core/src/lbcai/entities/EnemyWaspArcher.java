@@ -163,6 +163,9 @@ public class EnemyWaspArcher extends EnemyWasp {
 			} else {
 				if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
 					hitState = HitState.NOHIT;
+					if (lockState == LockState.LOCK) {
+						lockState = LockState.FREE;
+					}
 				}
 			}
 			
@@ -253,9 +256,7 @@ public class EnemyWaspArcher extends EnemyWasp {
 			
 			if (hitState == HitState.IFRAME) {
 				//region = Assets.instance.pBeetleAssets.idleLeftAnim.getKeyFrame(0);
-				if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
-					hitState = HitState.NOHIT;
-				}
+				
 			}
 			//use for attacking animation
 			if (lockState == LockState.LOCK) {

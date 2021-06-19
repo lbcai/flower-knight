@@ -252,6 +252,7 @@ public abstract class Enemy extends Entity {
 		health -= damage;
 		// using iframe to denote flinch animation but no actual iframe for mobs
 		hitState = HitState.IFRAME;
+		lockState = LockState.LOCK;
 		timeSinceHit = TimeUtils.nanoTime();
 		
 		velocity.y = Constants.knockbackSpeed.y;

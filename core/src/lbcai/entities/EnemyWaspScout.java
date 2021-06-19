@@ -118,6 +118,9 @@ public class EnemyWaspScout extends EnemyWasp {
 							}
 							
 						} else if (target.position.y < position.y) {
+
+							//account for case where player pushes wasp into ceiling, placeholder
+							
 							//reset pushed below map counter
 							if (getAbovePlayer == 1) {
 								getAbovePlayer = 0;
@@ -129,7 +132,7 @@ public class EnemyWaspScout extends EnemyWasp {
 								flyDown(delta);
 							}
 						}
-						
+
 						//make wasp move around back and forth instead of freezing in idle when there is nothing else to do
 						chaseRandomness(delta);
 						
@@ -152,7 +155,7 @@ public class EnemyWaspScout extends EnemyWasp {
 						
 						//return to home platform sometimes
 						if (goHome == true) {
-
+							
 							if (!hitBox.contains(homeTracker)) {
 								
 								if (position.x > platform.centerX + 10) {
@@ -178,7 +181,7 @@ public class EnemyWaspScout extends EnemyWasp {
 							}
 							
 						} else {
-							
+
 							wanderTime = (long) Utils.secondsSince(startTime);
 							//no player in sight, random movement
 							if (moveSpeed != Constants.enemyMoveSpeed) {
@@ -223,11 +226,19 @@ public class EnemyWaspScout extends EnemyWasp {
 				} else {
 					if (Utils.secondsSince(timeSinceHit) > Constants.enemyFlinchTime) {
 						hitState = HitState.NOHIT;
+						//reset velocity from knockback, since this flying unit doesnt actually use velocity other than
+						//for knockback purposes, leaving velocity alone at nonzero values can cause bugs
+						velocity.x = 0;
+						velocity.y = 0;
+
+						if (lockState == LockState.LOCK) {
+							lockState = LockState.FREE;
+						}
+						
 					}
 				}
 			}
-			
-			
+
 
 			hitBox = new Rectangle(
 					position.x - collisionRadius.x,
@@ -364,6 +375,7 @@ public class EnemyWaspScout extends EnemyWasp {
 		
 		if (lockState == LockState.FREE) {
 			
+			parabolaStage = 0;
 			lockState = LockState.ATTACK1LOCK;
 			diveStartTime = TimeUtils.nanoTime();
 			
@@ -396,7 +408,7 @@ public class EnemyWaspScout extends EnemyWasp {
 				//the actual dive
 				position.lerp(diveGoalPosition, 0.1f);
 				
-				if (hitBox.contains(diveGoalPosition)) {
+				if (hitBox.y <= diveGoalPosition.y && (hitBox.y + hitBox.height >= diveGoalPosition.y)) {
 					parabolaStage = 1;
 					knockback = false;
 				}
@@ -430,10 +442,11 @@ public class EnemyWaspScout extends EnemyWasp {
 				
 			}
 			
-			
-
 		}
 		
 	}
+	
+	//
+	
 	
 }

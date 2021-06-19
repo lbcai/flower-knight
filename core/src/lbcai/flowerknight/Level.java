@@ -83,7 +83,7 @@ public class Level {
 	
 	public void update(float delta) {
 		player.update(delta);
-		System.out.println(dustClouds.size + " " + dustCloudCounter);
+
 		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
 	
@@ -264,7 +264,7 @@ public class Level {
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
 		enemies.add(new EnemyWaspScout(enemyPlatform, this));
 		enemies.add(new EnemyWaspArcher(enemyPlatform, this));
-		enemies.add(new EnemyWaspLancer(enemyPlatform, this));
+		//enemies.add(new EnemyWaspLancer(enemyPlatform, this));
 		platforms.add(enemyPlatform);
 		
 		
