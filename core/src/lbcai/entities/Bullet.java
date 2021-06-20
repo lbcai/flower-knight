@@ -27,6 +27,7 @@ public class Bullet extends Entity {
 		
 		this.level = level;
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 		
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position.cpy();
@@ -195,10 +196,16 @@ public class Bullet extends Entity {
 		player.level.spawnDmgNum(player.position, damageInstance, facing);
 		player.level.spawnHitEffect(player.hitBox, facing, 2);
 		player.hitState = HitState.IFRAME;
+		
 		inactive = true;
-
 		
 	}
-
 	
+	@Override
+	public boolean isExpired() {
+		if (inactive == true) {
+			return true;
+		} 
+		return false;
+	}
 }

@@ -80,6 +80,7 @@ public class DamageNum extends Effect {
 		}
 		
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 	}
 	
 	public void render(SpriteBatch batch) {

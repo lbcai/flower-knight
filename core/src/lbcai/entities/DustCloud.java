@@ -22,6 +22,7 @@ public class DustCloud extends Effect {
 	public DustCloud(Vector2 position, Facing facing, int type, Level level) {
 		
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 		
 		region = Assets.instance.dustAssets.dust;
 		this.position = position;

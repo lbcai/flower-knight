@@ -71,6 +71,7 @@ public class HitEffect extends Effect {
 		
 		randomPicker = (int) (Math.random() * randomizer.length);
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -163,6 +164,11 @@ public class HitEffect extends Effect {
 		}
 		
 		batch.setColor(1, 1, 1, 1);
+	}
+	
+	public void update(float delta) {
+		//nothing to update for now...
+		//this is just here because the fabulous solution re: updatables and renderables lists in level requires this
 	}
 	
 	@Override

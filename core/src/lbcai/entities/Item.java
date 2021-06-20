@@ -12,7 +12,7 @@ import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
 
-public class Item implements Renderable {
+public class Item implements Renderable, Updatable {
 	
 	protected Vector2 lastPosition = new Vector2();
 	protected Vector2 startPosition = new Vector2();
@@ -55,6 +55,7 @@ public class Item implements Renderable {
 				Constants.itemCenter.y * 2);
 		
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 		
 	}
 	

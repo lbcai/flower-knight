@@ -408,7 +408,7 @@ public class EnemyWaspScout extends EnemyWasp {
 				//the actual dive
 				position.lerp(diveGoalPosition, 0.1f);
 				
-				if (hitBox.y <= diveGoalPosition.y && (hitBox.y + hitBox.height >= diveGoalPosition.y)) {
+				if (hitBox.contains(diveGoalPosition)) {
 					parabolaStage = 1;
 					knockback = false;
 				}

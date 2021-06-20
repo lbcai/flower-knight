@@ -262,7 +262,7 @@ public class Platform {
 		}
 	}
 	
-	class Grass implements Renderable {
+	class Grass implements Renderable, Updatable {
 		
 		Vector2 position;
 		TextureRegion region;
@@ -288,9 +288,10 @@ public class Platform {
 			//depending on the size of tilesSize at the time of grass creation
 			startTime = TimeUtils.nanoTime();
 			level.getRenderables().add(this);
+			level.getUpdatables().add(this);
 		}
 		
-		void update() {
+		public void update(float delta) {
 			
 			float animTime = Utils.secondsSince(startTime);
 			region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
@@ -324,6 +325,10 @@ public class Platform {
 			//add +1 to artificially pad the y value returned, this will keep the grass rendered behind the front tiles and
 			//in whatever front/behind position required when rendered against player/other entities.
 			return (int) (top + 1);
+		}
+		
+		public boolean isExpired() {
+			return false;
 		}
 		
 	}
@@ -413,9 +418,9 @@ public class Platform {
 		
 	}
 
-	public void update() {
+	public void update(float delta) {
 		for (Grass grass : grass) {
-			grass.update();
+			grass.update(delta);
 		}
 	}
 	

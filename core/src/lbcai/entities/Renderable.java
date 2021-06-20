@@ -9,4 +9,5 @@ public interface Renderable {
 	public int getzValue();
 	
 	public int getyValue();
+	
 }

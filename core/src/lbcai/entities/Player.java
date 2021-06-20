@@ -100,6 +100,7 @@ public class Player extends Entity {
 		
 		//add player to list of items that must be rendered in the level
 		level.getRenderables().add(this);
+		level.getUpdatables().add(this);
 		
 		init();
 		

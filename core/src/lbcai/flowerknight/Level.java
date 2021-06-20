@@ -3,6 +3,7 @@ package lbcai.flowerknight;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -32,6 +33,7 @@ import lbcai.entities.ItemLife;
 import lbcai.entities.Platform;
 import lbcai.entities.Player;
 import lbcai.entities.Renderable;
+import lbcai.entities.Updatable;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
 import lbcai.util.Enums.HitState;
@@ -58,6 +60,8 @@ public class Level {
 	//last
 	ArrayList<Renderable> renderables;
 	
+	//list of stuff that must be updated every pass
+	DelayedRemovalArray<Updatable> updatables;
 	/**
 	 * DelayedRemovalArray of enemies. This type of array allows for removal of items from the array even while iterating.
 	 * Did the same with bullet objects.
@@ -82,8 +86,18 @@ public class Level {
 	}
 	
 	public void update(float delta) {
-		player.update(delta);
 
+		updatables.begin();
+		for (Updatable update : updatables) {
+			update.update(delta);
+			if (update.isExpired()) {
+				updatables.removeValue(update, false);
+				renderables.remove((Renderable) update);
+			}
+		}
+		updatables.end();
+
+		
 		if (player.runState == RunState.SKID || player.hitState == HitState.DODGE) {
 			spawnDustCloud(new Vector2(player.position.x, player.position.y - player.eyeHeight.y), player.facing, 0);
 	
@@ -135,71 +149,7 @@ public class Level {
 			}
 		}
 		
-		enemies.begin();
-		for (int i = 0; i < enemies.size; i++) {
-			Enemy enemy = enemies.get(i);
-			enemy.update(delta);
-		}
-		enemies.end();
-		
-		for (Platform platform : platforms) {
-			platform.update();
-		}
-		
-		//removals from the delayed removal array are queued after begin and actually performed after end.
-		bullets.begin();
-		for (Bullet bullet : bullets) {
-			//update any bullets in the bullet array
-			bullet.update(delta);
-			if (bullet.inactive == true) {
-				//if the bullet is not active (aka it is outside of the viewport), delete from bullet array
-				//removeValue only removes the first instance of the thing, false means use .equals() for comparison and not ==
-				bullets.removeValue(bullet, false);
-				renderables.remove(bullet);
-			}
-		}
-		bullets.end();
-
-		dustClouds.begin();
-		for (DustCloud dust : dustClouds) {
-			dust.update(delta);
-			if (dust.isExpired()) {
-				dustClouds.removeValue(dust, false);
-				renderables.remove(dust);
-			}
-		}
-		dustClouds.end();
-		
-		items.begin();
-		for (Item item : items) {
-			item.update(delta);
-			if (item.isExpired() == true) {
-				//if item expires or falls off map, remove
-				items.removeValue(item, false);
-				renderables.remove(item);
-			}
-		}
-		items.end();
-		
-		hitEffects.begin();
-		for (HitEffect effect : hitEffects) {
-			if (effect.isExpired() == true) {
-				hitEffects.removeValue(effect, false);
-				renderables.remove(effect);
-			}
-		}
-		hitEffects.end();
-		
-		damageNums.begin();
-		for (DamageNum damageNum : damageNums) {
-			damageNum.update(delta);
-			if (damageNum.isExpired() == true) {
-				damageNums.removeValue(damageNum, false);
-				renderables.remove(damageNum);
-			}
-		}
-		damageNums.end();
-		
+		System.out.println("updatables: " + updatables.size);
 		
 	}
 	
@@ -218,10 +168,15 @@ public class Level {
 													return zDiff;
 													});
 		
+		
 		//render the sorted list of items that must be rendered
+		//remove the item if it is removed from updatables to avoid memleaks (placeholder)
+		//never remove platforms...
 		for (Renderable render : renderables) {
 			render.render(batch);
 		}
+		
+		System.out.println("renderables: " + renderables.size());
 		
 	}
 	
@@ -229,6 +184,7 @@ public class Level {
 		
 		//Initialize the array of platforms and enemies, etc.
 		renderables = new ArrayList<Renderable>();
+		updatables = new DelayedRemovalArray<Updatable>();
 		platforms = new Array<Platform>();
 		enemies = new DelayedRemovalArray<Enemy>();
 		bullets = new DelayedRemovalArray<Bullet>();
@@ -262,11 +218,14 @@ public class Level {
 		Platform enemyPlatform = new Platform(700, 160, 500, 50, this);
 		enemies.add(new EnemyDandelion(enemyPlatform, this));
 		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
-		enemies.add(new EnemyWaspScout(enemyPlatform, this));
-		enemies.add(new EnemyWaspArcher(enemyPlatform, this));
+		//enemies.add(new EnemyWaspScout(enemyPlatform, this));
+		//enemies.add(new EnemyWaspArcher(enemyPlatform, this));
 		//enemies.add(new EnemyWaspLancer(enemyPlatform, this));
 		platforms.add(enemyPlatform);
-		
+		items.add(new ItemHealSmall(new Vector2(100, 100), this));
+		items.add(new ItemHealSmall(new Vector2(200, 100), this));
+		items.add(new ItemHealSmall(new Vector2(300, 100), this));
+		items.add(new ItemHealSmall(new Vector2(400, 100), this));
 		
 		lowestTop = platforms.get(0).getTop();		
 		float lowestTopLength = platforms.get(0).getWidth();
@@ -304,6 +263,10 @@ public class Level {
 	
 	public ArrayList<Renderable> getRenderables() {
 		return renderables;
+	}
+	
+	public DelayedRemovalArray<Updatable> getUpdatables() {
+		return updatables;
 	}
 	
 	public DelayedRemovalArray<Enemy> getEnemies() {

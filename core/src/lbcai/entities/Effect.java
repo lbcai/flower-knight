@@ -10,7 +10,7 @@ import lbcai.util.Enums.Facing;
  * @author lbcai
  *
  */
-public abstract class Effect implements Renderable {
+public abstract class Effect implements Renderable, Updatable {
 
 	TextureRegion region;
 	float alpha = 255f/255f;

@@ -110,6 +110,8 @@ public abstract class Enemy extends Entity {
 		//make a list of possible states for enemy to cycle between when not chasing player
 		wanderStateRandomizer = Arrays.asList(0, 1, 2);
 		
+		level.getUpdatables().add(this);
+		
 	}
 
 	@Override

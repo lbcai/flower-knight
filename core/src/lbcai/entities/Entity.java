@@ -27,7 +27,7 @@ import lbcai.util.Enums.RunState;
  *
  */
 
-public abstract class Entity implements Renderable {
+public abstract class Entity implements Renderable, Updatable {
 	
 	//this is for render order stuff
 	int zValue;
@@ -215,4 +215,11 @@ public abstract class Entity implements Renderable {
 		//platform due to overlap, so it has a little artificial padding added
 		return (int) (position.y - eyeHeight.y + 2);
 	}
+	
+	public boolean isExpired() {
+		//base entities like enemies and player do not expire
+		return false;
+	}
+	
+	
 }
