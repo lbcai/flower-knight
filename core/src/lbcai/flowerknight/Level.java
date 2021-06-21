@@ -26,6 +26,7 @@ import lbcai.entities.EnemyPBeetle;
 import lbcai.entities.EnemyWaspArcher;
 import lbcai.entities.EnemyWaspLancer;
 import lbcai.entities.EnemyWaspScout;
+import lbcai.entities.Entity;
 import lbcai.entities.HitEffect;
 import lbcai.entities.Item;
 import lbcai.entities.ItemHealSmall;
@@ -67,11 +68,11 @@ public class Level {
 	 * Did the same with bullet objects.
 	 */
 	private DelayedRemovalArray<Enemy> enemies;
+	private DelayedRemovalArray<Item> items;
 	private DelayedRemovalArray<Bullet> bullets;
 	private DelayedRemovalArray<DustCloud> dustClouds;
 	private DelayedRemovalArray<HitEffect> hitEffects;
 	private DelayedRemovalArray<DamageNum> damageNums;
-	private DelayedRemovalArray<Item> items;
 	private int dustCloudCounter = 0;
 	
 	//define the level bounds
@@ -91,8 +92,7 @@ public class Level {
 		for (Updatable update : updatables) {
 			update.update(delta);
 			if (update.isExpired()) {
-				updatables.removeValue(update, false);
-				renderables.remove((Renderable) update);
+				remove(update);
 			}
 		}
 		updatables.end();
@@ -187,11 +187,11 @@ public class Level {
 		updatables = new DelayedRemovalArray<Updatable>();
 		platforms = new Array<Platform>();
 		enemies = new DelayedRemovalArray<Enemy>();
+		items = new DelayedRemovalArray<Item>();
 		bullets = new DelayedRemovalArray<Bullet>();
 		dustClouds = new DelayedRemovalArray<DustCloud>();
 		hitEffects = new DelayedRemovalArray<HitEffect>();
 		damageNums = new DelayedRemovalArray<DamageNum>();
-		items = new DelayedRemovalArray<Item>();
 		
 		//left, top, width, height
 		platforms.add(new Platform(500, 75, 200, 50, this));
@@ -208,24 +208,24 @@ public class Level {
 		//then +5 to top for background grass, this means the actual top will be -95 y position.
 		Platform longPlatform = new Platform(0, -100, 10000, 500, this);
 		platforms.add(longPlatform);
-		enemies.add(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
-		enemies.add(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
+		create(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
+		create(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
 		
 		
 		//Add player to the level. Add a start position for the level as input.
-		player = new Player(new Vector2(2000, 800), this);
+		create(new Player(new Vector2(2000, 800), this));
 		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50, this);
-		enemies.add(new EnemyDandelion(enemyPlatform, this));
-		//enemies.add(new EnemyPBeetle(enemyPlatform, this));
-		//enemies.add(new EnemyWaspScout(enemyPlatform, this));
-		//enemies.add(new EnemyWaspArcher(enemyPlatform, this));
-		//enemies.add(new EnemyWaspLancer(enemyPlatform, this));
+		create(new EnemyDandelion(enemyPlatform, this));
+		//create(new EnemyPBeetle(enemyPlatform, this));
+		//create(new EnemyWaspScout(enemyPlatform, this));
+		//create(new EnemyWaspArcher(enemyPlatform, this));
+		//create(new EnemyWaspLancer(enemyPlatform, this));
 		platforms.add(enemyPlatform);
-		items.add(new ItemHealSmall(new Vector2(100, 100), this));
-		items.add(new ItemHealSmall(new Vector2(200, 100), this));
-		items.add(new ItemHealSmall(new Vector2(300, 100), this));
-		items.add(new ItemHealSmall(new Vector2(400, 100), this));
+		create(new ItemHealSmall(new Vector2(100, 100), this));
+		create(new ItemHealSmall(new Vector2(200, 100), this));
+		create(new ItemHealSmall(new Vector2(300, 100), this));
+		create(new ItemHealSmall(new Vector2(400, 100), this));
 		
 		lowestTop = platforms.get(0).getTop();		
 		float lowestTopLength = platforms.get(0).getWidth();
@@ -277,9 +277,6 @@ public class Level {
 		return bullets;
 	}
 	
-	public DelayedRemovalArray<Item> getItems() {
-		return items;
-	}
 	
 	public Viewport getViewport() {
 		return viewport;
@@ -289,8 +286,12 @@ public class Level {
 		return player;
 	}
 	
+	public DelayedRemovalArray<Item> getItems() {
+		return items;
+	}
+	
 	public void spawnBullet(Vector2 position, Facing facing, int damage, int type) {
-		bullets.add(new Bullet(this, position, facing, damage, type));
+		create(new Bullet(this, position, facing, damage, type));
 	}
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
@@ -322,14 +323,53 @@ public class Level {
 		if (Math.random() <= Constants.itemRollChance) {
 			int tableIndex = enemy.rollDrop();
 			if (tableIndex == 0) {
-				items.add(new Item(enemy.position, this));
+				create(new Item(enemy.position, this));
 			} else if (tableIndex == 1) {
-				items.add(new ItemHealSmall(enemy.position, this));
+				create(new ItemHealSmall(enemy.position, this));
 			} else if (tableIndex == 2) {
-				items.add(new ItemLife(enemy.position, this));
+				create(new ItemLife(enemy.position, this));
 			}
 		}
 	}
 	
+	void create(Entity entity) {
+		updatables.add(entity);
+		renderables.add(entity);
+		if (entity instanceof Enemy) {
+			enemies.add((Enemy) entity);
+		} else if (entity instanceof Bullet) {
+			bullets.add((Bullet) entity);
+		} else if (entity instanceof Player) {
+			this.player = (Player) entity;
+		}
+	}
+	
+	void remove(Updatable entity) {
+		
+		if (entity instanceof Entity) {
+			updatables.removeValue(entity, false);
+			renderables.remove((Renderable) entity);
+			if (entity instanceof Enemy) {
+				enemies.removeValue((Enemy) entity, false);
+			} else if (entity instanceof Bullet) {
+				bullets.removeValue((Bullet) entity, false);
+			}
+		} else if (entity instanceof Item) {
+			updatables.removeValue(entity, false);
+			renderables.remove((Renderable) entity);
+			items.removeValue((Item) entity, false);
+		}
+	}
+	
+	
+	void create(Item item) {
+		updatables.add(item);
+		renderables.add(item);
+		items.add(item);
+	}
+	
+	void remove(Item item) {
+		
+	}
 	
 }

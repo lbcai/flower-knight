@@ -8,7 +8,6 @@ public class EnemyWaspLancer extends EnemyWasp {
 	
 	public EnemyWaspLancer(Platform platform, Level level) {
 		super(platform, level);
-		level.getRenderables().add(this);
 	}
 
 	public void update(float delta) {

@@ -51,8 +51,7 @@ public class EnemyWaspScout extends EnemyWasp {
 		
 		//this enemy does no damage.
 		touchDmg = false;
-		
-		level.getRenderables().add(this);
+
 	}
 
 	@Override

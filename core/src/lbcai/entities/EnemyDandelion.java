@@ -37,7 +37,6 @@ public class EnemyDandelion extends Enemy {
 				2 * collisionRadius.x,
 				2 * collisionRadius.y);
 		
-		level.getRenderables().add(this);
 	}
 	
 	/**

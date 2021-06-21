@@ -54,9 +54,6 @@ public class Item implements Renderable, Updatable {
 				Constants.itemCenter.x * 2,
 				Constants.itemCenter.y * 2);
 		
-		level.getRenderables().add(this);
-		level.getUpdatables().add(this);
-		
 	}
 	
 	public void update(float delta) {

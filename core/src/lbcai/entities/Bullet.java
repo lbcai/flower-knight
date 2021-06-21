@@ -26,8 +26,6 @@ public class Bullet extends Entity {
 		knockback = false;
 		
 		this.level = level;
-		level.getRenderables().add(this);
-		level.getUpdatables().add(this);
 		
 		region = Assets.instance.bulletAssets.bulletAnim.getKeyFrame(0);
 		this.position = position.cpy();
