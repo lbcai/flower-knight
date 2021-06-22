@@ -20,6 +20,7 @@ import lbcai.entities.BreakableObject;
 import lbcai.entities.Bullet;
 import lbcai.entities.DamageNum;
 import lbcai.entities.DustCloud;
+import lbcai.entities.Effect;
 import lbcai.entities.Enemy;
 import lbcai.entities.EnemyDandelion;
 import lbcai.entities.EnemyPBeetle;
@@ -70,9 +71,6 @@ public class Level {
 	private DelayedRemovalArray<Enemy> enemies;
 	private DelayedRemovalArray<Item> items;
 	private DelayedRemovalArray<Bullet> bullets;
-	private DelayedRemovalArray<DustCloud> dustClouds;
-	private DelayedRemovalArray<HitEffect> hitEffects;
-	private DelayedRemovalArray<DamageNum> damageNums;
 	private int dustCloudCounter = 0;
 	
 	//define the level bounds
@@ -189,39 +187,35 @@ public class Level {
 		enemies = new DelayedRemovalArray<Enemy>();
 		items = new DelayedRemovalArray<Item>();
 		bullets = new DelayedRemovalArray<Bullet>();
-		dustClouds = new DelayedRemovalArray<DustCloud>();
-		hitEffects = new DelayedRemovalArray<HitEffect>();
-		damageNums = new DelayedRemovalArray<DamageNum>();
-		
-		//left, top, width, height
-		platforms.add(new Platform(500, 75, 200, 50, this));
-		platforms.add(new Platform(0, 0, 512, 50, this));
-		platforms.add(new Platform(100, 300, 900, 50, this));
-		platforms.add(new Platform(100, 200, 900, 50, this));
-		platforms.add(new Platform(100, 400, 900, 50, this));
-		platforms.add(new Platform(100, 500, 900, 50, this));
-		platforms.add(new Platform(100, 700, 10, 50, this));
-		platforms.add(new Platform(0, 1000, 200, 800, this));
-		platforms.add(new Platform(512, 1000, 200, 800, this));
-		platforms.add(new Platform(800, 0, 800, 50, this));
-		//this is the lowest platform in the map. height must be at least 72, so bottom is corrected to -172, 
-		//then +5 to top for background grass, this means the actual top will be -95 y position.
-		Platform longPlatform = new Platform(0, -100, 10000, 500, this);
-		platforms.add(longPlatform);
-		create(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
-		create(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
-		
 		
 		//Add player to the level. Add a start position for the level as input.
 		create(new Player(new Vector2(2000, 800), this));
 		
+		//left, top, width, height
+		create(new Platform(500, 75, 200, 50, this));
+		create(new Platform(0, 0, 512, 50, this));
+		create(new Platform(100, 300, 900, 50, this));
+		create(new Platform(100, 200, 900, 50, this));
+		create(new Platform(100, 400, 900, 50, this));
+		create(new Platform(100, 500, 900, 50, this));
+		create(new Platform(100, 700, 10, 50, this));
+		create(new Platform(0, 1000, 200, 800, this));
+		create(new Platform(512, 1000, 200, 800, this));
+		create(new Platform(800, 0, 800, 50, this));
+		//this is the lowest platform in the map. height must be at least 72, so bottom is corrected to -172, 
+		//then +5 to top for background grass, this means the actual top will be -95 y position.
+		Platform longPlatform = new Platform(0, -100, 10000, 500, this);
+		create(longPlatform);
+		create(new BreakableObject(longPlatform, this, Facing.LEFT, new Vector2(0.5f, 0f)));
+		create(new BreakableObject(longPlatform, this, Facing.RIGHT, new Vector2(0.1f, 0f)));
+		
 		Platform enemyPlatform = new Platform(700, 160, 500, 50, this);
 		create(new EnemyDandelion(enemyPlatform, this));
 		//create(new EnemyPBeetle(enemyPlatform, this));
-		//create(new EnemyWaspScout(enemyPlatform, this));
-		//create(new EnemyWaspArcher(enemyPlatform, this));
+		create(new EnemyWaspScout(enemyPlatform, this));
+		create(new EnemyWaspArcher(enemyPlatform, this));
 		//create(new EnemyWaspLancer(enemyPlatform, this));
-		platforms.add(enemyPlatform);
+		create(enemyPlatform);
 		create(new ItemHealSmall(new Vector2(100, 100), this));
 		create(new ItemHealSmall(new Vector2(200, 100), this));
 		create(new ItemHealSmall(new Vector2(300, 100), this));
@@ -255,7 +249,11 @@ public class Level {
 			bullet.debugRender(shape);
 		}
 		
+		for (Item item : items) {
+			item.debugRender(shape);
 		}
+		
+	}
 	
 	public Array<Platform> getPlatforms() {
 		return platforms;
@@ -277,7 +275,6 @@ public class Level {
 		return bullets;
 	}
 	
-	
 	public Viewport getViewport() {
 		return viewport;
 	}
@@ -296,7 +293,7 @@ public class Level {
 	
 	public void spawnDustCloud(Vector2 position, Facing facing, int type) {
 		if (dustCloudCounter == 0) {
-			dustClouds.add(new DustCloud(position, facing, type, this));
+			create(new DustCloud(position, facing, type));
 			dustCloudCounter = 1;
 		}
 	}
@@ -308,11 +305,11 @@ public class Level {
 		rectangle.getCenter(position);
 		float x = (float) (Math.random() * ((position.x + 10) - (position.x - 10) + 1) + (position.x - 10));
 		float y = (float) (Math.random() * ((position.y + 40) - (position.y - 40) + 1) + (position.y - 40));
-		hitEffects.add(new HitEffect(new Vector2(x, y), facing, type, this));
+		create(new HitEffect(new Vector2(x, y), facing, type));
 	}
 	
 	public void spawnDmgNum(Vector2 position, int number, Facing facing) {
-		damageNums.add(new DamageNum(position, number, facing, this));
+		create(new DamageNum(position, number, facing));
 	}
 	
 	public void dropItem(Enemy enemy) {
@@ -349,18 +346,23 @@ public class Level {
 		if (entity instanceof Entity) {
 			updatables.removeValue(entity, false);
 			renderables.remove((Renderable) entity);
-			if (entity instanceof Enemy) {
-				enemies.removeValue((Enemy) entity, false);
-			} else if (entity instanceof Bullet) {
+			if (entity instanceof Bullet) {
 				bullets.removeValue((Bullet) entity, false);
+			} else if (entity instanceof Enemy) {
+				enemies.removeValue((Enemy) entity, false);
 			}
 		} else if (entity instanceof Item) {
 			updatables.removeValue(entity, false);
 			renderables.remove((Renderable) entity);
 			items.removeValue((Item) entity, false);
+		} else if (entity instanceof Effect) {
+			updatables.removeValue(entity, false);
+			renderables.remove((Renderable) entity);
+			//no unique effect list
 		}
+		//platforms do not get destroyed
+		//players do not get destroyed
 	}
-	
 	
 	void create(Item item) {
 		updatables.add(item);
@@ -368,8 +370,15 @@ public class Level {
 		items.add(item);
 	}
 	
-	void remove(Item item) {
-		
+	void create(Effect effect) {
+		updatables.add(effect);
+		renderables.add(effect);
+		//effects.add(effect);
+	}
+	
+	void create(Platform platform) {
+		//platform adds its own pieces to renderables and updatables.
+		platforms.add(platform);
 	}
 	
 }

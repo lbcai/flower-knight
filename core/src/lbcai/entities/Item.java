@@ -2,6 +2,7 @@ package lbcai.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -171,6 +172,10 @@ public class Item implements Renderable, Updatable {
 		//platform due to overlap, so it has a little artificial padding added
 		//entities are +2 so +3 keeps the items above entities
 		return (int) (position.y - Constants.itemCenter.y + 3);
+	}
+	
+	public void debugRender(ShapeRenderer shape) {
+		shape.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 	}
 	
 }

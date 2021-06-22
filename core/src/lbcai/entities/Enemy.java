@@ -301,6 +301,11 @@ public abstract class Enemy extends Entity {
 			}
 			
 		}
+		
+		if (Utils.secondsSince(hitPlayerTime) > Constants.iFrameLength) {
+			hitPlayerRecently = 0;
+		}
+		
 	}
 	
 	public void doesDamage(Player player, Facing facing) {
@@ -313,17 +318,11 @@ public abstract class Enemy extends Entity {
 					(damage - range) + 1) + 
 					(damage - range));
 			player.health -= damageInstance;
-			player.level.spawnDmgNum(player.position, damageInstance, facing);
-			player.level.spawnHitEffect(player.hitBox, facing, 0);
+			level.spawnDmgNum(player.position, damageInstance, facing);
+			level.spawnHitEffect(player.hitBox, facing, 0);
 			player.hitState = HitState.IFRAME;
-
 			
-		} else {
-			if (Utils.secondsSince(hitPlayerTime) > Constants.iFrameLength) {
-				hitPlayerRecently = 0;
-				
-			}
-		}
+		} 
 		
 	}
 	

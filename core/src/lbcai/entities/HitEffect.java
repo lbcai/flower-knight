@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Enums.Facing;
@@ -29,7 +28,7 @@ public class HitEffect extends Effect {
 	private int randomPicker2;
 	private TextureRegion region2;
 	
-	public HitEffect(Vector2 position, Facing facing, int type, Level level) {
+	public HitEffect(Vector2 position, Facing facing, int type) {
 		this.position = position;
 		//if not pierce effect, make it random direction facing
 		if (type == 2) {
@@ -70,8 +69,7 @@ public class HitEffect extends Effect {
 		}
 		
 		randomPicker = (int) (Math.random() * randomizer.length);
-		level.getRenderables().add(this);
-		level.getUpdatables().add(this);
+
 	}
 	
 	public void render(SpriteBatch batch) {

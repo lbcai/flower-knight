@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import lbcai.flowerknight.Level;
 import lbcai.util.Assets;
 import lbcai.util.Constants;
 import lbcai.util.Utils;
@@ -19,10 +18,7 @@ public class DustCloud extends Effect {
 	private boolean flip;
 	private int type;
 	
-	public DustCloud(Vector2 position, Facing facing, int type, Level level) {
-		
-		level.getRenderables().add(this);
-		level.getUpdatables().add(this);
+	public DustCloud(Vector2 position, Facing facing, int type) {
 		
 		region = Assets.instance.dustAssets.dust;
 		this.position = position;
