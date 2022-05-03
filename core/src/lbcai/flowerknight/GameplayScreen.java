@@ -80,33 +80,33 @@ public class GameplayScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void render(float delta) {
-		//Update the camera and UI.
+		// Update the camera and UI.
 		chaseCam.update(delta);
 		
-		//Check what happened; update the level so we can re-render it below and provide illusion of movement.
+		// Check what happened; update the level so we can re-render it below and provide illusion of movement.
 		level.update(delta);
-		//Actually applies the view to our camera.
+		// Actually applies the view to our camera.
 		viewport.apply();
-		//Sets the background color using rgba values from BackgroundColor.
+		// Sets the background color using rgba values from BackgroundColor.
 		Gdx.gl.glClearColor(
 				Constants.BackgroundColor.r,
 				Constants.BackgroundColor.g,
 				Constants.BackgroundColor.b,
 				Constants.BackgroundColor.a);
-		//Clear frame buffer so sprites don't linger.
+		// Clear frame buffer so sprites don't linger.
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//A projection matrix basically says that things look smaller the farther they are from the camera. A view matrix
-		//basically says where things should be rendered in relation to camera (so if camera moves left, the item moves right).
-		//The camera.combined = both view and projection matrices. Describes where to render things on the screen.
-		//We are now telling our SpriteBatch to use this combined matrix to render things. Call this whenever you do something to
-		//the camera! Putting it in render() is also safe.
+		// A projection matrix basically says that things look smaller the farther they are from the camera. A view matrix
+		// basically says where things should be rendered in relation to camera (so if camera moves left, the item moves right).
+		// The camera.combined = both view and projection matrices. Describes where to render things on the screen.
+		// We are now telling our SpriteBatch to use this combined matrix to render things. Call this whenever you do something to
+		// the camera! Putting it in render() is also safe.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
 		
 		batch.begin();
-		//Render the level! Renders everything in the level.
+		// Render the level! Renders everything in the level.
 		level.render(batch);
-		//Render the UI
+		// Render the UI
 		ui.render(batch);
 		batch.end();
 		
@@ -137,9 +137,7 @@ public class GameplayScreen extends ScreenAdapter {
 	
 	@Override
 	public void resize(int width, int height) {
-		/**
-		 * Use ExtendViewport to adjust the things we see if the window is resized. Center camera set to true.
-		 */
+		// Use ExtendViewport to adjust the things we see if the window is resized. Center camera set to true.
 		viewport.update(width, height, true);
 		ui.viewport.update(width, height, true);
 	}

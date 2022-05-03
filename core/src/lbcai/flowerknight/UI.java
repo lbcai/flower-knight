@@ -48,6 +48,7 @@ public class UI {
 	final float worldHeight;
 	final float cameraY;
 	
+	// petal that represents lives
 	private class livesPetal {
 		
 		Vector2 position;
@@ -166,6 +167,10 @@ public class UI {
 		
 	}
 	
+	/**
+	 * Check for updates and update UI visuals accordingly.
+	 * @param delta
+	 */
 	public void update(float delta) {
 
 		//if the player's number of lives has changed:
@@ -192,6 +197,10 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * Render UI elements.
+	 * @param batch
+	 */
 	public void render(SpriteBatch batch) {
 		
 		viewport.apply();
@@ -289,7 +298,11 @@ public class UI {
 		
 	}
 	
-	
+	/**
+	 * Displays hitboxes.
+	 * @param shape
+	 * @param batch
+	 */
 	public void debugRender(ShapeRenderer shape, SpriteBatch batch) {
 		//keep in mind that from this point on in the shaperenderer, it is using the batch projection matrix. if you add something
 		//for debug renderer to render AFTER the ui, it will probably be bugged and stuck on the screen. just add it before

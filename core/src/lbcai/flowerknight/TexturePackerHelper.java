@@ -70,7 +70,6 @@ public class TexturePackerHelper {
 	        	//animation that requires offset adjustment
 	        	if (map.containsKey(atlasLine)) {
 	        		buffWriter.write(atlasLine + "\n");
-	        		int currentLine = buffReader.getLineNumber();
 	        		
 	        		//pass over lines between the animation name and the relevant info
 	        		for (int n = 0; n < 6; n++) {

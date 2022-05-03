@@ -954,6 +954,7 @@ public class Player extends Entity {
 		}
 		
 		if (health <= 0) {
+			health = 0; // keep health at 0 for display in UI purposes (don't go negative)
 			if (lockState != LockState.DEATH) {
 				lives -= 1;
 				lockState = LockState.DEATH;
